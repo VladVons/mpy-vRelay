@@ -1,0 +1,12 @@
+body {
+    font-family: Arial;
+    background-color: #3498DB;
+    padding: 50px;
+}
+
+.box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
