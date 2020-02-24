@@ -27,23 +27,35 @@ class THttpApiApp(THttpApi):
             Conf['STA_ESSID'] = Query.get('STA_ESSID')
             Conf['STA_Paswd'] = Query.get('STA_Paswd')
             Conf.Save()
-            R = 'Saved\nReboot to connect'
+
+            Log.Print(1, 'Reboot')
+            UHrd.LedFlash()
+            machine.reset()
         else:
             R = super().DoUrl(aPath, aQuery, aData)
         return R
 
 
-class TTaskLed(TTask):
-    Cnt = 0
+class TTaskIdle(TTask):
+    BtnCnt = 0
+
+    def ConfClear(self):
+        Btn = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_UP)
+        if (not Btn.value()):
+            self.BtnCnt += 1
+            if (self.BtnCnt > 2):
+                print('Reset')
+
+                Conf['STA_ESSID'] = ''
+                Conf.Save()
+
+                UHrd.LedFlash()
+                machine.reset()
+        else:
+            self.BtnCnt = 0 
 
     def DoRun(self):
         print('Task_Led', self.Cnt)
-
-        self.Cnt += 1
-        if (self.Cnt % 10 == 0):
-            print('DSleep...')
-            self.DoExit()
-            UHrd.DeepSleep(Conf.DSleep)
 
         gc.collect()
         print('mem_free Led', gc.mem_free())
@@ -51,41 +63,43 @@ class TTaskLed(TTask):
         Obj = machine.Pin(2, machine.Pin.OUT)
         Obj.value(not Obj.value())
 
+        if (self.Cnt % 20 == 0):
+            print('DSleep')
+            self.DoExit()
+            UHrd.DeepSleep(Conf.DSleep)
+
+        self.ConfClear()
+
     def DoExit(self):
-        Obj = machine.Pin(2, machine.Pin.OUT)
-        for i in range(8):
-            Obj.value(not Obj.value())
-            time.sleep(0.2)
-        Obj.value(0)
+        UHrd.LedFlash()
 
 
-def InitConnect():
-    HttpServer = THttpServer(THttpApiApp())
-
-    if (not Conf.STA_ESSID):
-        from Inc.NetCaptive import TTaskCaptive
-
-        TaskCaptive = TTaskCaptive()
-        ELoop.create_task(TaskCaptive.Run())
-
+def InitServer():
     if (machine.reset_cause() == machine.DEEPSLEEP_RESET):
         Log.Print(1, 'From  DSleep')
     else:
-        from Inc.NetWLan import Connect
-
         Log.Print(1, 'From reset')
-        Connect(Conf.STA_ESSID, Conf.STA_Paswd)
+
+        if (not Conf.STA_ESSID):
+            from Inc.NetCaptive import TTaskCaptive
+            TaskCaptive = TTaskCaptive()
+            ELoop.create_task(TaskCaptive.Run())
+        else:
+            from Inc.NetWLan import Connect
+            Connect(Conf.STA_ESSID, Conf.STA_Paswd)
+
+    HttpServer = THttpServer(THttpApiApp())
     ELoop.create_task(HttpServer.Run())
 
 
 def Main():
     Log.Print(1, 'Main', os.uname())
 
-    InitConnect()
+    InitServer()
 
-    TaskLed = TTaskLed()
-    TaskLed.Sleep = Conf.FLed
-    ELoop.create_task(TaskLed.Run())
+    Task = TTaskIdle()
+    Task.Sleep = Conf.FLed
+    ELoop.create_task(Task.Run())
 
     gc.collect()
     print('mem_free', gc.mem_free())

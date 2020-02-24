@@ -10,11 +10,13 @@ import uasyncio as asyncio
 
 class TTask():
     Sleep = 1
+    Cnt   = 0
 
     async def Run(self):
         self.Handle = self.IsRun = True
         while self.IsRun:
             if (self.Handle):
+                self.Cnt += 1
                 self.DoRun()
             await asyncio.sleep(self.Sleep)
         self.DoExit()
