@@ -39,14 +39,20 @@ def EnableAP(aMode: bool):
     return R
 
 
-def Connect(aESSID: str, aPassw: str):
-    Log.Print(1, 'Connect ESSID %s, passw %s' % (aESSID, aPassw))
-
-    Cnt = 20
-    Obj = network.WLAN(network.STA_IF)
-    while (not Obj.isconnected()) and (Cnt > 0):
-        Cnt -= 1
+def _TryConnect(aObj, aCnt):
+    while (not aObj.isconnected()) and (aCnt > 0):
         sys.stdout.write('.')
-        time.sleep(1)
+        time.sleep(0.5)
+        aCnt -= 1
+    return aCnt
+
+def Connect(aESSID, aPassw):
+    print('Connect ESSID `%s`, Passw `%s`' % (aESSID, aPassw))
+
+    Obj = network.WLAN(network.STA_IF)
+    if (_TryConnect(Obj, 20) == 0):
+        Obj.active(True)
+        Obj.connect(aESSID, aPassw)
+        TryConnect(Obj, 20)
     print('Network', Obj.ifconfig())
     print('MAC:', GetMac(Obj))
