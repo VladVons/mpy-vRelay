@@ -1,3 +1,11 @@
+'''
+Author:      Vladimir Vons <VladVons@gmail.com>, Oster Inc
+Created:     2020.02.10
+License:     GNU, see LICENSE for more details
+Description:.
+'''
+
+
 import os
 import gc
 import machine
@@ -82,14 +90,14 @@ def InitServer():
 
         if (not Conf.STA_ESSID):
             from Inc.NetCaptive import TTaskCaptive
-            TaskCaptive = TTaskCaptive()
-            ELoop.create_task(TaskCaptive.Run())
+            Task = TTaskCaptive()
+            ELoop.create_task(Task.Run())
         else:
             from Inc.NetWLan import Connect
             Connect(Conf.STA_ESSID, Conf.STA_Paswd)
 
-    HttpServer = THttpServer(THttpApiApp())
-    ELoop.create_task(HttpServer.Run())
+    Task = THttpServer(THttpApiApp())
+    ELoop.create_task(Task.Run())
 
 
 def Main():
@@ -100,8 +108,5 @@ def Main():
     Task = TTaskIdle()
     Task.Sleep = Conf.FLed
     ELoop.create_task(Task.Run())
-
-    gc.collect()
-    print('mem_free', gc.mem_free())
 
     ELoop.run_forever()
