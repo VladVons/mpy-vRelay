@@ -24,12 +24,6 @@ ExecM()
 }
 
 
-GetSrc()
-{
-  ls -p | egrep -v "/|_" | sort
-}
-
-
 Upgrade()
 {
   echo "$0->$FUNCNAME"
@@ -55,13 +49,10 @@ Install()
 {
   echo "$0->$FUNCNAME"
 
-  sudo su
-
-
-  apt-get install git
+  sudo apt-get install git
   # git clone https://github.com/VladVons/py-esp8266.git
 
-  apt-get install pychecker pep8
+  sudo apt-get install pychecker pep8
 
   apt-get install python-pip
 
@@ -98,11 +89,6 @@ EspFirmware()
   # http://micropython.org/download#esp8266
 
   Dir="/mnt/hdd/data1/share/public/image/esp/micropython"
-  #FileName="esp8266-20190519-v1.10-356-g653e1756c.bin"
-  #FileName="esp8266-20190125-v1.10.bin"
-  #FileName="esp8266-20180511-v1.9.4.bin"
-  #FileName="esp32-20180511-v1.9.4.bin"
-  #FileName="esp8266-20190529-v1.11.bin"
   FileName="esp8266-20191220-v1.12.bin"
 
 
@@ -118,75 +104,24 @@ EspFirmware()
   fi;
 }
 
-_EspFileList()
+
+EspFileList()
 {
   ampy --port $Dev --baud $Speed1 ls $Root
 }
 
 
-EspFileList()
-{
-  echo "$0->$FUNCNAME"
-  
-  echo "List files in ESP"
-  ExecM "_EspFileList"
-}
-
-
-EspSrcPut()
-{
-  aFile="$1"
-
-  FileSize=$(wc -c $aFile | awk '{ print $1 }')
-  echo "File: $aFile, Size: $FileSize"
-  ExecM "ampy --port $Dev --baud $Speed1 put $aFile"
-}
-
 EspSrcCopy()
 {
-  echo "$0->$FUNCNAME"
+  local aDir="$1"
+  echo "$FUNCNAME($*)"
 
-  EspFileList
+  echo "Copy files in ESP"
 
-  # deploy
-  GetSrc |\
+  cd $aDir
+  ls | sort |\
   while read File; do
-    EspSrcPut $File
-    sleep 1
-  done
-
-  ls -d ./*/ |\
-  while read Dir; do
-    ExecM "ampy --port $Dev --baud $Speed1 put $Dir"
-  done
-}
-
-
-EspSrcDel()
-{
-  echo "$0->$FUNCNAME"
-
-  echo "Delete files in ESP"
-
- _EspFileList | grep -v "boot.py" |\
-  while read File; do
-    ExecM "ampy --port $Dev --baud $Speed1 rm $File"
-  done
-
-  EspFileList  
-}
-
-
-EspSrcGet()
-{
-  echo "$0->$FUNCNAME"
-
-  Dir="Files"
-  mkdir -p $Dir
-
- _EspFileList |\
-  while read File; do
-    ExecM "ampy --port $Dev --baud $Speed1 get $File > $Dir/$File"
+    ExecM "ampy --port $Dev --baud $Speed1 put $File"
   done
 }
 
@@ -195,22 +130,26 @@ EspRelease()
 {
   echo "$0->$FUNCNAME"
 
-  Skip="boot.py,main.py,Options.py"
+  SkipCompile="boot.py,main.py,Options.py"
   Compiler="/admin/py-esp/micropython/mpy-cross"
+
   DirOut="../release"
+  cd ./src
   mkdir -p $DirOut
 
-  find ./src -type f |\
+  find * -type f |\
   while read File; do
     echo "$File ..."
 
     FExt="${File##*.}"
     FName=$(basename -- "$File")
-    if [ "$FExt" == "py" ] && [[ "$Skip" != *"$FName"* ]]; then
+    if [ "$FExt" == "py" ] && [[ "$SkipCompile" != *"$FName"* ]]; then
+        mkdir -p $(dirname $DirOut/$File)
+
         FileObj=$(echo $File | sed "s|.py|.mpy|g")
         $Compiler $File -o $DirOut/$FileObj
     else
-        cp -R $File $DirOut
+        cp --parents $File $DirOut
     fi
 
   done
@@ -219,14 +158,11 @@ EspRelease()
 
 clear
 case $1 in
-    Install)        "$1"        ;;
-    Upgrade)        "$1"        ;;
-    EspFirmware|w)  EspFirmware ;;
-    EspErase|e)     EspErase    ;;
-    EspRelease)     "$1"        ;;
-    EspFileList|l)  EspFileList ;;
-    EspSrcGet|g)    EspSrcGet   ;;
-    EspSrcDel|d)    EspSrcDel   ;;
-    EspSrcPut|f)    EspSrcPut   $2 ;;
-    EspSrcCopy|c)   EspSrcCopy  ;;
+    Install)        "$1"        $2 ;;
+    Upgrade)        "$1"        $2 ;;
+    EspFirmware|w)  EspFirmware $2 ;;
+    EspErase|e)     EspErase    $2 ;;
+    EspRelease|r)   EspRelease  $2 ;;
+    EspFileList|l)  EspFileList $2 ;;
+    EspSrcCopy|c)   EspSrcCopy  $2 ;;
 esac

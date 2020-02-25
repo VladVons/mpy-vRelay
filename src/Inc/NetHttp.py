@@ -10,6 +10,7 @@ import uasyncio as asyncio
 from Inc.Log import Log
 from Inc import UFS, UObj
 from Inc.UStr import SplitPad
+from Inc.Task import TTask
 
 
 class THttpApi():
@@ -60,7 +61,7 @@ class THttpApi():
         return self.LoadFile(aPath, aQuery, aData)
 
 
-class THttpServer():
+class THttpServer(TTask):
     def __init__(self, aApi: THttpApi):
         self.Api = aApi
 
@@ -88,5 +89,5 @@ class THttpServer():
         await aWriter.awrite("%s\r\n" % Data)
         await aWriter.aclose()
 
-    async def Loop(self, aPort: int = 80):
-        return await asyncio.start_server(self.CallBack, "0.0.0.0", aPort)
+    async def Loop(self):
+        return await asyncio.start_server(self.CallBack, "0.0.0.0", 80)

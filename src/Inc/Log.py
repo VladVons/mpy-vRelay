@@ -38,7 +38,9 @@ class TLog():
         R = '' 
         if (aLevel <= self.Level):
             self.Cnt += 1
-            R = '%d,%d,%d,%s,%s%s' % (time.time(), self.Cnt, aLevel, Conf.get('ID'), ' ' * aLevel, list(aParam))
+            lt  = time.localtime(time.time())
+            Now = '%d-%02d-%02d,%02d:%02d:%02d' % (lt[0], lt[1], lt[2], lt[3], lt[4], lt[5])
+            R   = '%s,%03d,%d,%s,%s%s' % (Now, self.Cnt, aLevel, Conf.get('ID'), ' ' * aLevel, list(aParam))
             for Echo in self.Echoes: 
                 Echo.Write(R)
         return R

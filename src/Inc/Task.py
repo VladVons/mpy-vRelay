@@ -40,6 +40,11 @@ class TTasks():
             self.Obj.append(aTask)
             self.ELoop.create_task(aTask.Loop())
 
+    def Stop(self):
+        for O in self.Obj:
+            O.Run = False
+            O.DoExit()
+
     def Run(self):
         self.ELoop.run_forever()
 
