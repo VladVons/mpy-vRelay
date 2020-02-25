@@ -15,6 +15,7 @@ Log()
   echo "$Msg"
 }
 
+
 Clean()
 {
   echo "delete objects"
@@ -32,6 +33,7 @@ Clean()
   find . -name '*.json' | xargs wc
 }
 
+
 GitAuth()
 {
   Log "$0->$FUNCNAME"
@@ -46,6 +48,7 @@ GitAuth()
   git config --global credential.helper 'cache --timeout=36000'
 }
 
+
 GitCreate()
 {
   Log "$0->$FUNCNAME"
@@ -58,6 +61,7 @@ GitCreate()
   git remote add origin $Url
 
 }
+
 
 GitClone()
 {
