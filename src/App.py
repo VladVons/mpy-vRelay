@@ -14,11 +14,9 @@ import uasyncio as asyncio
 #
 from Inc.Conf import Conf
 from Inc.Log  import Log
-from Inc.Task import TTask
+from Inc.Task import TTask, Tasks
 from Inc      import UStr, UHrd
-from Inc.HttpServer import THttpServer, THttpApi
-
-ELoop = asyncio.get_event_loop()
+from Inc.NetHttp import THttpServer, THttpApi
 
 
 class THttpApiApp(THttpApi):
@@ -46,10 +44,11 @@ class THttpApiApp(THttpApi):
 
 class TTaskIdle(TTask):
     BtnCnt = 0
+    Sleep  = Conf.FLed
 
-    def ConfClear(self):
-        Btn = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_UP)
-        if (not Btn.value()):
+    def tConfClear(self):
+        O = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_UP)
+        if (not O.value()):
             self.BtnCnt += 1
             if (self.BtnCnt > 2):
                 print('Reset')
@@ -62,21 +61,27 @@ class TTaskIdle(TTask):
         else:
             self.BtnCnt = 0 
 
-    def DoRun(self):
-        print('Task_Led', self.Cnt)
-
-        gc.collect()
-        print('mem_free Led', gc.mem_free())
-
-        Obj = machine.Pin(2, machine.Pin.OUT)
-        Obj.value(not Obj.value())
-
+    def tDSleep(self):
         if (self.Cnt % 20 == 0):
             print('DSleep')
             self.DoExit()
-            UHrd.DeepSleep(Conf.DSleep)
+            UHrd.DSleep(Conf.DSleep)
 
-        self.ConfClear()
+    def tLedBeat(self):
+        O = machine.Pin(2, machine.Pin.OUT)
+        O.value(not O.value())
+
+    def tMemFree(self):
+        gc.collect()
+        print('mem_free Led', gc.mem_free())
+
+    def DoLoop(self):
+        Log.Print(1, 'TTaskIdle %s' % self.Cnt)
+
+        self.tMemFree()
+        self.tLedBeat()
+        self.tConfClear()
+        #self.tDSleep()
 
     def DoExit(self):
         UHrd.LedFlash()
@@ -84,29 +89,27 @@ class TTaskIdle(TTask):
 
 def InitServer():
     if (machine.reset_cause() == machine.DEEPSLEEP_RESET):
-        Log.Print(1, 'From  DSleep')
+        Log.Print(1, 'Boot as DSleep')
     else:
-        Log.Print(1, 'From reset')
+        Log.Print(1, 'Boot as Reset')
 
         if (not Conf.STA_ESSID):
             from Inc.NetCaptive import TTaskCaptive
-            Task = TTaskCaptive()
-            ELoop.create_task(Task.Run())
+            Tasks.Add(TTaskCaptive())
         else:
             from Inc.NetWLan import Connect
             Connect(Conf.STA_ESSID, Conf.STA_Paswd)
 
-    Task = THttpServer(THttpApiApp())
-    ELoop.create_task(Task.Run())
+            if (Conf.Mqtt_Host):
+                from Inc.NetMqtt import TTaskMqtt
+                Tasks.Add(TTaskMqtt(Conf.Mqtt_Host))
+
+    Tasks.Add(THttpServer(THttpApiApp()))
 
 
 def Main():
     Log.Print(1, 'Main', os.uname())
 
     InitServer()
-
-    Task = TTaskIdle()
-    Task.Sleep = Conf.FLed
-    ELoop.create_task(Task.Run())
-
-    ELoop.run_forever()
+    Tasks.Add(TTaskIdle())
+    Tasks.Run()

@@ -6,8 +6,8 @@ Description:.
 '''
 
 
-def GetAttr(aObj, aName: str):
+def GetAttr(aO, aName: str):
     R = None
-    if (hasattr(aObj, aName)):
-        R = getattr(aObj, aName)
+    if (hasattr(aO, aName)):
+        R = getattr(aO, aName)
     return R

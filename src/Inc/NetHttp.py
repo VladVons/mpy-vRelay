@@ -88,5 +88,5 @@ class THttpServer():
         await aWriter.awrite("%s\r\n" % Data)
         await aWriter.aclose()
 
-    async def Run(self, aPort: int = 80):
+    async def Loop(self, aPort: int = 80):
         return await asyncio.start_server(self.CallBack, "0.0.0.0", aPort)

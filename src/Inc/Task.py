@@ -9,20 +9,39 @@ import uasyncio as asyncio
 
 
 class TTask():
-    Sleep = 1
-    Cnt   = 0
+    Sleep  = 1
+    Cnt    = 0
 
-    async def Run(self):
-        self.Handle = self.IsRun = True
-        while self.IsRun:
-            if (self.Handle):
-                self.Cnt += 1
-                self.DoRun()
-            await asyncio.sleep(self.Sleep)
-        self.DoExit()
+    async def Loop(self):
+        self.Handle = self.Run = True
+        try:
+            while self.Run:
+                if (self.Handle):
+                    self.Cnt += 1
+                    self.DoLoop()
+                await asyncio.sleep(self.Sleep)
+        finally:
+            self.DoExit()
 
-    def DoRun(self):
+    def DoLoop(self):
         pass
 
     def DoExit(self):
         pass
+
+
+class TTasks():
+    def __init__(self):
+        self.Obj = []
+        self.ELoop = asyncio.get_event_loop()
+
+    def Add(self, aTask: TTask):
+        if (aTask not in self.Obj):
+            self.Obj.append(aTask)
+            self.ELoop.create_task(aTask.Loop())
+
+    def Run(self):
+        self.ELoop.run_forever()
+
+
+Tasks = TTasks()

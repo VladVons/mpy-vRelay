@@ -57,7 +57,7 @@ class TTaskCaptive(TTask):
         R += bytes(map(int, aIP.split(".")))
         return R
 
-    def DoRun(self):
+    def DoLoop(self):
         try:
             Data, Addr = self.Sock.recvfrom(1024)
             print("In datagram ...", self.IP)

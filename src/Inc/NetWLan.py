@@ -53,6 +53,6 @@ def Connect(aESSID, aPassw):
     if (_TryConnect(Obj, 20) == 0):
         Obj.active(True)
         Obj.connect(aESSID, aPassw)
-        TryConnect(Obj, 20)
+        _TryConnect(Obj, 20)
     print('Network', Obj.ifconfig())
     print('MAC:', GetMac(Obj))

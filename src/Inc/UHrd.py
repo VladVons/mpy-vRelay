@@ -9,7 +9,7 @@ import machine
 import time
 
 
-def DeepSleep(aSec: int):
+def DSleep(aSec: int):
     O = machine.RTC()
     O.irq(trigger = O.ALARM0, wake = machine.DEEPSLEEP)
     O.alarm(O.ALARM0, aSec * 1000)
