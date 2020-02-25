@@ -43,8 +43,9 @@ Upgrade()
 
 Make_mpy_cross()
 {
-  https://github.com/micropython/micropython.git
-  #https://github.com/micropython/micropython/tree/master/mpy-cross
+  #https://github.com/micropython/micropython.git
+  git clone https://github.com/micropython/micropython/tree/master/mpy-cross
+
   cd micropython/mpy-cross
   make
 }
