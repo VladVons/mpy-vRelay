@@ -1,5 +1,5 @@
 '''
-Author:      Vladimir Vons <VladVons@gmail.com>, Oster Inc
+Author:      Vladimir Vons, Oster Inc.
 Created:     2017.02.01
 License:     GNU, see LICENSE for more details
 Description: 

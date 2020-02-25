@@ -43,8 +43,8 @@ Upgrade()
 
 Make_mpy_cross()
 {
-  #https://github.com/micropython/micropython.git
-  git clone https://github.com/micropython/micropython/tree/master/mpy-cross
+  git clone https://github.com/micropython/micropython.git
+  #https://github.com/micropython/micropython/tree/master/mpy-cross
 
   cd micropython/mpy-cross
   make
@@ -195,29 +195,25 @@ EspRelease()
 {
   echo "$0->$FUNCNAME"
 
-  SkipFiles="boot.py,main.py,config.json"
-
-  DirOut="Release"
+  Skip="boot.py,main.py,Options.py"
+  Compiler="/admin/py-esp/micropython/mpy-cross"
+  DirOut="../release"
   mkdir -p $DirOut
 
-  EspSrcDel
-
-  GetSrc |\
+  find ./src -type f |\
   while read File; do
-    if [[ "$SkipFiles" == *"$File"* ]]; then
-        FileOut=$File
-        cp $File $DirOut
-    else
+    echo "$File ..."
+
+    FExt="${File##*.}"
+    FName=$(basename -- "$File")
+    if [ "$FExt" == "py" ] && [[ "$Skip" != *"$FName"* ]]; then
         FileObj=$(echo $File | sed "s|.py|.mpy|g")
-        FileOut=$DirOut/$FileObj
-        mpy-cross $File -o $FileOut
+        $Compiler $File -o $DirOut/$FileObj
+    else
+        cp -R $File $DirOut
     fi
 
-    ExecM "ampy --port $Dev --baud $Speed1 put $FileOut"
-    #ampy --port /dev/ttyUSB0 --baud 115200 put AppConf.py
   done
-
-  EspFileList
 }
 
 
