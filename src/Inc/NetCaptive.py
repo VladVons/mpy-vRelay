@@ -19,8 +19,6 @@ from Inc.Task import TTask
 
 class TTaskCaptive(TTask): 
     def __init__(self):
-        self.Sleep = 0.1
-
         AP = EnableAP(True)
         AP.config(essid = 'oster-' + GetMac(AP), authmode = network.AUTH_OPEN)
         self.IP = AP.ifconfig()[0]

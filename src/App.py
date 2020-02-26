@@ -23,7 +23,7 @@ def Reset(aDSleep: bool = False):
     UHrd.LedFlash()
     Tasks.Stop()
     if (aDSleep):
-        UHrd.DSleep(Conf.DSleep)
+        UHrd.DSleep(Conf.get('DSleep', 60))
     else:
         machine.reset()
 
@@ -50,11 +50,17 @@ class THttpApiApp(THttpApi):
 
 class TTaskIdle(TTask):
     BtnCnt = 0
-    Sleep  = Conf.FLed
 
     def tLedBeat(self):
         O = machine.Pin(2, machine.Pin.OUT)
         O.value(not O.value())
+
+        if (self.Cnt % 5 == 0):
+
+            print('mqtt public')
+            mqtt = Tasks.Find('mqtt')
+            mqtt.Publish('MyTopic1', 'tLedBeat')
+
 
     def tConfClear(self):
         O = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_UP)
@@ -68,7 +74,7 @@ class TTaskIdle(TTask):
             self.BtnCnt = 0 
 
     def tDSleep(self):
-        if (Conf.DSleep) and (self.Cnt % 20 == 0):
+        if (Conf.DSleep) and (self.Cnt % 60 == 0):
             Reset(True)
 
     def tMemFree(self):
@@ -87,27 +93,29 @@ class TTaskIdle(TTask):
         UHrd.LedFlash()
 
 
-
 def Main():
     Log.Print(1, 'Main', os.uname())
 
-    DSleep = machine.reset_cause() == machine.DEEPSLEEP_RESET
+    DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
 
     if (Conf.STA_ESSID):
         from Inc.NetWLan import Connect
-        if (Connect(Conf.STA_ESSID, Conf.STA_Paswd)):
-            from ntptime import settime
-            settime()
+        if (Connect(Conf.STA_ESSID, Conf.get('STA_Paswd', ''))):
+            if (not DSleep):
+                from ntptime import settime
+                try:
+                    settime()
+                except: pass
 
             if (Conf.Mqtt_Host):
                 from Inc.NetMqtt import TTaskMqtt
-                Tasks.Add(TTaskMqtt(Conf.Mqtt_Host))
+                Tasks.Add(TTaskMqtt(Conf.Mqtt_Host), 0.1, 'mqtt')
     else:
         from Inc.NetCaptive import TTaskCaptive
-        Tasks.Add(TTaskCaptive())
+        Tasks.Add(TTaskCaptive(), 0.1)
 
     Tasks.Add(THttpServer(THttpApiApp()))
-    Tasks.Add(TTaskIdle())
+    Tasks.Add(TTaskIdle(), Conf.get('FLed', 2))
 
     try:
         Tasks.Run()

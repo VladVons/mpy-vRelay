@@ -17,20 +17,35 @@ class TTaskMqtt(TTask):
     def __init__(self, aHost, aPort = 1883):
         self.Sleep = 0.1
 
-        aTopic = 'MyTopic'
-        O = MQTTClient('ClientID', aHost, aPort)
-        O.set_callback(self.on_message)
-        O.connect()
-        O.publish(aTopic, "ESP8266 is Connected")
-        O.subscribe(aTopic)
-        self.O = O
+        self.O = MQTTClient('ClientID', aHost, aPort)
+        self.O.set_callback(self.OnMessage)
 
-    def on_message(self, aClient, aMessage):
+    def Publish(self, aTopic: str, aMsg: str):
+        try:
+            self.O.publish(aTopic, aMsg)
+        except: pass
+
+    def OnMessage(self, aClient, aMessage):
         print ('on_message')
         #print ('on_message', aMessage.topic, aMessage.payload)
+
+    def DoEnter(self):
+        Log.Print(1, 'Mqtt.DoEnter')
+
+        self.O.connect()
+        Log.Print(1, 'Mqtt connect')
+
+        aTopic = 'MyTopic'
+        self.O.subscribe(aTopic)
 
     def DoLoop(self):
         self.O.check_msg()
 
     def DoExit(self):
-        self.O.disconnect()
+        try:
+            self.O.disconnect()
+        except: pass
+
+    def DoExcept(self, aE):
+        Log.Print(1, 'Mqtt DoExcept', aE)
+        return 30

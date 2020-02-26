@@ -107,6 +107,7 @@ GitSyncToServ()
   git push -u origin master
 }
 
+
 GitFromServ()
 # sync changes from server to disk
 {
@@ -114,6 +115,7 @@ GitFromServ()
 
   git pull
 }
+
 
 GitToServ()
 # sync changes from disk to serv
@@ -126,6 +128,7 @@ GitToServ()
   git add -A -v
   GitSyncToServ "$aComment"
 }
+
 
 Diff(){
   diff -r dir1 dir2 | sed '/Binary\ files\ /d' > diff.txt
