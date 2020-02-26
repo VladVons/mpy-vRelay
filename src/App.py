@@ -20,6 +20,7 @@ from Inc.NetHttp import THttpServer, THttpApi
 
 
 def Reset(aDSleep: bool = False):
+    Log.Print(1, 'DSleep', aDSleep)
     UHrd.LedFlash()
     Tasks.Stop()
     if (aDSleep):
