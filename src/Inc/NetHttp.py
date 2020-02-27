@@ -19,6 +19,20 @@ class THttpApi():
         self.FIndex  = '/index.html'
         self.F404    = '/page_404.html'
 
+    '''
+    @staticmethod
+    def GetMime(aExt: str) -> str:
+        R = {
+            'html' : 'text/html',
+            'css'  : 'text/css',
+            'js'   : 'text/javascript',
+            'png'  : 'image/png',
+            'gif'  : 'image/gif',
+            'jpg'  : 'image/jpeg'
+        }
+        return R.get(aExt, 'text/plain')
+    '''
+
     @staticmethod
     def GetMethod(aPath: str) -> str:
         return 'p' + aPath.replace('/', '_')

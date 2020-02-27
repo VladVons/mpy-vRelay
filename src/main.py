@@ -14,9 +14,11 @@ def Main():
     App.Main()
 
 
-def Test():
+def Test1():
     import Test
-    Test.Task1()
+    #Test.Task1()
+    Test.Connect('oster.com.ua', '19710000')
 
 Main()
-#Test()
+#Test2()
+

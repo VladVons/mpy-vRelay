@@ -2,18 +2,12 @@
 # Created: 28.09.2016
 # Vladimir Vons, VladVons@gmail.com
 
+source ./common.sh
+
+
 User="VladVons"
 Mail="vladvons@gmail.com"
 Url="https://github.com/$User/mpy-vRelay.git"
-
-
-Log()
-{
-  aMsg="$1";
-
-  Msg="$(date +%Y-%m-%d-%a), $(date +%H:%M:%S), $(id -u -n), $aMsg"
-  echo "$Msg"
-}
 
 
 Clean()
@@ -36,7 +30,7 @@ Clean()
 
 GitAuth()
 {
-  Log "$0->$FUNCNAME"
+  Log "$0->$FUNCNAME($*)"
 
   sudo chown -R $USER .
 
@@ -51,7 +45,7 @@ GitAuth()
 
 GitCreate()
 {
-  Log "$0->$FUNCNAME"
+  Log "$0->$FUNCNAME($*)"
 
   # create new project on disk
   git init
@@ -65,7 +59,7 @@ GitCreate()
 
 GitClone()
 {
-  Log "$0->$FUNCNAME"
+  Log "$0->$FUNCNAME($*)"
 
   # restore clone copy fromserver to disk 
   git clone $Url
@@ -78,7 +72,7 @@ GitClone()
 
 GitReset()
 {
-  Log "$0->$FUNCNAME"
+  Log "$0->$FUNCNAME($*)"
 
   git checkout --orphan TEMP_BRANCH
   git add -A
@@ -93,7 +87,7 @@ GitSyncToServ()
 # sync only changes from disk to server 
 {
   aComment="$1";
-  Log "$0->$FUNCNAME"
+  Log "$0->$FUNCNAME($*)"
 
   git status
 
@@ -111,7 +105,7 @@ GitSyncToServ()
 GitFromServ()
 # sync changes from server to disk
 {
-  Log "$0->$FUNCNAME"
+  Log "$0->$FUNCNAME($*)"
 
   git pull
 }
@@ -120,8 +114,8 @@ GitFromServ()
 GitToServ()
 # sync changes from disk to serv
 {
-  aComment=${1:-"MyCommit"};
-  Log "$0->$FUNCNAME"
+  local aComment=${1:-"MyCommit"};
+  Log "$0->$FUNCNAME($*)"
 
   Clean
   # add all new files

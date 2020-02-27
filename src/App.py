@@ -76,21 +76,21 @@ class TTaskIdle(TTask):
             Reset(Conf.get('DSleep', 60))
 
     def tMemFree(self):
-        #gc.collect()
+        gc.collect()
         print('mem_free Led', gc.mem_free())
-
-    def DoLoop(self):
-        Log.Print(1, 'TTaskIdle %s' % self.Cnt)
-
-        self.tWatchDog()
-        self.tMemFree()
-        self.tLedBeat()
-        self.tConfClear()
-        self.tDSleep()
 
     def tWatchDog(self):
         #WDog.Feed()
         pass
+
+    def DoLoop(self):
+        Log.Print(1, 'TTaskIdle %s' % self.Cnt)
+
+        #self.tWatchDog()
+        self.tMemFree()
+        self.tLedBeat()
+        self.tConfClear()
+        #self.tDSleep()
 
     def DoExit(self):
         UHrd.LedFlash()
@@ -104,6 +104,9 @@ def Main():
     if (Conf.STA_ESSID):
         from Inc.NetWLan import Connect
         if (Connect(Conf.STA_ESSID, Conf.get('STA_Paswd', ''))):
+            #import upip
+            #upip.install('micropython-uasyncio')
+
             if (not DSleep):
                 from Inc.UTime import SetTime
                 SetTime(Conf.get('TZone', 0))
@@ -120,7 +123,7 @@ def Main():
     Tasks.Add(THttpServer(THttpApiApp()))
     Tasks.Add(TTaskIdle(), Conf.get('FLed', 2))
 
-    #WDog = UHrd.TWDog(0, 10)
+    WDog = UHrd.TWDog(0, 10)
 
     try:
         Tasks.Run()

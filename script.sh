@@ -1,9 +1,9 @@
 #!/bin/bash
-
-#/usr/lib/python3.5 
 #--- VladVons@gmail.com
 
-Dev=$(ls /dev/ttyUSB*)
+source ./common.sh
+
+#Dev=$(ls /dev/ttyUSB*)
 Dev="/dev/ttyUSB0"
 
 
@@ -14,19 +14,10 @@ Root=""
 #Root="/flash"
 
 
-ExecM()
-{
-  aExec="$1"; aMsg="$2";
-
-  echo
-  echo "$FUNCNAME, $aExec, $aMsg"
-  eval "$aExec"
-}
-
 
 Upgrade()
 {
-  echo "$0->$FUNCNAME"
+  Log "$0->$FUNCNAME"
 
   sudo pip install esptool       --upgrade
   sudo pip install adafruit-ampy --upgrade 
@@ -35,22 +26,9 @@ Upgrade()
 }
 
 
-Make_mpy_cross()
-{
-  git clone https://github.com/micropython/micropython.git
-
-  #cd micropython
-  #git submodule update --init
-
-  cd micropython/mpy-cross
-  make
-
-}
-
-
 Install()
 {
-  echo "$0->$FUNCNAME"
+  Log "$0->$FUNCNAME"
 
   sudo apt-get install git
   # git clone https://github.com/VladVons/py-esp8266.git
@@ -77,7 +55,7 @@ Install()
 
 EspErase()
 {
-  echo "$0->$FUNCNAME"
+  Log "$0->$FUNCNAME"
   ExecM "esptool.py --port $Dev --baud $Speed1 erase_flash"
   #ExecM "esptool.py --port $Dev --baud $Speed1 --chip esp32 erase_flash"
   echo "Done. To write EspFirmware Unplag/Plug device"
@@ -86,14 +64,17 @@ EspErase()
 
 EspFirmware()
 {
-  echo "$0->$FUNCNAME"
+  Log "$0->$FUNCNAME"
 
   # images
   # http://micropython.org/download#esp8266
 
   Dir="/mnt/hdd/data1/share/public/image/esp/micropython"
-  FileName="esp8266-20191220-v1.12.bin"
+  #FileName="esp32-idf3-20191220-v1.12.bin"
+  #FileName="esp8266-20191220-v1.12.bin"
 
+  Dir="/mnt/hdd/data1/work/micropython/micropython/ports/esp8266/build-GENERIC"
+  FileName="firmware-combined.bin"
 
   File=$Dir/$FileName
   if [ -f $File ] ; then
@@ -117,21 +98,26 @@ EspFileList()
 EspSrcCopy()
 {
   local aDir="$1"
-  echo "$FUNCNAME($*)"
+  Log "$FUNCNAME($*)"
+
+  #Skip="Inc"
 
   echo "Copy files in ESP"
 
   cd $aDir
+
   ls | sort |\
   while read File; do
-    ExecM "ampy --port $Dev --baud $Speed1 put $File"
+    if [[ "$Skip" != *"$File"* ]]; then
+      ExecM "ampy --port $Dev --baud $Speed1 put $File"
+   fi
   done
 }
 
 
 EspRelease()
 {
-  echo "$0->$FUNCNAME"
+  Log "$0->$FUNCNAME"
   # https://github.com/bbcmicrobit/micropython/issues/555#issuecomment-419491671
 
   SkipCompile="boot.py,main.py,Options.py"
