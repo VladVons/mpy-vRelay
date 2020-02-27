@@ -38,10 +38,13 @@ Upgrade()
 Make_mpy_cross()
 {
   git clone https://github.com/micropython/micropython.git
-  #https://github.com/micropython/micropython/tree/master/mpy-cross
+
+  #cd micropython
+  #git submodule update --init
 
   cd micropython/mpy-cross
   make
+
 }
 
 
@@ -129,6 +132,7 @@ EspSrcCopy()
 EspRelease()
 {
   echo "$0->$FUNCNAME"
+  # https://github.com/bbcmicrobit/micropython/issues/555#issuecomment-419491671
 
   SkipCompile="boot.py,main.py,Options.py"
   Compiler="/admin/py-esp/micropython/mpy-cross"

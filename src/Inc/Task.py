@@ -5,28 +5,34 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
+import sys
 import uasyncio as asyncio
 from Inc.Log import Log
 
 
+Tasks = None
+
+
 class TTask():
-    Sleep  = 1
-    Cnt    = 0
     Alias  = ''
+    Cnt    = 0
+    Sleep  = 1
 
     async def Loop(self):
-        self.Handle = self.Run = True
+        self.Pause = False
+        self.Run   = True
         while self.Run:
             try:
                 self.DoEnter()
                 while self.Run:
-                    if (self.Handle):
+                    if (not self.Pause):
                         self.Cnt += 1
                         self.DoLoop()
                     await asyncio.sleep(self.Sleep)
             except Exception as E:
                 Sleep = self.DoExcept(E)
                 if (Sleep == 0):
+                    Tasks.Remove(self)
                     break
                 await asyncio.sleep(Sleep)
         self.DoExit()
@@ -41,7 +47,8 @@ class TTask():
         pass
 
     def DoExcept(self, aE):
-        Log.Print(1, 'Err', self.__class__.__name__, aE)
+        sys.print_exception(aE)
+        Log.Print(1, 'Exit', self.__class__.__name__, self.Alias)
         return 0
 
 
@@ -62,6 +69,9 @@ class TTasks():
             if (O.Alias == aAlias):
                 return O
         return None
+
+    def Remove(self, aTask):
+        self.Obj.remove(aTask)
 
     def Stop(self):
         for O in self.Obj:

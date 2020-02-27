@@ -19,14 +19,12 @@ from Inc      import UStr, UHrd
 from Inc.NetHttp import THttpServer, THttpApi
 
 
-def Reset(aDSleep: bool = False):
-    Log.Print(1, 'DSleep', aDSleep)
+
+def Reset(aSec: int = 0):
+    Log.Print(1, 'Reset', aSec)
     UHrd.LedFlash()
     Tasks.Stop()
-    if (aDSleep):
-        UHrd.DSleep(Conf.get('DSleep', 60))
-    else:
-        machine.reset()
+    UHrd.Reset(aSec)
 
 
 class THttpApiApp(THttpApi):
@@ -57,11 +55,10 @@ class TTaskIdle(TTask):
         O.value(not O.value())
 
         if (self.Cnt % 5 == 0):
-
-            print('mqtt public')
             mqtt = Tasks.Find('mqtt')
-            mqtt.Publish('MyTopic1', 'tLedBeat')
-
+            if (mqtt):
+                print('mqtt public')
+                mqtt.Publish('MyTopic1', 'tLedBeat %s' % self.Cnt)
 
     def tConfClear(self):
         O = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_UP)
@@ -76,19 +73,24 @@ class TTaskIdle(TTask):
 
     def tDSleep(self):
         if (Conf.DSleep) and (self.Cnt % 60 == 0):
-            Reset(True)
+            Reset(Conf.get('DSleep', 60))
 
     def tMemFree(self):
-        gc.collect()
+        #gc.collect()
         print('mem_free Led', gc.mem_free())
 
     def DoLoop(self):
         Log.Print(1, 'TTaskIdle %s' % self.Cnt)
 
+        self.tWatchDog()
         self.tMemFree()
         self.tLedBeat()
         self.tConfClear()
         self.tDSleep()
+
+    def tWatchDog(self):
+        #WDog.Feed()
+        pass
 
     def DoExit(self):
         UHrd.LedFlash()
@@ -103,20 +105,22 @@ def Main():
         from Inc.NetWLan import Connect
         if (Connect(Conf.STA_ESSID, Conf.get('STA_Paswd', ''))):
             if (not DSleep):
-                from ntptime import settime
-                try:
-                    settime()
-                except: pass
+                from Inc.UTime import SetTime
+                SetTime(Conf.get('TZone', 0))
 
             if (Conf.Mqtt_Host):
                 from Inc.NetMqtt import TTaskMqtt
                 Tasks.Add(TTaskMqtt(Conf.Mqtt_Host), 0.1, 'mqtt')
+            pass
+        pass
     else:
         from Inc.NetCaptive import TTaskCaptive
         Tasks.Add(TTaskCaptive(), 0.1)
 
     Tasks.Add(THttpServer(THttpApiApp()))
     Tasks.Add(TTaskIdle(), Conf.get('FLed', 2))
+
+    #WDog = UHrd.TWDog(0, 10)
 
     try:
         Tasks.Run()

@@ -25,9 +25,8 @@ class TTaskMqtt(TTask):
             self.O.publish(aTopic, aMsg)
         except: pass
 
-    def OnMessage(self, aClient, aMessage):
-        print ('on_message')
-        #print ('on_message', aMessage.topic, aMessage.payload)
+    def OnMessage(self, aTopic, aMsg):
+        print('OnMessage', aMessage.topic, aMessage.payload)
 
     def DoEnter(self):
         Log.Print(1, 'Mqtt.DoEnter')

@@ -6,7 +6,7 @@ Description:.
 '''
 
 
-def SplitPad(aCnt: int, aStr: str, aDelim: str):
+def SplitPad(aCnt: int, aStr: str, aDelim: str) -> list:
     R = aStr.split(aDelim, aCnt - 1)
     for i in range(aCnt - len(R)):
         R.append('')
@@ -17,7 +17,7 @@ class TDictRepl:
     def __init__(self, aDict: dict = {}):
         self.Dict = aDict
 
-    def Parse(self, aStr):
+    def Parse(self, aStr: str) -> str:
         import re as re
 
         if (self.Dict):

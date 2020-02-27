@@ -5,8 +5,18 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-import sys
-from App import Main
 
-sys.path.append('Inc')
+def Main():
+    #import sys
+    #sys.path.append('Inc')
+
+    import App 
+    App.Main()
+
+
+def Test():
+    import Test
+    Test.Task1()
+
 Main()
+#Test()

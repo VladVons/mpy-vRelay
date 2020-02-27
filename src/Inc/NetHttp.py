@@ -31,7 +31,7 @@ class THttpApi():
             R[Key] = Value
         return R
  
-    def LoadFile(self, aPath: str, aQuery: str, aData: str) -> str:
+    def LoadFile(self, aPath: str, aQuery: str, aData: bytearray) -> str:
         if (aPath == '/'):
             aPath = self.FIndex
 
@@ -49,7 +49,7 @@ class THttpApi():
         return UFS.FileLoad(self.RootDir + Path, Mode)
 
  
-    def ParseUrl(self, aPath: str, aQuery: str, aData: str) -> str:
+    def ParseUrl(self, aPath: str, aQuery: str, aData: bytearray) -> str:
         Obj = UObj.GetAttr(self, self.GetMethod(aPath))
         if (Obj):
             R = Obj(aQuery, aData)
@@ -57,7 +57,7 @@ class THttpApi():
             R = self.DoUrl(aPath, aQuery, aData)
         return R
 
-    def DoUrl(self, aPath, aQuery, aData):
+    def DoUrl(self, aPath: str, aQuery: str, aData: bytearray):
         return self.LoadFile(aPath, aQuery, aData)
 
 
@@ -65,7 +65,7 @@ class THttpServer(TTask):
     def __init__(self, aApi: THttpApi):
         self.Api = aApi
 
-    async def CallBack(self, aReader, aWriter):
+    async def CallBack(self, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter):
         R = {}
         while True:
             Data = await aReader.readline()

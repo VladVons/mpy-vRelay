@@ -26,7 +26,7 @@ class TConfD(dict):
 
 
 class TConf(TConfD):
-    def __init__(self, aFile: str = 'Options'):
+    def __init__(self, aFile: str):
         super().__init__() 
 
         self.File = aFile + '.py'
@@ -46,4 +46,4 @@ class TConf(TConfD):
                     V = "'" + V + "'"
                 File.write('%s = %s\n' % (K, V))
 
-Conf = TConf()
+Conf = TConf('Options')
