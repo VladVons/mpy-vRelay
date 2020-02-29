@@ -40,9 +40,9 @@ class TWDog:
         self._Cnt += 1
         Log.Print(1, 'TWDog _CallBack', self._Cnt)
         if (self._Cnt >= self._TOut):
-            Log.Print(1, 'TWDog timeout')
+            Log.Print(2, 'TWDog timeout')
             time.sleep(1)
-            aTimer.deinit()
+            #aTimer.deinit()
             #machine.reset()
 
     def Feed(self):

@@ -19,4 +19,3 @@ def SetTime(aTZone):
         rtc  = machine.RTC()
         rtc.datetime((year, month, day, 0, hour, minute, second, 0))
     except: pass
-

@@ -30,8 +30,18 @@ def Reset(aSec: int = 0):
 class THttpApiApp(THttpApi):
     def DoUrl(self, aPath, aQuery, aData):
         print('--- aPath', aPath, 'aQuery', aQuery, 'aData', aData)
+        R = 'DoUrl()'
 
-        if (aPath == '/generate_204'):
+        Name, Ext = UStr.SplitPad(2, aPath.split('/')[-1], '.')
+        if (Ext == 'py'):
+            try:
+                Obj = __import__('Api/' + Name)
+                R = Obj.Api({})
+            except Exception as E: 
+                print('E', E)
+                R = str(E)
+
+        elif (aPath == '/generate_204'):
             aPath += '.html' 
 
             R = super().DoUrl(aPath, aQuery, aData)
@@ -49,7 +59,11 @@ class THttpApiApp(THttpApi):
 
 class TTaskIdle(TTask):
     BtnCnt = 0
-
+ 
+    def __init__(self):
+        #self.WDog = UHrd.TWDog(0, 10)
+        pass
+ 
     def tLedBeat(self):
         O = machine.Pin(2, machine.Pin.OUT)
         O.value(not O.value())
@@ -76,21 +90,24 @@ class TTaskIdle(TTask):
             Reset(Conf.get('DSleep', 60))
 
     def tMemFree(self):
+        #time.sleep(0.05)
         gc.collect()
+        #time.sleep(0.05)
         print('mem_free Led', gc.mem_free())
+        pass
 
     def tWatchDog(self):
-        #WDog.Feed()
+        #self.WDog.Feed()
         pass
 
     def DoLoop(self):
         Log.Print(1, 'TTaskIdle %s' % self.Cnt)
 
-        #self.tWatchDog()
+        self.tWatchDog()
+        self.tDSleep()
         self.tMemFree()
         self.tLedBeat()
         self.tConfClear()
-        #self.tDSleep()
 
     def DoExit(self):
         UHrd.LedFlash()
@@ -122,8 +139,6 @@ def Main():
 
     Tasks.Add(THttpServer(THttpApiApp()))
     Tasks.Add(TTaskIdle(), Conf.get('FLed', 2))
-
-    WDog = UHrd.TWDog(0, 10)
 
     try:
         Tasks.Run()

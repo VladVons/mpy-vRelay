@@ -13,7 +13,7 @@ import machine
 import time
 import dht
 #
-from Log import Log
+from Inc.Log import Log
 
 
 def Get(aPin):
@@ -28,8 +28,8 @@ def Get(aPin):
         T = Obj.temperature()
         H = Obj.humidity()
         R = [T, H]
-    except Exception as e:
-        Log.Print(1, 'Err: DevDHT22', 'Get()', e)
+    except Exception as E:
+        Log.Print(1, 'Err: DevDHT22', 'Get()', E)
         R = [None, None]
     return R
 

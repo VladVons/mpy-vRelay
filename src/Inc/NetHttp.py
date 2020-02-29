@@ -56,7 +56,7 @@ class THttpApi():
             Path = self.F404
 
         Ext = Path.split('.')[-1]
-        if (Ext in ['html', 'txt', 'css']):
+        if (Ext in ['html', 'txt', 'css', 'json']):
             Mode = 'r'
         else:
             Mode = 'rb'

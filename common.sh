@@ -4,7 +4,7 @@
 
 
 cDirMPY='/mnt/hdd/data1/work/micropython'
-DirCur=$(pwd)
+cDirCur=$(pwd)
 
 
 Log()

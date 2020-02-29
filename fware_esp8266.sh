@@ -4,12 +4,14 @@
 
 source ./common.sh
 
-export PATH=$DirMPY/esp-open-sdk/xtensa-lx106-elf/bin:$PATH
 mkdir -p $cDirMPY
+export PATH=$PATH:$cDirMPY/esp-open-sdk/xtensa-lx106-elf/bin
 
 
 Make_EspOpenSdk()
 {
+  Log "$0->$FUNCNAME($*)"
+
   apt install unzip unrar-free bzip2
   apt install python-dev python-serial
   apt install make autoconf automake libtool gcc g++ gperf flex bison texinfo gawk ncurses-dev libexpat-dev git help2man wget libtool-bin
@@ -30,6 +32,8 @@ Make_EspOpenSdk()
 
 InstallPkg()
 {
+  Log "$0->$FUNCNAME($*)"
+
   $cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('uasyncio')"
   cp -R ~/.micropython/lib/uasyncio $cDirMPY/micropython/ports/esp8266/modules/
 
@@ -40,6 +44,8 @@ InstallPkg()
 
 Make_MicroPython()
 {
+  Log "$0->$FUNCNAME($*)"
+
   cd $cDirMPY
 
   git clone https://github.com/micropython/micropython.git
@@ -57,8 +63,9 @@ Make_MicroPython()
 }
 
 
-Make_MicroFirmware_esp8266()
+Make_MicroFirmware()
 {
+  Log "$0->$FUNCNAME($*)"
 
   cd $cDirMPY/micropython/ports/esp8266
   make
@@ -68,8 +75,6 @@ Make_MicroFirmware_esp8266()
 }
 
 
-
-
 #Make_EspOpenSdk
 #Make_MicroPython
-Make_MicroFirmware_esp8266
+Make_MicroFirmware
