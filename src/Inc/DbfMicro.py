@@ -8,10 +8,15 @@ Description:.
 import os
 import struct
 import collections
+import time
 
 
-CHead  = collections.namedtuple('Head',  ['Sign', 'RecCnt', 'LUpd', 'HeadLen', 'RecLen'])
-CField = collections.namedtuple('Field', ['Name', 'Type', 'Len', 'LenD'])
+CHead  = collections.namedtuple('Head',  ('Sign', 'RecCnt', 'LUpd', 'HeadLen', 'RecLen'))
+
+# ToDO. 3.7 supports defaults parameter
+#CField = collections.namedtuple('Field', ('Type', 'Len', 'LenD', 'No', 'Ofst'), defaults = ('C', 10, 0, 0, 0))
+#CField.__new__.__defaults__ = ('C', 10, 0, 0, 0)
+CField = collections.namedtuple('Field', ('Type', 'Len', 'LenD', 'No', 'Ofst'))
 
 
 class TDbf():
@@ -25,16 +30,32 @@ class TDbf():
     def __del__(self):
         self.Close()
 
-    def _GetFieldRange(self, aIdx: int):
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if (self.RecNo >= self.GetSize()):
+            raise StopIteration
+        else:
+            self.RecGo(self.RecNo)
+            self.RecNo += 1
+            return self.RecNo - 1
+
+    def _WriteFields(self, aFields: list):
+        self.Stream.seek(31)
+        self.Stream.write(b'\0')
+
         R = 0
-        for F in self.Fields[0:aIdx + 1]:
-            print(F.Name, F.Len)
-            R += F.Len
-        return [R, F.Len]
+        for K, V in aFields.items():
+            print(V.Type)
+            #V.Ofst = R
+            R += V.Len 
+        return R
 
-    def _ParseFields(self):
-        self.Fields = []
+    def _ReadFields(self):
+        self.Fields = {}
 
+        Ofst = 1
         self.Stream.seek(32)
         while True:
             Data = self.Stream.read(32)
@@ -42,41 +63,44 @@ class TDbf():
             if (FName[0] == 13):
                 break
 
-            F = CField(
-                    Name = FName.split(b'\0',1)[0].decode(), 
-                    Type = FType.decode(), 
-                    Len  = FLen, 
-                    LenD = FLenD
-                )
-            self.Fields.append(F)
+            Name = FName.split(b'\0',1)[0].decode()
+            self.Fields[Name] = CField(Type = FType.decode(), Len = FLen, LenD = FLenD, Ofst = Ofst, No = len(self.Fields))
+            Ofst += FLen
 
-    def _ParseHead(self):
+    def _ReadHead(self):
         self.Stream.seek(0)
         Data = self.Stream.read(32)
         Sign, LUpd, RecCnt, HeadLen, RecLen = struct.unpack('1B3s1I1H1H', Data[0:1+3+4+2+2])
-        self.Head = CHead(
-                Sign    = Sign,
-                LUpd    = LUpd,
-                RecCnt  = RecCnt,
-                HeadLen = HeadLen, 
-                RecLen  = RecLen 
-            )
+        self.Head = CHead( Sign = Sign, LUpd = LUpd, RecCnt = RecCnt, HeadLen = HeadLen, RecLen = RecLen )
 
     def _SeekRecNo(self):
-        self.Stream.seek(self.Head.HeadLen + (self.RecNo * self.Head.RecLen))
+        Ofst = self.Head.HeadLen + (self.RecNo * self.Head.RecLen)
+        return self.Stream.seek(Ofst)
 
-    def Open(self, aName: str) -> bool:
-        self.Name   = aName
-        self.Stream = open(aName, 'rb')
+
+    def Create(self, aName: str, aFields: list):
+        self.Name = aName
+        self.Close()
+
+        self.Stream = open(aName, 'wb+')
+        self._WriteFields(aFields)
+
+    def Open(self, aName: str, aReadOnly = False):
+        self.Name = aName
+        self.Close()
+
+        Mode = 'rb' if aReadOnly else 'rb+'
+        self.Stream = open(aName, Mode)
  
-        self._ParseHead()
-        self._ParseFields()
+        self._ReadHead()
+        self._ReadFields()
         self.RecGo(0)
 
     def Close(self): 
        if (self.Stream):
             self.RecWrite()
             self.Stream.close()
+            self.Stream = None
 
     def GetSize(self) -> int:
         Len = os.stat(self.Name)[6]
@@ -84,20 +108,57 @@ class TDbf():
 
     def RecRead(self):
         self._SeekRecNo()
-        self.Buf = self.Stream.read(self.Head.RecLen)
+        self.Buf = bytearray(self.Stream.read(self.Head.RecLen))
 
     def RecWrite(self):
         if (self.RecSave):
-            self._SeekRecNo()
-            self.Stream.write(self.Buf)
             self.RecSave = False
+            self._SeekRecNo()
+            return self.Stream.write(self.Buf)
 
     def RecGo(self, aNo: int):
         self.RecWrite()
-        self.RecNo = min(max(0, aNo), self.GetSize())
+        self.RecNo = min(aNo, self.GetSize())
         self.RecRead()
 
-    def GetFieldData(self, aIdx: int):
-        Arr = self._GetFieldRange(aIdx)
-        print(Arr)
-        return self.Buf[Arr[0]:Arr[1]]
+    def RecDelete(self, aMode: bool):
+        self.RecSave = True
+        self.Buf[0] = 42 if aMode else 32
+
+    def RecDeleted(self):
+        return self.Buf[0] == 42
+
+    def GetFieldData(self, aField: CField) -> bytearray:
+        return self.Buf[aField.Ofst : aField.Ofst + aField.Len]
+
+    def SetFieldData(self, aField: CField, aData: bytearray):
+        self.RecSave = True
+        if (aField.Ofst + len(aData) >= len(self.Buf)):
+            aData = aData[0:len(self.Buf) - aField.Ofst]
+            Len   = None
+        else:
+            Len  = aField.Ofst + len(aData) - len(self.Buf)
+        self.Buf[aField.Ofst:Len] = aData
+
+    def GetField(self, aName: str):
+        Field = self.Fields[aName]
+        R = self.GetFieldData(Field).decode().strip()
+
+        if (Field.Type == 'N'):
+            if (Field.LenD > 0):
+                R = float(R if R != '' else '0.0')
+            else:
+                R = int(R if R != '' else '0')
+        elif (Field.Type == 'F'):
+            R = float(R if R != '' else '0.0')
+        elif (Field.Type == 'L'):
+            R = True if R == 'T' else False
+        elif (Field.Type == 'D'):
+            if (R == ''):
+                R = '20000101'
+            #R = time.mktime([int(R[0:4]), int(R[4:6]), int(R[6:8]), 0, 0, 0, 0, 0])
+        return R
+
+    def SetField(self, aName: str, aValue):
+        Field = self.Fields[aName]
+        self.SetFieldData(Field, aValue)
