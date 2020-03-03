@@ -44,6 +44,7 @@ class TDbf():
     def _WriteFields(self, aFields: list):
         self.Stream.seek(31)
         self.Stream.write(b'\0')
+        self.Stream.readline(20)
 
         R = 0
         for K, V in aFields.items():
@@ -118,8 +119,19 @@ class TDbf():
 
     def RecGo(self, aNo: int):
         self.RecWrite()
-        self.RecNo = min(aNo, self.GetSize())
+        if (aNo > 0):
+            self.RecNo = min(aNo, self.GetSize())
+        else:
+            self.RecNo = max(0, self.GetSize() + aNo)
         self.RecRead()
+
+    def RecAdd(self):
+        self.RecWrite()
+
+        self.Buf = bytearray(b' ' * self.Head.RecLen)
+        self.Stream.seek(0, 2)
+        self.Stream.write(self.Buf)
+        self.RecNo = self.GetSize()
 
     def RecDelete(self, aMode: bool):
         self.RecSave = True
