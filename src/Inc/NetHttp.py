@@ -7,10 +7,9 @@ Description:.
 
 import uasyncio as asyncio
 #
-from Inc.Log import Log
-from Inc import UFS, UObj
-from Inc.UStr import SplitPad
-from Inc.Task import TTask
+from .Log  import Log
+from .Util import UFS, UObj, UStr
+from .Task import TTask
 
 
 class THttpApi():
@@ -41,7 +40,7 @@ class THttpApi():
     def ParseQuery(aQuery: str) -> dict:
         R = {}
         for i in aQuery.split('&'):
-            Key, Value = SplitPad(2, i, '=')
+            Key, Value = UStr.SplitPad(2, i, '=')
             R[Key] = Value
         return R
  
@@ -88,10 +87,10 @@ class THttpServer(TTask):
 
             Data = Data.decode('utf-8').strip()
             if (len(R) == 0):
-                R['mode'], R['url'], R['prot'] = SplitPad(3, Data, ' ')
-                R['path'], R['query'] = SplitPad(2, R['url'], '?')
+                R['mode'], R['url'], R['prot'] = UStr.SplitPad(3, Data, ' ')
+                R['path'], R['query'] = UStr.SplitPad(2, R['url'], '?')
             else:
-                Key, Value = SplitPad(2, Data, ':')
+                Key, Value = UStr.SplitPad(2, Data, ':')
                 R[Key.lower()] = Value.strip()
 
         Len = int(R.get('content-length', '0'))

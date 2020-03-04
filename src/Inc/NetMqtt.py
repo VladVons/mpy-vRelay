@@ -9,8 +9,8 @@ Description:.
 import uasyncio as asyncio
 from umqtt.simple import MQTTClient
 #
-from Inc.Log import Log
-from Inc.Task import TTask
+from .Log import Log
+from .Task import TTask
 
 
 class TTaskMqtt(TTask):

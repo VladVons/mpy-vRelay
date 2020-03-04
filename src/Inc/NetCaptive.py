@@ -13,8 +13,8 @@ import usocket as socket
 import network
 import time
 #
-from Inc.NetWLan import EnableAP, GetMac
-from Inc.Task import TTask
+from .NetWLan import EnableAP, GetMac
+from .Task import TTask
 
 
 class TTaskCaptive(TTask): 

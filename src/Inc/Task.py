@@ -7,7 +7,7 @@ Description:.
 
 import sys
 import uasyncio as asyncio
-from Inc.Log import Log
+from .Log import Log
 
 
 Tasks = None

@@ -10,7 +10,7 @@ import time
 import os
 import sys
 #
-from Inc.Conf import Conf
+from .Conf import Conf
 
 
 class TEcho():

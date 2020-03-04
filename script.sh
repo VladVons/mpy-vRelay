@@ -73,8 +73,8 @@ EspFirmware()
   #FileName="esp32-idf3-20191220-v1.12.bin"
   FileName="esp8266-20191220-v1.12.bin"
 
-  #Dir="/mnt/hdd/data1/work/micropython/micropython/ports/esp8266/build-GENERIC"
-  #FileName="firmware-combined.bin"
+  Dir="/mnt/hdd/data1/work/micropython/micropython/ports/esp8266/build-GENERIC"
+  FileName="firmware-combined.bin"
 
   File=$Dir/$FileName
   if [ -f $File ] ; then

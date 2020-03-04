@@ -9,37 +9,21 @@ import os
 import struct
 import collections
 import time
+#
+from .Db import TDb
 
 
-CHead  = collections.namedtuple('Head',  ('Sign', 'RecCnt', 'LUpd', 'HeadLen', 'RecLen'))
-
+#CHead  = collections.namedtuple('Head',  ('Sign', 'RecCnt', 'LUpd', 'HeadLen', 'RecLen'))
 # ToDO. 3.7 supports defaults parameter
 #CField = collections.namedtuple('Field', ('Type', 'Len', 'LenD', 'No', 'Ofst'), defaults = ('C', 10, 0, 0, 0))
 #CField.__new__.__defaults__ = ('C', 10, 0, 0, 0)
 CField = collections.namedtuple('Field', ('Type', 'Len', 'LenD', 'No', 'Ofst'))
 
 
-class TDbf():
+class TDbf(TDb):
     def __init__(self):
-        self.Stream  = None
-        self.Head    = None
-        self.Fields  = None
-        self.RecNo   = 0
-        self.RecSave = False
-
-    def __del__(self):
-        self.Close()
-
-    def __iter__(self):
-        return self
-
-    def __next__(self):
-        if (self.RecNo >= self.GetSize()):
-            raise StopIteration
-        else:
-            self.RecGo(self.RecNo)
-            self.RecNo += 1
-            return self.RecNo - 1
+        super().__init__()
+        self.RecFill = ' '
 
     def _WriteFields(self, aFields: list):
         self.Stream.seek(31)
@@ -71,68 +55,12 @@ class TDbf():
     def _ReadHead(self):
         self.Stream.seek(0)
         Data = self.Stream.read(32)
-        Sign, LUpd, RecCnt, HeadLen, RecLen = struct.unpack('1B3s1I1H1H', Data[0:1+3+4+2+2])
-        self.Head = CHead( Sign = Sign, LUpd = LUpd, RecCnt = RecCnt, HeadLen = HeadLen, RecLen = RecLen )
+        Sign, LUpd, RecCnt, self.HeadLen, self.RecLen = struct.unpack('1B3s1I1H1H', Data[0:1+3+4+2+2])
 
-    def _SeekRecNo(self):
-        Ofst = self.Head.HeadLen + (self.RecNo * self.Head.RecLen)
-        return self.Stream.seek(Ofst)
-
-
-    def Create(self, aName: str, aFields: list):
-        self.Name = aName
-        self.Close()
-
-        self.Stream = open(aName, 'wb+')
-        self._WriteFields(aFields)
-
-    def Open(self, aName: str, aReadOnly = False):
-        self.Name = aName
-        self.Close()
-
-        Mode = 'rb' if aReadOnly else 'rb+'
-        self.Stream = open(aName, Mode)
- 
+    def _StructRead(self):
         self._ReadHead()
         self._ReadFields()
-        self.RecGo(0)
-
-    def Close(self): 
-       if (self.Stream):
-            self.RecWrite()
-            self.Stream.close()
-            self.Stream = None
-
-    def GetSize(self) -> int:
-        Len = os.stat(self.Name)[6]
-        return int((Len - self.Head.HeadLen) / self.Head.RecLen)
-
-    def RecRead(self):
-        self._SeekRecNo()
-        self.Buf = bytearray(self.Stream.read(self.Head.RecLen))
-
-    def RecWrite(self):
-        if (self.RecSave):
-            self.RecSave = False
-            self._SeekRecNo()
-            return self.Stream.write(self.Buf)
-
-    def RecGo(self, aNo: int):
-        self.RecWrite()
-        if (aNo > 0):
-            self.RecNo = min(aNo, self.GetSize())
-        else:
-            self.RecNo = max(0, self.GetSize() + aNo)
-        self.RecRead()
-
-    def RecAdd(self):
-        self.RecWrite()
-
-        self.Buf = bytearray(b' ' * self.Head.RecLen)
-        self.Stream.seek(0, 2)
-        self.Stream.write(self.Buf)
-        self.RecNo = self.GetSize()
-
+ 
     def RecDelete(self, aMode: bool):
         self.RecSave = True
         self.Buf[0] = 42 if aMode else 32
@@ -174,3 +102,11 @@ class TDbf():
     def SetField(self, aName: str, aValue):
         Field = self.Fields[aName]
         self.SetFieldData(Field, aValue)
+
+    def Create(self, aName: str, aFields: list):
+        self.Name = aName
+        self.Close()
+
+        self.Stream = open(aName, 'wb+')
+        self._WriteFields(aFields)
+

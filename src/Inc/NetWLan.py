@@ -10,7 +10,7 @@ import time
 import ubinascii
 import sys
 #
-from Inc.Log import Log
+from .Log import Log
 
 
 def GetMac(aObj) -> str:

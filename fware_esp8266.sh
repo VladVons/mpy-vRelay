@@ -39,6 +39,9 @@ InstallPkg()
 
   $cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('umqtt.simple')"
   cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
+
+  rm -R $cDirMPY/micropython/ports/esp8266/modules/Inc
+  cp -R /mnt/hdd/data1/work/micropython/proj/mpy-vRelay/src/Inc $cDirMPY/micropython/ports/esp8266/modules/
 }
 
 
@@ -56,7 +59,7 @@ Make_MicroPython()
 
   make -C mpy-cross
 
-  cd $cDirMPY/ports/unix
+  cd $cDirMPY/micropython/ports/unix
   make
 
   InstallPkg
@@ -76,5 +79,5 @@ Make_MicroFirmware()
 
 
 #Make_EspOpenSdk
-#Make_MicroPython
+Make_MicroPython
 Make_MicroFirmware
