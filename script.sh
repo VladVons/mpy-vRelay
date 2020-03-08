@@ -73,8 +73,8 @@ EspFirmware()
   #FileName="esp32-idf3-20191220-v1.12.bin"
   FileName="esp8266-20191220-v1.12.bin"
 
-  Dir="/mnt/hdd/data1/work/micropython/micropython/ports/esp8266/build-GENERIC"
-  FileName="firmware-combined.bin"
+  #Dir="/mnt/hdd/data1/work/micropython/micropython/ports/esp8266/build-GENERIC"
+  #FileName="firmware-combined.bin"
 
   File=$Dir/$FileName
   if [ -f $File ] ; then
@@ -101,6 +101,7 @@ EspSrcCopy()
   Log "$FUNCNAME($*)"
 
   #Skip="Inc"
+  Skip="__pycache__"
 
   echo "Copy files in ESP"
 
@@ -110,7 +111,7 @@ EspSrcCopy()
   while read File; do
     if [[ "$Skip" != *"$File"* ]]; then
       ExecM "ampy --port $Dev --baud $Speed1 put $File"
-   fi
+    fi
   done
 }
 
@@ -120,7 +121,7 @@ EspRelease()
   Log "$0->$FUNCNAME"
   # https://github.com/bbcmicrobit/micropython/issues/555#issuecomment-419491671
 
-  SkipCompile="boot.py,main.py,Options.py"
+  SkipCompile="boot.py,main.py,Options.py,__pycache__"
   Compiler="/admin/py-esp/micropython/mpy-cross"
 
   DirOut="../release"
@@ -141,7 +142,6 @@ EspRelease()
     else
         cp --parents $File $DirOut
     fi
-
   done
 }
 

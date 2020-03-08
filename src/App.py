@@ -17,7 +17,7 @@ from Inc.Log  import Log
 from Inc.Task import TTask, Tasks
 from Inc.Util import UStr, UHrd
 from Inc.NetHttp import THttpServer, THttpApi
-from Inc.DB.Dbl import TDbl 
+#from Inc.DB.Dbl import TDbl 
 
 
 def Reset(aSec: int = 0):
@@ -87,7 +87,7 @@ class TTaskIdle(TTask):
 
     def tDSleep(self):
         if (Conf.DSleep) and (self.Cnt % 60 == 0):
-            Reset(Conf.get('DSleep', 60))
+            Reset(Conf.get('DSleep', 1*60))
 
     def tMemFree(self):
         #time.sleep(0.05)
@@ -103,8 +103,8 @@ class TTaskIdle(TTask):
     def DoLoop(self):
         Log.Print(1, 'TTaskIdle %s' % self.Cnt)
 
-        self.tWatchDog()
-        self.tDSleep()
+        #self.tWatchDog()
+        #self.tDSleep()
         self.tMemFree()
         self.tLedBeat()
         self.tConfClear()
@@ -139,6 +139,9 @@ def Main():
 
     Tasks.Add(THttpServer(THttpApiApp()))
     Tasks.Add(TTaskIdle(), Conf.get('FLed', 2))
+    
+    #time.sleep(2)
+    #Reset(1*60)
 
     try:
         Tasks.Run()

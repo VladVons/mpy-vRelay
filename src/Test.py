@@ -1,3 +1,8 @@
+#!/usr/bin/python3
+#!/usr/bin/micropython
+
+
+
 async def Task1():
     import uasyncio as asyncio
 
@@ -55,4 +60,50 @@ def TestMem():
     print('mem_free', gc.collect(), gc.mem_free())
 
 
-#Test1()
+
+def TestDbf_Open():
+    from Inc.DB.Dbf import TDbf
+
+    Dbf = TDbf()
+    Dbf.Open('1SBLOB.dbf')
+    print('---1', Dbf.Buf)
+
+    FName = 'FIELDID'
+    for i in Dbf:
+        if (not Dbf.RecDeleted()):
+            print(i, Dbf.GetField(FName))
+
+
+def TestDbf_Create():
+    from Inc.DB.Dbf import TDbf, TDbfFields
+
+    Fields = TDbfFields()
+    Fields.Add('FChr', 'c')
+    Fields.Add('FNUM', 'n')
+    Fields.Add('FDAT', 'D')
+    Fields.Add('FLOG', 'L')
+
+    Dbf = TDbf()
+    Dbf.Create('1SBLOB-2.db', Fields)
+    Dbf.RecAdd()
+    Dbf.RecDelete()
+    Dbf.SetField('FCHr', 'Hello')
+    Dbf.Close()
+
+
+
+def TestDbl():
+    from Inc.DB.Dbl import TDbl, CField
+
+    Fields = {
+        'F_CHAR' : CField(Type = 'C', Len = 10, No = 0, Ofst = 0),
+        'F_NUM'  : CField(Type = 'N', Len = 0,  No = 1, Ofst = 0),
+        'F_LOG'  : CField(Type = 'L', Len = 0,  No = 2, Ofst = 0)
+    }
+
+
+
+TestDbf_Open()
+#TestDbf_Create()
+#TestDbl()
+    

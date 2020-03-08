@@ -58,10 +58,3 @@ class TDbl(TDb):
         print(type(Field.Type), Field.Type, type(aValue), aValue)
         Data = struct.pack(Field.Type, aValue)
         self.Buf[Field.Ofst : Field.Ofst + Field.Len] = Data
-
-    def Create(self, aName: str, aPack: str, aFields: str):
-        self.Close()
-
-        self.Stream = open(aName, 'wb+')
-        self._StructWrite(aPack, aFields)
-

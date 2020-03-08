@@ -29,6 +29,7 @@ def Get(aPin):
         H = Obj.humidity()
         R = [T, H]
     except Exception as E:
+        sys.print_exception(E)
         Log.Print(1, 'Err: DevDHT22', 'Get()', E)
         R = [None, None]
     return R

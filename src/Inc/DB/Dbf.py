@@ -5,108 +5,102 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-import os
+
 import struct
-import collections
-import time
 #
-from .Db import TDb
+from .Db import TDb, TDbFields, TDbField
 
 
-#CHead  = collections.namedtuple('Head',  ('Sign', 'RecCnt', 'LUpd', 'HeadLen', 'RecLen'))
-# ToDO. 3.7 supports defaults parameter
-#CField = collections.namedtuple('Field', ('Type', 'Len', 'LenD', 'No', 'Ofst'), defaults = ('C', 10, 0, 0, 0))
-#CField.__new__.__defaults__ = ('C', 10, 0, 0, 0)
-CField = collections.namedtuple('Field', ('Type', 'Len', 'LenD', 'No', 'Ofst'))
+class TDbfField(TDbField):
+    def DefLen(self, aType: str, aLen: int):
+        if (aLen == 0):
+            aLen = {'C': 10, 'N': 10, 'D': 8, 'L': 1}.get(aType, 0)
+        return aLen
+
+    def DefValue(self, aValue: str):
+        if (self.Type == 'N'):
+            if (self.LenD > 0):
+                aValue = float(aValue if aValue != '' else '0.0')
+            else:
+                aValue = int(aValue if aValue != '' else '0')
+        elif (self.Type == 'F'):
+            aValue = float(aValue if aValue != '' else '0.0')
+        elif (self.Type == 'L'):
+            aValue = True if aValue == 'T' else False
+        elif (self.Type == 'D'):
+            if (aValue == ''):
+                aValue = '20010101'
+            #R = time.mktime([int(R[0:4]), int(R[4:6]), int(R[6:8]), 0, 0, 0, 0, 0])
+        return aValue
+
+
+class TDbfFields(TDbFields):
+    def Add(self, aName: str, aType: str, aLen: int = 0, aLenD: int = 0):
+        aName = aName.upper()
+        aType = aType.upper()
+
+        R = TDbfField()
+        aLen = R.DefLen(aType, aLen)
+        R.update({'Name': aName, 'Type': aType, 'Len': aLen, 'No': len(self), 'Ofst': self.Len, 'LenD': aLenD})
+        self[aName] = R
+        self.Len += aLen
+        return R
 
 
 class TDbf(TDb):
+
     def __init__(self):
         super().__init__()
-        self.RecFill = ' '
-
-    def _WriteFields(self, aFields: list):
-        self.Stream.seek(31)
-        self.Stream.write(b'\0')
-        self.Stream.readline(20)
-
-        R = 0
-        for K, V in aFields.items():
-            print(V.Type)
-            #V.Ofst = R
-            R += V.Len 
-        return R
-
-    def _ReadFields(self):
-        self.Fields = {}
-
-        Ofst = 1
-        self.Stream.seek(32)
-        while True:
-            Data = self.Stream.read(32)
-            FName, FType, X, FLen, FLenD = struct.unpack('11s1s4s1B1B', Data[0:11+1+4+1+1])
-            if (FName[0] == 13):
-                break
-
-            Name = FName.split(b'\0',1)[0].decode()
-            self.Fields[Name] = CField(Type = FType.decode(), Len = FLen, LenD = FLenD, Ofst = Ofst, No = len(self.Fields))
-            Ofst += FLen
-
-    def _ReadHead(self):
-        self.Stream.seek(0)
-        Data = self.Stream.read(32)
-        Sign, LUpd, RecCnt, self.HeadLen, self.RecLen = struct.unpack('1B3s1I1H1H', Data[0:1+3+4+2+2])
+        self.RecFill = b' '
 
     def _StructRead(self):
         self._ReadHead()
         self._ReadFields()
- 
-    def RecDelete(self, aMode: bool):
+
+    def _StructWrite(self, aFields: TDbfFields):
+        RecLen  = aFields.Len + 1
+        HeadLen = 32 + (32 * len(aFields)) + 1
+        Data = struct.pack('<1B3B1I1H1H', 3, 1, 1, 1, 0, HeadLen, RecLen)
+        self.Stream.seek(0)
+        self.Stream.write(Data)
+
+        self.Stream.seek(32)
+        for K, V in aFields.Sort():
+            Data = struct.pack('<11s1s4s1B1B14s', V.Name.encode(), V.Type.encode(), b'\x00', V.Len, V.LenD, b'\x00')
+            self.Stream.write(Data)
+        self.Stream.write(b'\x0D')
+
+    def _ReadFields(self):
+        self.Fields = TDbfFields()
+        self.Fields.Add('Del', 'C', 1, 0)
+
+        self.Stream.seek(32)
+        while True:
+            Data = self.Stream.read(32)
+            if (Data[0] == 0x0D):
+                break
+
+            FName, FType, X, FLen, FLenD = struct.unpack('<11s1s4s1B1B', Data[0:11+1+4+1+1])
+            Name = FName.split(b'\0', 1)[0].decode()
+            self.Fields.Add(Name, FType.decode(), FLen, FLenD)
+
+    def _ReadHead(self):
+        self.Stream.seek(0)
+        Data = self.Stream.read(32)
+        Sign, LUpd, RecCnt, self.HeadLen, self.RecLen = struct.unpack('<1B3s1I1H1H', Data[0:1+3+4+2+2])
+
+    def RecDelete(self, aMode: bool = True):
         self.RecSave = True
         self.Buf[0] = 42 if aMode else 32
 
     def RecDeleted(self):
         return self.Buf[0] == 42
 
-    def GetFieldData(self, aField: CField) -> bytearray:
-        return self.Buf[aField.Ofst : aField.Ofst + aField.Len]
-
-    def SetFieldData(self, aField: CField, aData: bytearray):
-        self.RecSave = True
-        if (aField.Ofst + len(aData) >= len(self.Buf)):
-            aData = aData[0:len(self.Buf) - aField.Ofst]
-            Len   = None
-        else:
-            Len  = aField.Ofst + len(aData) - len(self.Buf)
-        self.Buf[aField.Ofst:Len] = aData
-
     def GetField(self, aName: str):
-        Field = self.Fields[aName]
+        Field = self.Fields[aName.upper()]
         R = self.GetFieldData(Field).decode().strip()
-
-        if (Field.Type == 'N'):
-            if (Field.LenD > 0):
-                R = float(R if R != '' else '0.0')
-            else:
-                R = int(R if R != '' else '0')
-        elif (Field.Type == 'F'):
-            R = float(R if R != '' else '0.0')
-        elif (Field.Type == 'L'):
-            R = True if R == 'T' else False
-        elif (Field.Type == 'D'):
-            if (R == ''):
-                R = '20000101'
-            #R = time.mktime([int(R[0:4]), int(R[4:6]), int(R[6:8]), 0, 0, 0, 0, 0])
-        return R
+        return Field.DefValue(R)
 
     def SetField(self, aName: str, aValue):
-        Field = self.Fields[aName]
-        self.SetFieldData(Field, aValue)
-
-    def Create(self, aName: str, aFields: list):
-        self.Name = aName
-        self.Close()
-
-        self.Stream = open(aName, 'wb+')
-        self._WriteFields(aFields)
-
+        Field = self.Fields[aName.upper()]
+        self.SetFieldData(Field, aValue.encode())

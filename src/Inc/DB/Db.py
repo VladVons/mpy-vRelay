@@ -5,7 +5,23 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-import os
+from Inc.Util import UArr
+
+# ToDo. < 3.7 doesnt supports defaults parameter. Need own TField
+#CField = collections.namedtuple('Field', ('Type', 'Len', 'LenD', 'No', 'Ofst'), defaults = ('C', 10, 0, 0, 0))
+#CField.__new__.__defaults__ = ('C', 10, 0, 0, 0)
+
+
+class TDbField(dict):
+    def __getattr__(self, aName: str):
+        return self.get(aName)
+
+
+class TDbFields(dict):
+    Len = 0
+
+    def Sort(self, aName = 'No'):
+        return UArr.SortD(self, aName)
 
 
 class TDb():
@@ -58,19 +74,40 @@ class TDb():
 
     def RecGo(self, aNo: int):
         self.RecWrite()
-        if (aNo > 0):
+        if (aNo >= 0):
             self.RecNo = min(aNo, self.GetSize())
         else:
             self.RecNo = max(0, self.GetSize() + aNo)
         self.RecRead()
 
-    def RecAdd(self):
+    def RecAdd(self, aCnt = 1):
         self.RecWrite()
 
         self.Buf = bytearray(self.RecFill * self.RecLen)
         self.Stream.seek(0, 2)
-        self.Stream.write(self.Buf)
-        self.RecNo = self.GetSize()
+        for Cnt in range(aCnt):
+            self.Stream.write(self.Buf)
+        self.RecNo = self.GetSize() - 1
+
+    def GetFieldData(self, aField: TDbField) -> bytearray:
+        return self.Buf[aField.Ofst : aField.Ofst + aField.Len]
+
+    def SetFieldData(self, aField: TDbField, aData: bytearray):
+        self.RecSave = True
+        if (aField.Ofst + len(aData) >= len(self.Buf)):
+            aData = aData[0:len(self.Buf) - aField.Ofst]
+            Len = None
+        else:
+            Len = aField.Ofst + len(aData) - len(self.Buf)
+        self.Buf[aField.Ofst:Len] = aData
+
+    def Create(self, aName: str, aFields: TDbFields):
+        self.Name = aName
+        self.Close()
+
+        self.Stream = open(aName, 'wb+')
+        self._StructWrite(aFields)
+        self._StructRead()
 
     def Open(self, aName: str, aReadOnly = False):
         self.Close()
@@ -80,3 +117,4 @@ class TDb():
         self._StructRead()
 
         self.RecGo(0)
+
