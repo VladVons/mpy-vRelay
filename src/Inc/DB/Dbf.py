@@ -7,6 +7,7 @@ Description:.
 
 
 import struct
+import time
 #
 from .Db import TDb, TDbFields, TDbField
 
@@ -17,7 +18,17 @@ class TDbfField(TDbField):
             aLen = {'C': 10, 'N': 10, 'D': 8, 'L': 1}.get(aType, 0)
         return aLen
 
-    def DefValue(self, aValue: str):
+    def ValueToData(self, aValue) -> str:
+        if (self.Type == 'L'):
+            aValue = 'T' if aValue else 'F'
+        elif (self.Type == 'D'):
+            lt = time.localtime(aValue)
+            aValue = '%04d%02d%02d' % (lt[0], lt[1], lt[2])
+        else:
+            aValue = str(aValue)
+        return aValue
+
+    def DataToValue(self, aValue: str):
         if (self.Type == 'N'):
             if (self.LenD > 0):
                 aValue = float(aValue if aValue != '' else '0.0')
@@ -98,9 +109,10 @@ class TDbf(TDb):
 
     def GetField(self, aName: str):
         Field = self.Fields[aName.upper()]
-        R = self.GetFieldData(Field).decode().strip()
-        return Field.DefValue(R)
+        R = self._GetFieldData(Field).decode().strip()
+        return Field.DataToValue(R)
 
     def SetField(self, aName: str, aValue):
         Field = self.Fields[aName.upper()]
-        self.SetFieldData(Field, aValue.encode())
+        Value = Field.ValueToData(aValue)
+        self._SetFieldData(Field, Value.encode())

@@ -10,13 +10,11 @@ import uasyncio as asyncio
 from umqtt.simple import MQTTClient
 #
 from .Log import Log
-from .Task import TTask
+from .Task import TTask, Tasks
 
 
 class TTaskMqtt(TTask):
     def __init__(self, aHost, aPort = 1883):
-        self.Sleep = 0.1
-
         self.O = MQTTClient('ClientID', aHost, aPort)
         self.O.set_callback(self.OnMessage)
 
@@ -26,7 +24,8 @@ class TTaskMqtt(TTask):
         except: pass
 
     def OnMessage(self, aTopic, aMsg):
-        print('OnMessage', aMessage.topic, aMessage.payload)
+        print('OnMessage', aTopic, aMsg)
+        Tasks.Post(self, {'Type': 'OnMsg', 'Param': [aTopic, aMsg]})
 
     def DoEnter(self):
         Log.Print(1, 'Mqtt.DoEnter')

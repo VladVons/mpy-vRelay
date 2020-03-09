@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 #!/usr/bin/micropython
 
-
+class TTest1():
+    pass
 
 async def Task1():
     import uasyncio as asyncio
@@ -60,50 +61,54 @@ def TestMem():
     print('mem_free', gc.collect(), gc.mem_free())
 
 
-
 def TestDbf_Open():
     from Inc.DB.Dbf import TDbf
 
     Dbf = TDbf()
     Dbf.Open('1SBLOB.dbf')
-    print('---1', Dbf.Buf)
 
-    FName = 'FIELDID'
+    FName = 'FChr'
     for i in Dbf:
         if (not Dbf.RecDeleted()):
-            print(i, Dbf.GetField(FName))
+            if (i % 1000 == 0):
+                print(i, Dbf.GetField(FName))
 
 
 def TestDbf_Create():
+    import time
     from Inc.DB.Dbf import TDbf, TDbfFields
 
     Fields = TDbfFields()
-    Fields.Add('FChr', 'c')
-    Fields.Add('FNUM', 'n')
+    Fields.Add('FChr', 'c', 15)
+    Fields.Add('FNUM', 'n', 10, 2)
     Fields.Add('FDAT', 'D')
     Fields.Add('FLOG', 'L')
 
     Dbf = TDbf()
-    Dbf.Create('1SBLOB-2.db', Fields)
-    Dbf.RecAdd()
-    Dbf.RecDelete()
-    Dbf.SetField('FCHr', 'Hello')
+    Dbf.Create('1SBLOB.dbf', Fields)
+    for i in range(100000):
+        if (i % 1000 == 0):
+            print(i)
+        Dbf.RecAdd()
+        Dbf.SetField('FCHr', 'Hello %s' % i)
+        Dbf.SetField('FNUM', i)
+        Dbf.SetField('FDAT', time.time())
+        Dbf.SetField('FLOG', bool(i % 2))
     Dbf.Close()
 
 
-
 def TestDbl():
-    from Inc.DB.Dbl import TDbl, CField
+    from Inc.DB.Dbl import TDbl, TDblFields
 
-    Fields = {
-        'F_CHAR' : CField(Type = 'C', Len = 10, No = 0, Ofst = 0),
-        'F_NUM'  : CField(Type = 'N', Len = 0,  No = 1, Ofst = 0),
-        'F_LOG'  : CField(Type = 'L', Len = 0,  No = 2, Ofst = 0)
-    }
-
+    Fields = TDblFields()
+    Fields.Add('FChr', 'c', 15)
+    Fields.Add('FNUM', 'n')
+    Fields.Add('FDAT', 'D')
 
 
-TestDbf_Open()
-#TestDbf_Create()
+
+#TestDbf_Open()
+TestDbf_Create()
 #TestDbl()
-    
+
+#import cryptolib

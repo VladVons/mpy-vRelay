@@ -112,6 +112,9 @@ class TTaskIdle(TTask):
     def DoExit(self):
         UHrd.LedFlash()
 
+    def DoPost(self, aOwner: TTask, aMsg):
+        print('InIdle', aOwner.Alias, aMsg)
+
 
 def Main():
     Log.Print(1, 'Main', os.uname())
@@ -137,8 +140,8 @@ def Main():
         from Inc.NetCaptive import TTaskCaptive
         Tasks.Add(TTaskCaptive(), 0.1)
 
-    Tasks.Add(THttpServer(THttpApiApp()))
-    Tasks.Add(TTaskIdle(), Conf.get('FLed', 2))
+    Tasks.Add(THttpServer(THttpApiApp()), aAlias = 'http')
+    Tasks.Add(TTaskIdle(), Conf.get('FLed', 2), 'idle')
     
     #time.sleep(2)
     #Reset(1*60)

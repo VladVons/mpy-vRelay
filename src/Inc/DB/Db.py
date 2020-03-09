@@ -52,47 +52,20 @@ class TDb():
         Ofst = self.HeadLen + (self.RecNo * self.RecLen)
         return self.Stream.seek(Ofst)
 
-    def Close(self): 
-       if (self.Stream):
-            self.RecWrite()
-            self.Stream.close()
-            self.Stream = None
-
-    def GetSize(self) -> int:
-        FileSize = self.Stream.seek(0, 2)
-        return int((FileSize - self.HeadLen) / self.RecLen)
-
-    def RecRead(self):
+    def _RecRead(self):
         self._SeekRecNo()
         self.Buf = bytearray(self.Stream.read(self.RecLen))
 
-    def RecWrite(self):
+    def _RecWrite(self):
         if (self.RecSave):
             self.RecSave = False
             self._SeekRecNo()
             return self.Stream.write(self.Buf)
 
-    def RecGo(self, aNo: int):
-        self.RecWrite()
-        if (aNo >= 0):
-            self.RecNo = min(aNo, self.GetSize())
-        else:
-            self.RecNo = max(0, self.GetSize() + aNo)
-        self.RecRead()
-
-    def RecAdd(self, aCnt = 1):
-        self.RecWrite()
-
-        self.Buf = bytearray(self.RecFill * self.RecLen)
-        self.Stream.seek(0, 2)
-        for Cnt in range(aCnt):
-            self.Stream.write(self.Buf)
-        self.RecNo = self.GetSize() - 1
-
-    def GetFieldData(self, aField: TDbField) -> bytearray:
+    def _GetFieldData(self, aField: TDbField) -> bytearray:
         return self.Buf[aField.Ofst : aField.Ofst + aField.Len]
 
-    def SetFieldData(self, aField: TDbField, aData: bytearray):
+    def _SetFieldData(self, aField: TDbField, aData: bytearray):
         self.RecSave = True
         if (aField.Ofst + len(aData) >= len(self.Buf)):
             aData = aData[0:len(self.Buf) - aField.Ofst]
@@ -101,20 +74,45 @@ class TDb():
             Len = aField.Ofst + len(aData) - len(self.Buf)
         self.Buf[aField.Ofst:Len] = aData
 
+    def Close(self): 
+       if (self.Stream):
+            self._RecWrite()
+            self.Stream.close()
+            self.Stream = None
+
+    def GetSize(self) -> int:
+        FileSize = self.Stream.seek(0, 2)
+        return int((FileSize - self.HeadLen) / self.RecLen)
+
+    def RecGo(self, aNo: int):
+        self._RecWrite()
+        if (aNo >= 0):
+            self.RecNo = min(aNo, self.GetSize())
+        else:
+            self.RecNo = max(0, self.GetSize() + aNo)
+        self._RecRead()
+
+    def RecAdd(self, aCnt = 1):
+        self._RecWrite()
+
+        self.Buf = bytearray(self.RecFill * self.RecLen)
+        self.Stream.seek(0, 2)
+        for Cnt in range(aCnt):
+            self.Stream.write(self.Buf)
+        self.RecNo = self.GetSize() - 1
+
     def Create(self, aName: str, aFields: TDbFields):
-        self.Name = aName
         self.Close()
 
         self.Stream = open(aName, 'wb+')
         self._StructWrite(aFields)
         self._StructRead()
 
-    def Open(self, aName: str, aReadOnly = False):
+    def Open(self, aName: str, aROnly = False):
         self.Close()
 
-        Mode = 'rb' if aReadOnly else 'rb+'
+        Mode = 'rb' if aROnly else 'rb+'
         self.Stream = open(aName, Mode)
         self._StructRead()
 
         self.RecGo(0)
-

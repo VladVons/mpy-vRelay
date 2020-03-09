@@ -14,7 +14,10 @@ Tasks = None
 
 
 class TTask():
-    Alias  = ''
+    # Alias 
+    # Parent
+    # Pause
+    # Run
     Cnt    = 0
     Sleep  = 1
 
@@ -30,8 +33,10 @@ class TTask():
                         self.DoLoop()
                     await asyncio.sleep(self.Sleep)
             except Exception as E:
+                sys.print_exception(E)
                 Sleep = self.DoExcept(E)
-                if (Sleep == 0):
+                if (not Sleep):
+                    Sleep = 0
                     Tasks.Remove(self)
                     break
                 await asyncio.sleep(Sleep)
@@ -47,9 +52,10 @@ class TTask():
         pass
 
     def DoExcept(self, aE):
-        sys.print_exception(aE)
-        Log.Print(1, 'Exit', self.__class__.__name__, self.Alias)
-        return 0
+        pass
+
+    def DoPost(self, aOwner: TTask, aMsg):
+        pass
 
 
 class TTasks():
@@ -59,8 +65,12 @@ class TTasks():
 
     def Add(self, aTask: TTask, aSleep: int = 1, aAlias: str = ''):
         if (aTask not in self.Obj):
+            if (not aAlias):
+                aAlias = type(aTask).__name__
             aTask.Alias = aAlias
-            aTask.Sleep = aSleep
+ 
+            aTask.Sleep  = aSleep
+            aTask.Parent = self
             self.Obj.append(aTask)
             self.ELoop.create_task(aTask.Loop())
 
@@ -74,9 +84,15 @@ class TTasks():
         self.Obj.remove(aTask)
 
     def Stop(self):
-        for O in self.Obj:
-            O.DoExit()
-            O.Run = False
+        for Obj in self.Obj:
+            Obj.DoExit()
+            Obj.Run = False
+
+    def Post(self, aOwner: TTask, aMsg):
+        for Obj in self.Obj:
+            if (Obj != aOwner):
+                if (Obj.DoPost(aOwner, aMsg)):
+                    break
 
     def Run(self):
         self.ELoop.run_forever()
