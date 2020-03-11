@@ -18,7 +18,7 @@ class TDbfField(TDbField):
             aLen = {'C': 10, 'N': 10, 'D': 8, 'L': 1}.get(aType, 0)
         return aLen
 
-    def ValueToData(self, aValue) -> str:
+    def ValueToData(self, aValue) -> bytearray:
         if (self.Type == 'L'):
             aValue = 'T' if aValue else 'F'
         elif (self.Type == 'D'):
@@ -26,9 +26,11 @@ class TDbfField(TDbField):
             aValue = '%04d%02d%02d' % (lt[0], lt[1], lt[2])
         else:
             aValue = str(aValue)
-        return aValue
+        return aValue.encode()
 
-    def DataToValue(self, aValue: str):
+    def DataToValue(self, aValue: bytearray):
+        aValue = aValue.decode().strip()
+
         if (self.Type == 'N'):
             if (self.LenD > 0):
                 aValue = float(aValue if aValue != '' else '0.0')
@@ -59,7 +61,7 @@ class TDbfFields(TDbFields):
 
 
 class TDbf(TDb):
-    Sign = 03
+    Sign = 3
 
     def __init__(self):
         super().__init__()
@@ -111,10 +113,10 @@ class TDbf(TDb):
 
     def GetField(self, aName: str):
         Field = self.Fields[aName.upper()]
-        R = self._GetFieldData(Field).decode().strip()
-        return Field.DataToValue(R)
+        Data = self._GetFieldData(Field)
+        return Field.DataToValue(Data)
 
     def SetField(self, aName: str, aValue):
         Field = self.Fields[aName.upper()]
         Value = Field.ValueToData(aValue)
-        self._SetFieldData(Field, Value.encode())
+        self._SetFieldData(Field, Value)

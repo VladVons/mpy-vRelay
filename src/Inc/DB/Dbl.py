@@ -77,14 +77,14 @@ class TDbl(TDb):
             Name = FName.split(b'\x00', 1)[0].decode()
             self.Fields.Add(Name, FType.decode(), FLen)
 
+    def GetField(self, aName: str):
+        Field = self.Fields[aName]
+        Data  = self._GetFieldData(Field)
+        return Field.DataToValue(Data)
+
     def SetField(self, aName: str, aValue):
         self.RecSave = True
 
         Field = self.Fields[aName]
         Data  = Field.ValueToData(aValue)
         self._SetFieldData(Field, Data)
-
-    def GetField(self, aName: str):
-        Field = self.Fields[aName]
-        Data  = self._GetFieldData(Field)
-        return Field.DataToValue(Data)

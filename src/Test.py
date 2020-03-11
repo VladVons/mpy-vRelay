@@ -73,8 +73,8 @@ def TestDbf_Create():
 
     Dbf = TDbf()
     Dbf.Create('test.dbf', Fields)
-    for i in range(100000):
-        if (i % 1000 == 0):
+    for i in range(1000):
+        if (i % 100 == 0):
             print(i)
         Dbf.RecAdd()
         Dbf.SetField('FCHr', 'Hello %s' % i)
@@ -93,7 +93,7 @@ def TestDbf_Open():
     FName = 'FChr'
     for i in Dbf:
         if (not Dbf.RecDeleted()):
-            if (i % 1000 == 0):
+            if (i % 100 == 0):
                 print(i, Dbf.GetField(FName))
 
 
@@ -132,7 +132,7 @@ def TestDbl_Open():
 
 
 #TestDbf_Create()
-#TestDbf_Open()
+TestDbf_Open()
 #
 #TestDbl_Create()
-TestDbl_Open()
+#TestDbl_Open()
