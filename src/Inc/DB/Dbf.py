@@ -59,6 +59,7 @@ class TDbfFields(TDbFields):
 
 
 class TDbf(TDb):
+    Sign = 03
 
     def __init__(self):
         super().__init__()
@@ -71,7 +72,7 @@ class TDbf(TDb):
     def _StructWrite(self, aFields: TDbfFields):
         RecLen  = aFields.Len + 1
         HeadLen = 32 + (32 * len(aFields)) + 1
-        Data = struct.pack('<1B3B1I1H1H', 3, 1, 1, 1, 0, HeadLen, RecLen)
+        Data = struct.pack('<1B3B1I1H1H', self.Sign, 1, 1, 1, 0, HeadLen, RecLen)
         self.Stream.seek(0)
         self.Stream.write(Data)
 
@@ -92,13 +93,14 @@ class TDbf(TDb):
                 break
 
             FName, FType, X, FLen, FLenD = struct.unpack('<11s1s4s1B1B', Data[0:11+1+4+1+1])
-            Name = FName.split(b'\0', 1)[0].decode()
+            Name = FName.split(b'\x00', 1)[0].decode()
             self.Fields.Add(Name, FType.decode(), FLen, FLenD)
 
     def _ReadHead(self):
         self.Stream.seek(0)
         Data = self.Stream.read(32)
         Sign, LUpd, RecCnt, self.HeadLen, self.RecLen = struct.unpack('<1B3s1I1H1H', Data[0:1+3+4+2+2])
+        assert Sign == self.Sign, 'not a valid signature'
 
     def RecDelete(self, aMode: bool = True):
         self.RecSave = True

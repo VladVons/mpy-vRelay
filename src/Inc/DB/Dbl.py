@@ -5,56 +5,86 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
+
 import re
 import struct
-import collections
 #
-from .Db import TDb
+from .Db import TDb, TDbFields, TDbField
 
 
-CField = collections.namedtuple('Field', ('Type', 'Len', 'No', 'Ofst'))
+class TDblField(TDbField):
+    def ValueToData(self, aValue) -> bytearray:
+        if (self.Type == 's'):
+            R = struct.pack('<%s%s' % (self.Len, self.Type), aValue.encode())
+        else:
+            R = struct.pack('<%s%s' % (1, self.Type), aValue)
+        return R
+
+    def DataToValue(self, aValue: bytearray):
+        if (self.Type == 's'):
+            Data = struct.unpack('<%s%s' % (self.Len, self.Type), aValue)
+            R = Data[0].split(b'\x00', 1)[0].decode()
+        else:
+            Data = struct.unpack('<%s%s' % (1, self.Type), aValue)
+            R = Data[0]
+        return R
+
+
+class TDblFields(TDbFields):
+    def Add(self, aName: str, aType: str, aLen: int = 1):
+        if (aType != 's'):
+            aLen = 1
+        Len = struct.calcsize('<%s%s' % (aLen, aType))
+
+        R = TDblField()
+        R.update({'Name': aName, 'Type': aType, 'Len': Len, 'No': len(self), 'Ofst': self.Len})
+        self[aName] = R
+        self.Len += Len
+        return R
+
+    def GetStruct(self):
+        R = '<'
+        for K, V in self.Sort():
+            R += '%s%s' % (V.Len, V.Type)
+        return R
 
 
 class TDbl(TDb):
-    def _ReadFields(self, aPack, aFields):
-        self.Fields = {}
+    Sign = 71
 
-        RegEx = re.compile(r'([0-9]+?[a-zA-Z]+)')
-        Packs = RegEx.split(aPack.replace('<', ''))
-        if (Packs):
-            Packs = ' '.join(Packs).split()
-            Fields = aFields.split(',')
-            Ofst = 0
-            for No, Pack in enumerate(Packs):
-                Type = '<' + Pack
-                Name = Fields[No]
-                Len  = struct.calcsize(Type)
-                self.Fields[Name] = CField(Type, Len, No, Ofst)
-                Ofst += Len
-
-        self.HeadLen = 32 * 2
-        self.RecLen  = struct.calcsize(aPack)
-
-    def _StructWrite(self, aPack: str, aFields: str):
+    def _StructWrite(self, aFields: TDblFields):
+        HeadLen = 16 + (16 * len(aFields))
+        Data = struct.pack('<1B1H1H1H', self.Sign, HeadLen, aFields.Len, len(aFields))
         self.Stream.seek(0)
-        self.Stream.write('{:32}'.format(aPack).encode())
-        self.Stream.write('{:32}'.format(aFields).encode())
+        self.Stream.write(Data)
 
-        self._ReadFields(aPack, aFields)
+        self.Stream.seek(16)
+        for K, V in aFields.Sort():
+            Data = struct.pack('<11s1s1B3s', V.Name.encode(), V.Type.encode(), V.Len, b'\x00')
+            self.Stream.write(Data)
 
     def _StructRead(self):
-        self.Stream.seek(0)
-        Data = struct.unpack('>32s', self.Stream.read(32))
-        Pack = Data[0].decode().strip()
-        Data = struct.unpack('>32s', self.Stream.read(32))
-        Fields = Data[0].decode().strip()
+        self.Fields = TDblFields()
 
-        self._ReadFields(Pack, aFields)
+        self.Stream.seek(0)
+        Data = self.Stream.read(16)
+        Sign, self.HeadLen, self.RecLen, Fields = struct.unpack('<1B1H1H1H', Data[0:1+2+2+2])
+        assert Sign == self.Sign, 'not a valid signature'
+
+        for i in range(Fields):
+            Data = self.Stream.read(16)
+            FName, FType, FLen, X = struct.unpack('<11s1s1B3s', Data)
+            Name = FName.split(b'\x00', 1)[0].decode()
+            self.Fields.Add(Name, FType.decode(), FLen)
 
     def SetField(self, aName: str, aValue):
         self.RecSave = True
 
         Field = self.Fields[aName]
-        print(type(Field.Type), Field.Type, type(aValue), aValue)
-        Data = struct.pack(Field.Type, aValue)
-        self.Buf[Field.Ofst : Field.Ofst + Field.Len] = Data
+        Data  = Field.ValueToData(aValue)
+        self._SetFieldData(Field, Data)
+
+    def GetField(self, aName: str):
+        Field = self.Fields[aName]
+        Data  = self._GetFieldData(Field)
+        return Field.DataToValue(Data)

@@ -61,19 +61,6 @@ def TestMem():
     print('mem_free', gc.collect(), gc.mem_free())
 
 
-def TestDbf_Open():
-    from Inc.DB.Dbf import TDbf
-
-    Dbf = TDbf()
-    Dbf.Open('1SBLOB.dbf')
-
-    FName = 'FChr'
-    for i in Dbf:
-        if (not Dbf.RecDeleted()):
-            if (i % 1000 == 0):
-                print(i, Dbf.GetField(FName))
-
-
 def TestDbf_Create():
     import time
     from Inc.DB.Dbf import TDbf, TDbfFields
@@ -85,7 +72,7 @@ def TestDbf_Create():
     Fields.Add('FLOG', 'L')
 
     Dbf = TDbf()
-    Dbf.Create('1SBLOB.dbf', Fields)
+    Dbf.Create('test.dbf', Fields)
     for i in range(100000):
         if (i % 1000 == 0):
             print(i)
@@ -97,18 +84,55 @@ def TestDbf_Create():
     Dbf.Close()
 
 
-def TestDbl():
+def TestDbf_Open():
+    from Inc.DB.Dbf import TDbf
+
+    Dbf = TDbf()
+    Dbf.Open('test.dbf')
+
+    FName = 'FChr'
+    for i in Dbf:
+        if (not Dbf.RecDeleted()):
+            if (i % 1000 == 0):
+                print(i, Dbf.GetField(FName))
+
+
+def TestDbl_Create():
     from Inc.DB.Dbl import TDbl, TDblFields
 
     Fields = TDblFields()
-    Fields.Add('FChr', 'c', 15)
-    Fields.Add('FNUM', 'n')
-    Fields.Add('FDAT', 'D')
+    Fields.Add('Fs', 's', 10)
+    Fields.Add('FB', 'B')
+    Fields.Add('FI', 'I')
+    Fields.Add('Ff', 'f')
+    Fields.Add('Fd', 'd')
+
+    Dbl = TDbl()
+    Dbl.Create('test.dbl', Fields)
+    for i in range(1000):
+        if (i % 100 == 0):
+            print(i)
+        Dbl.RecAdd()
+        Dbl.SetField('Fs', 'Hello')
+        Dbl.SetField('FI', 1234)
+        Dbl.SetField('Fd', 1.2345678)
+    Dbl.Close()
 
 
+def TestDbl_Open():
+    from Inc.DB.Dbl import TDbl
 
+    Dbl = TDbl()
+    Dbl.Open('test.dbl')
+
+    for i in Dbl:
+            if (i % 100 == 0):
+                print(i, 'Fs', Dbl.GetField('Fs'))
+                print(i, 'Fi', Dbl.GetField('FI'))
+
+
+#TestDbf_Create()
 #TestDbf_Open()
-TestDbf_Create()
-#TestDbl()
-
-#import cryptolib
+#
+#TestDbl_Create()
+TestDbl_Open()
