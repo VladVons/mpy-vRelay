@@ -1,5 +1,6 @@
-#!/usr/bin/python3
 #!/usr/bin/micropython
+#!/usr/bin/python3
+
 
 import time
 
@@ -142,4 +143,4 @@ def TestDbl_Open():
 #TestDbf_Open()
 #
 TestDbl_Create()
-#TestDbl_Open()
+TestDbl_Open()
