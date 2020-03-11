@@ -1,4 +1,6 @@
 *.pyc
 *.mpy
+*.dbf
+*.dbl
 __pycache__
 .idea
