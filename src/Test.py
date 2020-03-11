@@ -139,8 +139,8 @@ def TestDbl_Open():
                 print(i, 'Ff1', Dbl.GetField('Ff1'))
 
 
-#TestDbf_Create()
-#TestDbf_Open()
+TestDbf_Create()
+TestDbf_Open()
 #
 TestDbl_Create()
 TestDbl_Open()

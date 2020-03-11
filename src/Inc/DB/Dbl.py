@@ -31,6 +31,8 @@ class TDblField(TDbField):
 
 class TDblFields(TDbFields):
     def Add(self, aName: str, aType: str, aLen: int = 1):
+        aName = aName.upper()
+
         if (aType != 's'):
             aLen = 1
         Len = struct.calcsize('<%s%s' % (aLen, aType))
@@ -68,22 +70,10 @@ class TDbl(TDb):
         self.Stream.seek(0)
         Data = self.Stream.read(16)
         Sign, self.HeadLen, self.RecLen, Fields = struct.unpack('<1B1H1H1H', Data[0:1+2+2+2])
-        assert Sign == self.Sign, 'not a valid signature'
+        assert Sign == self.Sign, 'bad signature'
 
         for i in range(Fields):
             Data = self.Stream.read(16)
             FName, FType, FLen, X = struct.unpack('<11s1s1B3s', Data)
             Name = FName.split(b'\x00', 1)[0].decode()
             self.Fields.Add(Name, FType.decode(), FLen)
-
-    def GetField(self, aName: str):
-        Field = self.Fields.Get(aName)
-        Data  = self._GetFieldData(Field)
-        return Field.DataToValue(Data)
-
-    def SetField(self, aName: str, aValue):
-        self.RecSave = True
-
-        Field = self.Fields.Get(aName)
-        Data  = Field.ValueToData(aValue)
-        self._SetFieldData(Field, Data)

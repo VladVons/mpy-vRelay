@@ -36,7 +36,8 @@ class TDb():
         self.RecNo   = 0
         self.RecSave = False
         self.Buf     = bytearray()    
-        self.RecFill = b'\0'
+        self.BufFill = b'\x00'
+        self.Fields  = TDbFields()
 
     def __del__(self):
         self.Close()
@@ -64,7 +65,8 @@ class TDb():
         if (self.RecSave):
             self.RecSave = False
             self._SeekRecNo()
-            return self.Stream.write(self.Buf)
+            self.Stream.write(self.Buf)
+            self._DoRecWrite()
 
     def _GetFieldData(self, aField: TDbField) -> bytearray:
         return self.Buf[aField.Ofst : aField.Ofst + aField.Len]
@@ -78,11 +80,15 @@ class TDb():
             Len = aField.Ofst + len(aData) - len(self.Buf)
         self.Buf[aField.Ofst:Len] = aData
 
-    def Close(self): 
-       if (self.Stream):
-            self._RecWrite()
-            self.Stream.close()
-            self.Stream = None
+    def GetField(self, aName: str):
+        Field = self.Fields.Get(aName.upper())
+        Data = self._GetFieldData(Field)
+        return Field.DataToValue(Data)
+
+    def SetField(self, aName: str, aValue):
+        Field = self.Fields.Get(aName.upper())
+        Value = Field.ValueToData(aValue)
+        self._SetFieldData(Field, Value)
 
     def GetSize(self) -> int:
         FileSize = self.Stream.seek(0, 2)
@@ -99,7 +105,7 @@ class TDb():
     def RecAdd(self, aCnt = 1):
         self._RecWrite()
 
-        self.Buf = bytearray(self.RecFill * self.RecLen)
+        self.Buf = bytearray(self.BufFill * self.RecLen)
         self.Stream.seek(0, 2)
         for Cnt in range(aCnt):
             self.Stream.write(self.Buf)
@@ -117,6 +123,24 @@ class TDb():
 
         Mode = 'rb' if aROnly else 'rb+'
         self.Stream = open(aName, Mode)
+
+        #self.HeadLen, self.RecLen
         self._StructRead()
 
         self.RecGo(0)
+
+    def Close(self):
+       if (self.Stream):
+            self._RecWrite()
+            self.Stream.close()
+            self.Stream = None
+
+    def _StructRead(self):
+        #init self.HeadLen, self.RecLen, self.Fields
+        raise NotImplementedError()
+
+    def _StructWrite(self, aFields: TDbFields):
+        raise NotImplementedError()
+
+    def _DoRecWrite(self):
+        pass

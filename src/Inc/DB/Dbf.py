@@ -65,11 +65,26 @@ class TDbf(TDb):
 
     def __init__(self):
         super().__init__()
-        self.RecFill = b' '
+        self.BufFill = b' '
 
     def _StructRead(self):
-        self._ReadHead()
-        self._ReadFields()
+        self.Stream.seek(0)
+        Data = self.Stream.read(32)
+        Sign, LUpd, RecCnt, self.HeadLen, self.RecLen = struct.unpack('<1B3s1I1H1H', Data[0:1+3+4+2+2])
+        assert Sign == self.Sign, 'bad signature'
+
+        self.Fields = TDbfFields()
+        self.Fields.Add('Del', 'C', 1, 0)
+
+        self.Stream.seek(32)
+        while True:
+            Data = self.Stream.read(32)
+            if (Data[0] == 0x0D):
+                break
+
+            FName, FType, X, FLen, FLenD = struct.unpack('<11s1s4s1B1B', Data[0:11+1+4+1+1])
+            Name = FName.split(b'\x00', 1)[0].decode()
+            self.Fields.Add(Name, FType.decode(), FLen, FLenD)
 
     def _StructWrite(self, aFields: TDbfFields):
         RecLen  = aFields.Len + 1
@@ -84,25 +99,11 @@ class TDbf(TDb):
             self.Stream.write(Data)
         self.Stream.write(b'\x0D')
 
-    def _ReadFields(self):
-        self.Fields = TDbfFields()
-        self.Fields.Add('Del', 'C', 1, 0)
-
-        self.Stream.seek(32)
-        while True:
-            Data = self.Stream.read(32)
-            if (Data[0] == 0x0D):
-                break
-
-            FName, FType, X, FLen, FLenD = struct.unpack('<11s1s4s1B1B', Data[0:11+1+4+1+1])
-            Name = FName.split(b'\x00', 1)[0].decode()
-            self.Fields.Add(Name, FType.decode(), FLen, FLenD)
-
-    def _ReadHead(self):
-        self.Stream.seek(0)
-        Data = self.Stream.read(32)
-        Sign, LUpd, RecCnt, self.HeadLen, self.RecLen = struct.unpack('<1B3s1I1H1H', Data[0:1+3+4+2+2])
-        assert Sign == self.Sign, 'not a valid signature'
+    def _DoRecWrite(self):
+        # YYMMDD, RecCount
+        Data = struct.pack('<1B1B1B1I', 20, 1, 1, self.GetSize())
+        self.Stream.seek(1)
+        self.Stream.write(Data)
 
     def RecDelete(self, aMode: bool = True):
         self.RecSave = True
@@ -110,13 +111,3 @@ class TDbf(TDb):
 
     def RecDeleted(self):
         return self.Buf[0] == 42
-
-    def GetField(self, aName: str):
-        Field = self.Fields.Get(aName.upper())
-        Data = self._GetFieldData(Field)
-        return Field.DataToValue(Data)
-
-    def SetField(self, aName: str, aValue):
-        Field = self.Fields.Get(aName.upper())
-        Value = Field.ValueToData(aValue)
-        self._SetFieldData(Field, Value)
