@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 #!/usr/bin/micropython
 
+import time
+
+
 class TTest1():
     pass
 
@@ -101,21 +104,25 @@ def TestDbl_Create():
     from Inc.DB.Dbl import TDbl, TDblFields
 
     Fields = TDblFields()
-    Fields.Add('Fs', 's', 10)
-    Fields.Add('FB', 'B')
-    Fields.Add('FI', 'I')
-    Fields.Add('Ff', 'f')
-    Fields.Add('Fd', 'd')
+    #Fields.Add('Fs', 's', 10)
+    #Fields.Add('FB1', 'B')
+    Fields.Add('Ff1', 'd')
+    Fields.Add('Ff2', 'd')
+    Fields.Add('Ff3', 'd')
 
     Dbl = TDbl()
     Dbl.Create('test.dbl', Fields)
-    for i in range(1000):
+    for i in range(8640):
+        t1 = time.time()
         if (i % 100 == 0):
-            print(i)
+            print(i, type(t1), t1)
         Dbl.RecAdd()
-        Dbl.SetField('Fs', 'Hello')
-        Dbl.SetField('FI', 1234)
-        Dbl.SetField('Fd', 1.2345678)
+        #Dbl.SetField('Fs', 'Hello')
+        #Dbl.SetField('FI', 1234)
+        Dbl.SetField('Ff1', t1)
+        #Dbl.SetField('Ff2', t1)
+        #Dbl.SetField('Ff3', t1)
+        #Dbl.SetField('Fd', 1.2345678)
     Dbl.Close()
 
 
@@ -127,12 +134,12 @@ def TestDbl_Open():
 
     for i in Dbl:
             if (i % 100 == 0):
-                print(i, 'Fs', Dbl.GetField('Fs'))
-                print(i, 'Fi', Dbl.GetField('FI'))
+                #print(i, 'Fs', Dbl.GetField('Fs'))
+                print(i, 'Ff1', Dbl.GetField('Ff1'))
 
 
 #TestDbf_Create()
-TestDbf_Open()
+#TestDbf_Open()
 #
-#TestDbl_Create()
+TestDbl_Create()
 #TestDbl_Open()

@@ -19,6 +19,9 @@ from Inc.Util import UStr, UHrd
 from Inc.NetHttp import THttpServer, THttpApi
 #from Inc.DB.Dbl import TDbl 
 
+__version__ = '1.01'
+__author__ = 'Vladimir Vons, Oster Inc.'
+
 
 def Reset(aSec: int = 0):
     Log.Print(1, 'Reset', aSec)

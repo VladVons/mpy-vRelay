@@ -7,10 +7,6 @@ Description:.
 
 from Inc.Util import UArr
 
-# ToDo. < 3.7 doesnt supports defaults parameter. Need own TField
-#CField = collections.namedtuple('Field', ('Type', 'Len', 'LenD', 'No', 'Ofst'), defaults = ('C', 10, 0, 0, 0))
-#CField.__new__.__defaults__ = ('C', 10, 0, 0, 0)
-
 
 class TDbField(dict):
     def __getattr__(self, aName: str):
@@ -20,8 +16,16 @@ class TDbField(dict):
 class TDbFields(dict):
     Len = 0
 
+    def Add(self, aName: str, aType: str, aLen: int):
+        pass
+
     def Sort(self, aName = 'No'):
         return UArr.SortD(self, aName)
+
+    def Get(self, aName: str) -> TDbField:
+        R = self.get(aName)
+        assert R, 'Field not found %s' % aName
+        return R
 
 
 class TDb():

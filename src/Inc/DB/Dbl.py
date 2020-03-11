@@ -6,7 +6,6 @@ Description:.
 '''
 
 
-import re
 import struct
 #
 from .Db import TDb, TDbFields, TDbField
@@ -78,13 +77,13 @@ class TDbl(TDb):
             self.Fields.Add(Name, FType.decode(), FLen)
 
     def GetField(self, aName: str):
-        Field = self.Fields[aName]
+        Field = self.Fields.Get(aName)
         Data  = self._GetFieldData(Field)
         return Field.DataToValue(Data)
 
     def SetField(self, aName: str, aValue):
         self.RecSave = True
 
-        Field = self.Fields[aName]
+        Field = self.Fields.Get(aName)
         Data  = Field.ValueToData(aValue)
         self._SetFieldData(Field, Data)

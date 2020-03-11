@@ -112,11 +112,11 @@ class TDbf(TDb):
         return self.Buf[0] == 42
 
     def GetField(self, aName: str):
-        Field = self.Fields[aName.upper()]
+        Field = self.Fields.Get(aName.upper())
         Data = self._GetFieldData(Field)
         return Field.DataToValue(Data)
 
     def SetField(self, aName: str, aValue):
-        Field = self.Fields[aName.upper()]
+        Field = self.Fields.Get(aName.upper())
         Value = Field.ValueToData(aValue)
         self._SetFieldData(Field, Value)

@@ -1,4 +1,9 @@
-    '''
+# ToDo. < 3.7 doesnt supports defaults parameter. Need own TField
+CField = collections.namedtuple('Field', ('Type', 'Len', 'LenD', 'No', 'Ofst'), defaults = ('C', 10, 0, 0, 0))
+CField.__new__.__defaults__ = ('C', 10, 0, 0, 0)
+
+---------
+
     def _ReadFields(self, aPack, aFields):
         self.Fields = {}
 
@@ -18,4 +23,3 @@
 
         self.HeadLen = 32 * 2
         self.RecLen  = struct.calcsize(aPack)
-    '''
