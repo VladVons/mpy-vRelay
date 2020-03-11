@@ -1,3 +1,4 @@
 *.pyc
+*.mpy
 __pycache__
 .idea
