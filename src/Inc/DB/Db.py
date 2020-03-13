@@ -12,12 +12,18 @@ class TDbField(dict):
     def __getattr__(self, aName: str):
         return self.get(aName)
 
+    def ValueToData(self, aValue) -> bytearray:
+        raise NotImplementedError()
+
+    def DataToValue(self, aValue: bytearray):
+        raise NotImplementedError()
+ 
 
 class TDbFields(dict):
     Len = 0
 
     def Add(self, aName: str, aType: str, aLen: int):
-        pass
+        raise NotImplementedError()
 
     def Sort(self, aName = 'No'):
         return UArr.SortD(self, aName)
@@ -136,7 +142,7 @@ class TDb():
             self.Stream = None
 
     def _StructRead(self):
-        #init self.HeadLen, self.RecLen, self.Fields
+        # init vars self.HeadLen, self.RecLen, self.Fields
         raise NotImplementedError()
 
     def _StructWrite(self, aFields: TDbFields):

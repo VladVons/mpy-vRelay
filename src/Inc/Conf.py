@@ -41,7 +41,7 @@ class TConf(TConfD):
 
     def Save(self):
         with open(self.File, 'w') as File:
-            for K, V in self.Keys().items():
+            for K, V in sorted(self.Keys().items()):
                 if (type(V) is str):
                     V = "'" + V + "'"
                 File.write('%s = %s\n' % (K, V))

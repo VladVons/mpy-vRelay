@@ -17,6 +17,7 @@ from Inc.Log  import Log
 from Inc.Task import TTask, Tasks
 from Inc.Util import UStr, UHrd
 from Inc.NetHttp import THttpServer, THttpApi
+from App.TaskDoorCheck import TTaskDoorCheck
 #from Inc.DB.Dbl import TDbl 
 
 __version__ = '1.01'
@@ -25,7 +26,7 @@ __author__ = 'Vladimir Vons, Oster Inc.'
 
 def Reset(aSec: int = 0):
     Log.Print(1, 'Reset', aSec)
-    UHrd.LedFlash()
+    UHrd.LedFlash(2, 3, 0.2)
     Tasks.Stop()
     UHrd.Reset(aSec)
 
@@ -64,9 +65,9 @@ class TTaskIdle(TTask):
     BtnCnt = 0
  
     def __init__(self):
-        #self.WDog = UHrd.TWDog(0, 10)
+        self.WDog = UHrd.TWDog(0, 10)
         pass
- 
+
     def tLedBeat(self):
         O = machine.Pin(2, machine.Pin.OUT)
         O.value(not O.value())
@@ -100,20 +101,21 @@ class TTaskIdle(TTask):
         pass
 
     def tWatchDog(self):
-        #self.WDog.Feed()
+        self.WDog.Feed()
         pass
 
     def DoLoop(self):
         Log.Print(1, 'TTaskIdle %s' % self.Cnt)
 
-        #self.tWatchDog()
+        self.tWatchDog()
         #self.tDSleep()
         self.tMemFree()
         self.tLedBeat()
-        self.tConfClear()
+        #self.tConfClear()
 
     def DoExit(self):
-        UHrd.LedFlash()
+        #self.WDog.Stop()
+        UHrd.LedFlash(2, 3, 0.2)
 
     def DoPost(self, aOwner: TTask, aMsg):
         print('InIdle', aOwner.Alias, aMsg)
@@ -125,8 +127,18 @@ def Main():
     DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
 
     if (Conf.STA_ESSID):
-        from Inc.NetWLan import Connect
-        if (Connect(Conf.STA_ESSID, Conf.get('STA_Paswd', ''))):
+        from Inc.NetWLan import ConnectDhcp, ConnectStat
+
+        if (Conf.IpInfo):
+            Net = ConnectStat(Conf.STA_ESSID, Conf.get('STA_Paswd', ''), Conf.IpInfo)
+        else:
+            Net = ConnectDhcp(Conf.STA_ESSID, Conf.get('STA_Paswd', ''), 10)
+            if (Net.isconnected()):
+                Conf['IpInfo'] = Net.ifconfig()
+                Conf.Save()
+
+        Log.Print(1, 'NetOK', Net.isconnected())
+        if (Net.isconnected()):
             #import upip
             #upip.install('micropython-uasyncio')
 
@@ -137,17 +149,13 @@ def Main():
             if (Conf.Mqtt_Host):
                 from Inc.NetMqtt import TTaskMqtt
                 Tasks.Add(TTaskMqtt(Conf.Mqtt_Host), 0.1, 'mqtt')
-            pass
-        pass
     else:
         from Inc.NetCaptive import TTaskCaptive
         Tasks.Add(TTaskCaptive(), 0.1)
 
     Tasks.Add(THttpServer(THttpApiApp()), aAlias = 'http')
-    Tasks.Add(TTaskIdle(), Conf.get('FLed', 2), 'idle')
-    
-    #time.sleep(2)
-    #Reset(1*60)
+    Tasks.Add(TTaskIdle(), Conf.get('TIdle', 2), 'idle')
+    Tasks.Add(TTaskDoorCheck(Conf.get('PinBtn', 0), Conf.get('PinLed', 2), Conf.get('PinSnd', 13)), 0.5, 'door')
 
     try:
         Tasks.Run()

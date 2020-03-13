@@ -10,15 +10,16 @@ def Main():
     #import sys
     #sys.path.append('Inc')
 
-    import App 
-    App.Main()
+    import AppMain
+    AppMain.Main()
 
 
 def Test1():
     import Test
     #Test.Task1()
-    Test.Connect('oster.com.ua', '19710000')
+    Test.Connect()
+
 
 Main()
-#Test2()
+#Test1()
 

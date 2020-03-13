@@ -21,29 +21,33 @@ def Reset(aSec: int):
         machine.reset()
 
 
-def LedFlash(aCnt: int = 4):
-    O = machine.Pin(2, machine.Pin.OUT)
-    for i in range(aCnt * 2):
-        O.value(not O.value())
-        time.sleep(0.2)
-    O.value(0)
+def LedFlash(aPin: int, aCnt: int, aDelay: int):
+    Obj = machine.Pin(aPin, machine.Pin.OUT)
+    for i in range(aCnt):
+        Obj(1)
+        time.sleep(aDelay)
+        Obj(0)
+        time.sleep(aDelay)
 
 
 class TWDog:
     def __init__(self, aID: int, aTOut: int):
         self._TOut = aTOut
         self._Cnt  = 0
-        Timer = machine.Timer(aID)
-        Timer.init(period = int(1 * 1000), mode = machine.Timer.PERIODIC, callback = self._CallBack)
+        self.Timer = machine.Timer(aID)
+        self.Timer.init(period = int(1 * 1000), mode = machine.Timer.PERIODIC, callback = self._CallBack)
+
+    def Stop(self):
+        self.Timer.deinit()
 
     def _CallBack(self, aTimer):
         self._Cnt += 1
-        Log.Print(1, 'TWDog _CallBack', self._Cnt)
+        #Log.Print(1, 'TWDog _CallBack', self._Cnt)
         if (self._Cnt >= self._TOut):
             Log.Print(2, 'TWDog timeout')
             time.sleep(1)
-            #aTimer.deinit()
-            #machine.reset()
+            aTimer.deinit()
+            machine.reset()
 
     def Feed(self):
         self._Cnt = 0
