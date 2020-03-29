@@ -7,11 +7,8 @@ Description:.
 
 
 def Main():
-    #import sys
-    #sys.path.append('Inc')
-
-    import AppMain
-    AppMain.Main()
+    import AppTask
+    AppTask.Run()
 
 
 def Test1():
@@ -22,4 +19,3 @@ def Test1():
 
 Main()
 #Test1()
-

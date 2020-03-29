@@ -13,10 +13,9 @@ from .Task import TTask
 
 
 class THttpApi():
-    def __init__(self):
-        self.RootDir = '/Web'
-        self.FIndex  = '/index.html'
-        self.F404    = '/page_404.html'
+    DirRoot = '/Web'
+    FIndex  = '/index.html'
+    F404    = '/page_404.html'
 
     '''
     @staticmethod
@@ -48,10 +47,10 @@ class THttpApi():
         if (aPath == '/'):
             aPath = self.FIndex
 
-        if (UFS.FileExists(self.RootDir + aPath)):
+        if (UFS.FileExists(self.DirRoot + aPath)):
             Path = aPath
         else:
-            Log.Print(1, 'File not found %s' % self.RootDir + aPath)
+            Log.Print(1, 'e', 'File not found %s' % self.DirRoot + aPath)
             Path = self.F404
 
         Ext = Path.split('.')[-1]
@@ -59,22 +58,27 @@ class THttpApi():
             Mode = 'r'
         else:
             Mode = 'rb'
-        return UFS.FileLoad(self.RootDir + Path, Mode)
+        return UFS.FileLoad(self.DirRoot + Path, Mode)
 
  
     def ParseUrl(self, aPath: str, aQuery: str, aData: bytearray) -> str:
+        if ('=' in aQuery):
+            Query = dict(Pair.split('=') for Pair in aQuery.split('&'))
+        else:
+            Query = dict()
+
         Obj = UObj.GetAttr(self, self.GetMethod(aPath))
         if (Obj):
-            R = Obj(aQuery, aData)
+            R = Obj(Query, aData)
         else: 
-            R = self.DoUrl(aPath, aQuery, aData)
+            R = self.DoUrl(aPath, Query, aData)
         return R
 
-    def DoUrl(self, aPath: str, aQuery: str, aData: bytearray):
+    def DoUrl(self, aPath: str, aQuery: dict, aData: bytearray):
         return self.LoadFile(aPath, aQuery, aData)
 
 
-class THttpServer(TTask):
+class TTaskHttpServer(TTask):
     def __init__(self, aApi: THttpApi):
         self.Api = aApi
 

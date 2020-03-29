@@ -8,9 +8,22 @@ Description:.
 
 import uasyncio as asyncio
 from umqtt.simple import MQTTClient
+import time
+import sys
 #
 from .Log import Log
 from .Task import TTask, Tasks
+
+
+def SendTo(aHost, aTopic, aMsg):
+    Obj = MQTTClient('ClientID', aHost, 1883)
+    try:
+        Obj.connect()
+        Obj.publish(aTopic, aMsg)
+        Obj.disconnect()
+        Log.Print(1, 'i'. 'Mqtt OK')
+    except Exception as E:
+        Log.Print(1, 'x', 'Mqtt Err', E)
 
 
 class TTaskMqtt(TTask):
@@ -28,15 +41,15 @@ class TTaskMqtt(TTask):
         Tasks.Post(self, {'Type': 'OnMsg', 'Param': [aTopic, aMsg]})
 
     def DoEnter(self):
-        Log.Print(1, 'Mqtt.DoEnter')
+        Log.Print(1, 'i', 'Mqtt.DoEnter')
 
         self.O.connect()
-        Log.Print(1, 'Mqtt connect')
+        Log.Print(1, 'i', 'Mqtt connect')
 
         aTopic = 'MyTopic'
         self.O.subscribe(aTopic)
 
-    def DoLoop(self):
+    async def DoLoop(self):
         self.O.check_msg()
 
     def DoExit(self):
@@ -45,5 +58,5 @@ class TTaskMqtt(TTask):
         except: pass
 
     def DoExcept(self, aE):
-        Log.Print(1, 'Mqtt DoExcept', aE)
+        Log.Print(1, 'x', 'Mqtt DoExcept', aE)
         return 30

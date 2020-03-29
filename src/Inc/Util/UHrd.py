@@ -42,9 +42,9 @@ class TWDog:
 
     def _CallBack(self, aTimer):
         self._Cnt += 1
-        #Log.Print(1, 'TWDog _CallBack', self._Cnt)
+        #Log.Print(1, 'i', 'TWDog _CallBack', self._Cnt)
         if (self._Cnt >= self._TOut):
-            Log.Print(2, 'TWDog timeout')
+            Log.Print(2, 'i', 'TWDog timeout')
             time.sleep(1)
             aTimer.deinit()
             machine.reset()

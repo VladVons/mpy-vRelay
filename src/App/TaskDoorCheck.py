@@ -39,5 +39,5 @@ class TTaskDoorCheck(TTask):
                     print('send mqtt DoorBtn')
                     mqtt.Publish('MyTopic1', 'CntDoor %s' % self.CntDoor)
 
-    def DoLoop(self):
+    async def DoLoop(self):
         self.tCheck()

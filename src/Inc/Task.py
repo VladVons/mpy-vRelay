@@ -30,7 +30,7 @@ class TTask():
                 while self.Run:
                     if (not self.Pause):
                         self.Cnt += 1
-                        self.DoLoop()
+                        await self.DoLoop()
                     await asyncio.sleep(self.Sleep)
             except Exception as E:
                 sys.print_exception(E)
@@ -45,7 +45,7 @@ class TTask():
     def DoEnter(self):
         pass
 
-    def DoLoop(self):
+    async def DoLoop(self):
         pass
 
     def DoExit(self):
@@ -54,7 +54,7 @@ class TTask():
     def DoExcept(self, aE):
         pass
 
-    def DoPost(self, aOwner: TTask, aMsg):
+    async def DoPost(self, aOwner: TTask, aMsg):
         pass
 
 
@@ -91,7 +91,7 @@ class TTasks():
     def Post(self, aOwner: TTask, aMsg):
         for Obj in self.Obj:
             if (Obj != aOwner):
-                if (Obj.DoPost(aOwner, aMsg)):
+                if (await Obj.DoPost(aOwner, aMsg)):
                     break
 
     def Run(self):

@@ -10,7 +10,7 @@ import time
 import os
 import sys
 #
-from .Conf import Conf
+from .Util import UTime
 
 
 class TEcho():
@@ -18,9 +18,18 @@ class TEcho():
         pass
 
 
-class TConsole(TEcho):
+class TEchoConsole(TEcho):
     def Write(self, aMsg: str):
         print(aMsg)
+
+
+class TEchoFile(TEcho):
+    def __init__(self, aName: str):
+        self.Name = aName
+
+    def Write(self, aMsg: str):
+        with open(self.Name, 'a+') as F:
+            F.write(aMsg + '\n')
 
 
 class TLog():
@@ -29,18 +38,16 @@ class TLog():
         self.Cnt    = 0
         self.Echoes = [] 
 
-        self.AddEcho(TConsole())
+        self.AddEcho(TEchoConsole())
 
     def AddEcho(self, aEcho: TEcho):
         self.Echoes.append(aEcho) 
 
-    def Print(self, aLevel: int, *aParam) -> str:
+    def Print(self, aLevel: int, aType: str,  *aParam) -> str:
         R = '' 
         if (aLevel <= self.Level):
             self.Cnt += 1
-            lt  = time.localtime(time.time())
-            Now = '%d-%02d-%02d,%02d:%02d:%02d' % (lt[0], lt[1], lt[2], lt[3], lt[4], lt[5])
-            R   = '%s,%03d,%d,%s,%s%s' % (Now, self.Cnt, aLevel, Conf.get('ID'), ' ' * aLevel, list(aParam))
+            R = '%s,%03d,%d,%s,%s%s' % (UTime.GetDate(), self.Cnt, aLevel, aType, ' ' * aLevel, list(aParam))
             for Echo in self.Echoes: 
                 Echo.Write(R)
         return R

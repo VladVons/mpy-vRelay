@@ -4,15 +4,35 @@
 source ./common.sh
 
 #Dev=$(ls /dev/ttyUSB*)
-Dev="/dev/ttyUSB0"
+cDev="/dev/ttyUSB0"
 
 
-Speed1=115200
-Speed2=460800
+cSpeed1=115200
+cSpeed2=460800
 
-Root=""
+cRoot=""
 #Root="/flash"
 
+#download link http://micropython.org/download#esp8266
+
+ESP32=0
+if [ $ESP32 == 1 ]; then
+  cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp32"
+  #cFileImg="esp32-idf3-20191220-v1.12.bin"
+  cFileImg="esp32-idf3-20200322-v1.12-263-g8d34344dc.bin"
+
+  cEraseCmd="esptool.py --port $cDev --baud $cSpeed1 --chip esp32 erase_flash"
+  cFirmwareCmd="esptool.py --port $cDev --baud $cSpeed2 --chip esp32 write_flash -z 0x1000"
+else
+  #cDirImg="/mnt/hdd/data1/work/micropython/micropython/ports/esp8266/build-GENERIC"
+  #cFileImg="firmware-combined.bin"
+
+  cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp8266"
+  cFileImg="esp8266-20191220-v1.12.bin"
+
+  cEraseCmd="esptool.py --port $cDev --baud $cSpeed1 erase_flash"
+  cFirmwareCmd="esptool.py --port $cDev --baud $cSpeed2 write_flash --flash_size=detect 0"
+fi
 
 
 Upgrade()
@@ -20,7 +40,7 @@ Upgrade()
   Log "$0->$FUNCNAME"
 
   sudo pip install esptool       --upgrade
-  sudo pip install adafruit-ampy --upgrade 
+  sudo pip install adafruit-ampy --upgrade
   #sudo pip install picocom       --upgrade
   #pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U
 }
@@ -45,19 +65,14 @@ Install()
 
   usermod -a -G dialout linux
   # logout
-
-  #Make_mpy_cross
-
-  # byte code cross compiler. py to mpy
-  # https://github.com/micropython/micropython/tree/master/mpy-cross
 }
 
 
 EspErase()
 {
   Log "$0->$FUNCNAME"
-  ExecM "esptool.py --port $Dev --baud $Speed1 erase_flash"
-  #ExecM "esptool.py --port $Dev --baud $Speed1 --chip esp32 erase_flash"
+
+  ExecM "$cEraseCmd"
   echo "Done. To write EspFirmware Unplag/Plug device"
 }
 
@@ -66,22 +81,10 @@ EspFirmware()
 {
   Log "$0->$FUNCNAME"
 
-  # images
-  # http://micropython.org/download#esp8266
-
-  Dir="/mnt/hdd/data1/share/public/image/esp/micropython"
-  #FileName="esp32-idf3-20191220-v1.12.bin"
-  FileName="esp8266-20191220-v1.12.bin"
-
-  #Dir="/mnt/hdd/data1/work/micropython/micropython/ports/esp8266/build-GENERIC"
-  #FileName="firmware-combined.bin"
-
-  File=$Dir/$FileName
+  File=$cDirImg/$cFileImg
   if [ -f $File ] ; then
     #EspErase
-    ExecM "esptool.py --port $Dev --baud $Speed2 write_flash --flash_size=detect 0 $File"
-    #ExecM "esptool.py --port $Dev --baud $Speed2 --chip esp32 write_flash -z 0x1000 $File"
-
+    ExecM "$cFirmwareCmd $File"
     #EspFileList
   else
     echo "File not found $File"  
@@ -91,7 +94,7 @@ EspFirmware()
 
 EspFileList()
 {
-  ampy --port $Dev --baud $Speed1 ls $Root
+  ampy --port $cDev --baud $cSpeed1 ls $cRoot
 }
 
 
@@ -110,7 +113,7 @@ EspSrcCopy()
   ls | sort |\
   while read File; do
     if [[ "$Skip" != *"$File"* ]]; then
-      ExecM "ampy --port $Dev --baud $Speed1 put $File"
+      ExecM "ampy --port $cDev --baud $cSpeed1 put $File"
     fi
   done
 }

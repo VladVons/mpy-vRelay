@@ -9,33 +9,30 @@ import gc
 import os
 import sys
 import time
+import network
 #
-from Conf import Conf
+from Inc.Conf import Conf
+from Inc.NetWLan import GetMac
+from Inc.Util import UTime
+
 
 __version__ = '1.0.15'
-
-
-def GetMac():
-    import network
-    import ubinascii
-
-    Obj    = network.WLAN(network.AP_IF)
-    MacBin = Obj.config('mac')
-    return ubinascii.hexlify(MacBin).decode('utf-8')
+__author__  = 'Vladimir Vons, Oster Inc.'
 
 
 def Api(aData):
     gc.collect()
 
     R = {
-        'Author':  'VladVons@gmail.com',
-        'SW':      __version__,
+        'Author':   __author__,
+        'SW':       __version__,
         'FW':       os.uname().version,
         'PW':       '%s.%s.%s' % (sys.version_info[0], sys.version_info[1], sys.version_info[2]),
-        'ID':       Conf.Get('ID'),
+        'Alias':    Conf.Alias,
         'MemFree':  gc.mem_free(),
         'MemAlloc': gc.mem_alloc(),
-        'MAC':      GetMac(),
+        'MAC':      GetMac(network.WLAN(network.STA_IF)),
+        'Date':     UTime.GetDate(),
         'Uptime':   int(time.ticks_ms() / 1000)
     }
     return R
