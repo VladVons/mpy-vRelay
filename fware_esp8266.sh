@@ -7,6 +7,8 @@ source ./common.sh
 mkdir -p $cDirMPY
 export PATH=$PATH:$cDirMPY/esp-open-sdk/xtensa-lx106-elf/bin
 
+DirCur=$(pwd)
+
 
 Make_EspOpenSdk()
 {
@@ -40,8 +42,10 @@ InstallPkg()
   $cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('umqtt.simple')"
   cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
 
+  #https://github.com/micropython/micropython/issues/2700
+  #micropython/ports/esp8266/boards/esp8266.ld -> irom0_0_seg :  org = 0x40209000, len = 0xa7000
   rm -R $cDirMPY/micropython/ports/esp8266/modules/Inc
-  cp -R /mnt/hdd/data1/work/micropython/proj/mpy-vRelay/src/Inc $cDirMPY/micropython/ports/esp8266/modules/
+  cp -R $DirCur/src/Inc $cDirMPY/micropython/ports/esp8266/modules/
 }
 
 
@@ -49,10 +53,12 @@ Make_MicroPython()
 {
   Log "$0->$FUNCNAME($*)"
 
+  echo "cDirMPY: $cDirMPY"
   cd $cDirMPY
 
   git clone https://github.com/micropython/micropython.git
   cd $cDirMPY/micropython
+  git pull
 
   git submodule sync
   git submodule update --init

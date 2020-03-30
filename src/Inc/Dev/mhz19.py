@@ -22,5 +22,5 @@ class MHZ19(TSerial):
     def GetCO2(self):
         Out = b'\xff\x01\x86\x00\x00\x00\x00\x00\x79'
         In = self.Send(Out, 9)
-        R = (In[2] * 256) + In[3])
+        R = (In[2] * 256) + In[3]
         return R

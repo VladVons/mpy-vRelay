@@ -147,8 +147,10 @@ Loop1()
 #Loop1
 #Relay
 
-#$wget "http://192.168.2.206/dev_sht3x.py"
+
+$wget "http://192.168.2.218/info.py"
+#$wget "http://192.168.2.218/dev_sht3x.py"
 #$wget "http://192.168.2.216/dev_dht11.py"
 #$wget "http://192.168.2.218/gpio_read.py?pins=0,1,2,3,4,5,12,13,14,15,16"
-$wget "http://192.168.2.218/gpio_write.py?0=0&1=0&2=0"
+#$wget "http://192.168.2.218/gpio_write.py?0=0&1=0&2=0"
 

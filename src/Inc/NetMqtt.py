@@ -21,7 +21,7 @@ def SendTo(aHost, aTopic, aMsg):
         Obj.connect()
         Obj.publish(aTopic, aMsg)
         Obj.disconnect()
-        Log.Print(1, 'i'. 'Mqtt OK')
+        Log.Print(1, 'i', 'Mqtt OK')
     except Exception as E:
         Log.Print(1, 'x', 'Mqtt Err', E)
 

@@ -20,7 +20,7 @@ __version__ = '1.0.15'
 __author__  = 'Vladimir Vons, Oster Inc.'
 
 
-def Api(aData):
+def Api(aData: dict) -> dict:
     gc.collect()
 
     R = {
