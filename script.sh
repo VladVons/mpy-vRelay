@@ -24,11 +24,11 @@ if [ $ESP32 == 1 ]; then
   cEraseCmd="esptool.py --port $cDev --baud $cSpeed1 --chip esp32 erase_flash"
   cFirmwareCmd="esptool.py --port $cDev --baud $cSpeed2 --chip esp32 write_flash -z 0x1000"
 else
-  cDirImg="/mnt/hdd/data1/work/micropython/micropython/ports/esp8266/build-GENERIC"
-  cFileImg="firmware-combined.bin"
+  #cDirImg="/mnt/hdd/data1/work/micropython/micropython/ports/esp8266/build-GENERIC"
+  #cFileImg="firmware-combined.bin"
 
-  #cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp8266"
-  #cFileImg="esp8266-20191220-v1.12.bin"
+  cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp8266"
+  cFileImg="esp8266-20191220-v1.12.bin"
 
   cEraseCmd="esptool.py --port $cDev --baud $cSpeed1 erase_flash"
   cFirmwareCmd="esptool.py --port $cDev --baud $cSpeed2 write_flash --flash_size=detect 0"

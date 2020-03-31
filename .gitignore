@@ -3,4 +3,5 @@
 *.dbf
 *.dbl
 __pycache__
+release
 .idea
