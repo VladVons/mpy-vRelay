@@ -9,18 +9,20 @@ Description: micropython ESP8266
 import machine
 #
 from Inc.Dev.bme280 import BME280
-from Inc.Log import Log
+from Inc.Api import TApiBase
 
 
-def Api(aData: dict) -> dict:
-    aScl = int(aData.get('scl', '5'))
-    aSda = int(aData.get('sda', '4'))
+class TApi(TApiBase):
+    def Exec(self, aScl: int, aSda: int) -> dict:
+        i2c = machine.I2C(scl = machine.Pin(aScl), sda = machine.Pin(aSda), freq = 10000)
+        try:
+            Obj = BME280(i2c = i2c)
+            R = Obj.read_compensated_data()
+        except Exception as E:
+            R = [None, None, None]
+        return {'temperature': R[0], 'humidity': R[2], 'preasure': R[1]}
 
-    i2c = machine.I2C(scl = machine.Pin(aScl), sda = machine.Pin(aSda), freq = 10000)
-    try:
-        Obj = BME280(i2c = i2c)
-        R = Obj.read_compensated_data()
-    except Exception as E:
-        Log.Print(1, 'x', 'bme280.Api()', E)
-        R = [None, None, None]
-    return {'temperature': R[0], 'humidity': R[2], 'preasure': R[1]}
+    def Query(self, aData: dict) -> dict:
+        aScl = int(aData.get('scl', '5'))
+        aSda = int(aData.get('sda', '4'))
+        return self.Exec(aScl, aSda)

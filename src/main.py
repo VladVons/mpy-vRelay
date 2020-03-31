@@ -7,8 +7,8 @@ Description:.
 
 
 def Main():
-    import AppTask
-    AppTask.Run()
+    import App
+    App.Run()
 
 
 def Test1():

@@ -23,6 +23,7 @@ MODE_FORCED = const(1)
 MODE_NORMAL = const(3)
 
 class BME280:
+
     def __init__(self,
                  mode=BME280_OSAMPLE_8,
                  address=BME280_I2CADDR,
@@ -68,15 +69,6 @@ class BME280:
         self.t_fine = 0
 
     def read_raw_data(self, result):
-        """ Reads the raw (uncompensated) data from the sensor.
-
-            Args:
-                result: array of length 3 or alike where the result will be
-                stored, in temperature, pressure, humidity order
-            Returns:
-                None
-        """
-
         self._l1_barray[0] = self._mode
         self.i2c.writeto_mem(self.address, BME280_REGISTER_CONTROL_HUM,
                              self._l1_barray)
@@ -103,17 +95,6 @@ class BME280:
         result[2] = raw_hum
 
     def read_compensated_data(self, result=None):
-        """ Reads the data from the sensor and returns the compensated data.
-
-            Args:
-                result: array of length 3 or alike where the result will be
-                stored, in temperature, pressure, humidity order. You may use
-                this to read out the sensor without allocating heap memory
-
-            Returns:
-                array with temperature, pressure, humidity. Will be the one
-                from the result parameter if not None
-        """
         self.read_raw_data(self._l3_resultarray)
         raw_temp, raw_press, raw_hum = self._l3_resultarray
         # temperature
@@ -155,44 +136,6 @@ class BME280:
 
         return array("f", (temp, pressure, humidity))
 
-    @property
-    def sealevel(self):
-        return self.__sealevel
-
-    @sealevel.setter
-    def sealevel(self, value):
-        if 30000 < value < 120000:  # just ensure some reasonable value
-            self.__sealevel = value
-
-    @property
-    def altitude(self):
-        '''
-        Altitude in m.
-        '''
-        from math import pow
-        try:
-            p = 44330 * (1.0 - pow(self.read_compensated_data()[1] /
-                                   self.__sealevel, 0.1903))
-        except:
-            p = 0.0
-        return p
-
-    @property
-    def dew_point(self):
-        """
-        Compute the dew point temperature for the current Temperature
-        and Humidity measured pair
-        """
-        from math import log
-        t, p, h = self.read_compensated_data()
-        h = (log(h, 10) - 2) / 0.4343 + (17.62 * t) / (243.12 + t)
-        return 243.12 * h / (17.62 - h)
-
-    @property
-    def values(self):
-        """ human readable values """
-
-        t, p, h = self.read_compensated_data()
-
-        return ("{:.2f}C".format(t), "{:.2f}hPa".format(p/100),
-                "{:.2f}%".format(h))
+    '''
+    VladVons. deleted some code here
+    '''

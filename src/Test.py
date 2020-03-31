@@ -66,12 +66,3 @@ def Conf1():
     print('---1', k)
     for K, V in sorted(Conf.Keys().items()):
         print('%s = %s' % (K, V))
-
-
-#Conf1()
-
-Query = '2=1&3=0'
-x1 = dict(Pair.split('=') for Pair in Query.split('&'))
-for K, V in x1.items():
-    print(K, V)
-

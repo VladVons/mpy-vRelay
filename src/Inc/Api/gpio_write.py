@@ -5,12 +5,22 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-import json
-#
 from machine import Pin
+#
+from Inc.Api import TApiBase
 
 
-def Api(aData: dict) -> dict:
-    for Key, Val in aData.items():
-        Obj = Pin(int(Key), Pin.OUT)
-        Obj.value(int(Val))
+class TApi(TApiBase):
+    def Exec(self, aPairs: list) -> dict:
+        R = {}
+        for PinNo, Val in aPairs:
+            Obj = Pin(PinNo, Pin.OUT)
+            Obj.value(Val)
+            R[str(PinNo)] = Obj.value()
+        return R
+
+    def Query(self, aData: dict) -> dict:
+        Pairs = []
+        for Key, Val in aData.items():
+            Pairs.append([int(Key), int(Val)])
+        return self.Exec(Pairs)

@@ -102,7 +102,11 @@ class TTaskHttpServer(TTask):
             R['content'] = await aReader.read(Len)
 
         await aWriter.awrite("HTTP/1.0 200 OK\r\n\r\n")
-        Data = self.Api.ParseUrl(R['path'], R['query'], R.get('content'))
+        try:
+            Data = self.Api.ParseUrl(R['path'], R['query'], R.get('content'))
+        except Exception as E:
+            Data = Log.Print(1, 'x', 'CallBack()', E)
+
         await aWriter.awrite("%s\r\n" % Data)
         await aWriter.aclose()
 
