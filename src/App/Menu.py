@@ -11,10 +11,13 @@ from Inc.Conf import Conf
 
 class TMenuApp(TMenu):
     def MSetup(self, aPath):
-        R = {}
         Vars = Conf.Keys()
+        print(Conf.File, Vars)
+        if (not self.AskYN('Cntinue')):
+            return
 
-        Items = {'WiFi Access': [['STA_ESSID', 'SSID', 'oster.com.ua1'], ['STA_Paswd', 'Password*', '']]}
+        R = {}
+        Items = {'WiFi Access': [['STA_ESSID', 'SSID', 'oster.com.ua'], ['STA_Paswd', 'Password*', '']]}
         R.update(self.Input(Items, Vars))
         Items = {'Mqtt Server': [['Mqtt_Host', 'Host', 'vpn2.oster.com.ua'], ['Mqtt_Login', 'Login', ''], ['Mqtt_Paswd', 'Password', '']]}
         R.update(self.Input(Items, Vars))
@@ -22,6 +25,7 @@ class TMenuApp(TMenu):
         if (self.AskYN('Save')):
             Conf.update(R)
             Conf.Save() 
+            print(Conf.Keys())
             print('Saved')
 
     def MInfo(self, aPath):
