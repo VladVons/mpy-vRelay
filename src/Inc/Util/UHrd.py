@@ -34,20 +34,28 @@ class TWDog:
     def __init__(self, aID: int, aTOut: int):
         self._TOut = aTOut
         self._Cnt  = 0
+        self.Enable = True
+
         self.Timer = machine.Timer(aID)
+        self.Start()
+
+    def Start(self):
         self.Timer.init(period = int(1 * 1000), mode = machine.Timer.PERIODIC, callback = self._CallBack)
 
     def Stop(self):
         self.Timer.deinit()
 
     def _CallBack(self, aTimer):
-        self._Cnt += 1
-        #Log.Print(1, 'i', 'TWDog _CallBack', self._Cnt)
-        if (self._Cnt >= self._TOut):
-            Log.Print(2, 'i', 'TWDog timeout')
-            time.sleep(1)
-            aTimer.deinit()
-            machine.reset()
+        if (self.Enable):
+            self._Cnt += 1
+            if (self._Cnt >= self._TOut):
+                self.DoTimeout(aTimer)
+
+    def DoTimeout(self, aTimer):
+        Log.Print(2, 'i', 'TWDog timeout')
+        time.sleep(3)
+        aTimer.deinit()
+        machine.reset()
 
     def Feed(self):
         self._Cnt = 0

@@ -19,7 +19,6 @@ def Connect1():
     pwm.duty(0)
 
 
-
 def Play():
     # https://github.com/dhylands/upy-rtttl
     from machine import Pin, PWM
@@ -50,19 +49,8 @@ def Play():
     beeper.deinit()
 
 
-def Connect1():
-    while True:
-        Play()
 
-
-def Connect():
-    from Inc.Util import UHrd
-    UHrd.LedFlash(13, 4, 0.15)
-
-
-def Conf1():
-    from Inc.Conf import Conf
-    k = Conf.Keys()
-    print('---1', k)
-    for K, V in sorted(Conf.Keys().items()):
-        print('%s = %s' % (K, V))
+from Inc.Conf import Conf
+from App.Menu import TMenuApp
+Menu = TMenuApp()
+Menu.MMain('/Main')

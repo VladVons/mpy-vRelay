@@ -15,20 +15,24 @@ cRoot=""
 
 #download link http://micropython.org/download#esp8266
 
-ESP32=0
+ESP32=1
+CustomFW=0
+
 if [ $ESP32 == 1 ]; then
   cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp32"
   #cFileImg="esp32-idf3-20191220-v1.12.bin"
-  cFileImg="esp32-idf3-20200322-v1.12-263-g8d34344dc.bin"
+  cFileImg="esp32-idf3-20200331-v1.12-326-g8fff0b0ac.bin"
 
   cEraseCmd="esptool.py --port $cDev --baud $cSpeed1 --chip esp32 erase_flash"
   cFirmwareCmd="esptool.py --port $cDev --baud $cSpeed2 --chip esp32 write_flash -z 0x1000"
 else
-  #cDirImg="/mnt/hdd/data1/work/micropython/micropython/ports/esp8266/build-GENERIC"
-  #cFileImg="firmware-combined.bin"
-
-  cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp8266"
-  cFileImg="esp8266-20191220-v1.12.bin"
+  if [ $CustomFW == 1 ]; then
+    cDirImg="/mnt/hdd/data1/work/micropython/micropython/ports/esp8266/build-GENERIC"
+    cFileImg="firmware-combined.bin"
+  else
+    cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp8266"
+    cFileImg="esp8266-20191220-v1.12.bin"
+  fi
 
   cEraseCmd="esptool.py --port $cDev --baud $cSpeed1 erase_flash"
   cFirmwareCmd="esptool.py --port $cDev --baud $cSpeed2 write_flash --flash_size=detect 0"

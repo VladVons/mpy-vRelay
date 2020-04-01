@@ -12,7 +12,7 @@ import machine
 from Inc.Conf import Conf
 from Inc.Log  import Log
 from Inc.Task import Tasks
-from Task.Utils  import Reset
+from .Utils  import Reset
 #from Inc.DB.Dbl import TDbl
 
 
@@ -52,14 +52,14 @@ def Run():
         from Inc.NetCaptive import TTaskCaptive
         Tasks.Add(TTaskCaptive(), 0.1)
 
-    from Task.Idle import TTaskIdle
+    from App.Idle import TTaskIdle
     Tasks.Add(TTaskIdle(), Conf.get('TIdle', 2), 'idle')
 
-    from Task.Http import THttpApiApp
+    from App.Http import THttpApiApp
     from Inc.NetHttp import TTaskHttpServer
     Tasks.Add(TTaskHttpServer(THttpApiApp()), aAlias = 'http')
 
-    #from Task.DoorCheck import TTaskDoorCheck
+    #from App.DoorCheck import TTaskDoorCheck
     #Tasks.Add(TTaskDoorCheck(Conf.get('PinBtn', 0), Conf.get('PinLed', 2), Conf.get('PinSnd', 13)), 0.5, 'door')
 
     try:

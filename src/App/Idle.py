@@ -7,7 +7,9 @@ Description:.
 
 
 import gc
+import sys
 import machine
+import select
 #
 from Inc.Conf import Conf
 from Inc.Log  import Log
@@ -15,14 +17,11 @@ from Inc.Util import UHrd
 from Inc.Task import TTask, Tasks
 from .Utils   import Reset
 
+WDog = UHrd.TWDog(0, 10)
 
 class TTaskIdle(TTask):
     BtnCnt = 0
  
-    def __init__(self):
-        self.WDog = UHrd.TWDog(0, 10)
-        pass
-
     def tLedBeat(self):
         O = machine.Pin(2, machine.Pin.OUT)
         O.value(not O.value())
@@ -53,8 +52,20 @@ class TTaskIdle(TTask):
         print('mem_free Led', gc.mem_free())
 
     def tWatchDog(self):
-        self.WDog.Feed()
+        WDog.Feed()
         pass
+
+    def tSetup(self):
+        while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+            Ch = sys.stdin.read(1)
+            if (Ch == 'm'): 
+                from .Menu import TMenuApp
+                Log.Print(1, 'i', 'App suspended !')
+
+                WDog.Enable = False
+                Menu = TMenuApp()
+                Menu.MMain('/Main')
+                WDog.Enable = True
 
     async def DoLoop(self):
         Log.Print(1, 'i', 'TTaskIdle %s' % self.Cnt)
@@ -64,9 +75,10 @@ class TTaskIdle(TTask):
         self.tMemFree()
         self.tLedBeat()
         self.tConfClear()
+        self.tSetup()
 
     def DoExit(self):
-        self.WDog.Stop()
+        WDog.Stop()
         UHrd.LedFlash(2, 3, 0.2)
 
     async def DoPost(self, aOwner: TTask, aMsg):

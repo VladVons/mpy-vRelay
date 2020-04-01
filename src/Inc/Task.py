@@ -6,7 +6,13 @@ Description:.
 '''
 
 import sys
-import uasyncio as asyncio
+
+try:
+    import uasyncio as asyncio
+except:
+    from .Pip import Install
+    #Install('uasyncio')
+
 from .Log import Log
 
 

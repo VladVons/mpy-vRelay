@@ -6,9 +6,9 @@ Description:.
 '''
 
 
-def Main():
-    import App
-    App.Run()
+def Run():
+    from App import Main
+    Main.Run()
 
 
 def Test1():
@@ -17,5 +17,5 @@ def Test1():
     Test.Connect()
 
 
-Main()
+Run()
 #Test1()

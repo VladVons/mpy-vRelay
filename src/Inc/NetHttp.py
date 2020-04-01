@@ -13,7 +13,7 @@ from .Task import TTask
 
 
 class THttpApi():
-    DirRoot = '/Web'
+    DirRoot = '/App/Web'
     FIndex  = '/index.html'
     F404    = '/page_404.html'
 
