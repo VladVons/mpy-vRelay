@@ -12,3 +12,4 @@ def SortD(aObj: dict, aName: str) -> list:
 
 def SortL(aObj: list, aName: str) -> list: 
     return sorted(aObj, key = lambda k: k[aName])
+

@@ -17,25 +17,23 @@ class TMenu():
             print('Menu:', aPath)
 
             for Idx, Item in enumerate(aItems, 1):
-                Key = list(Item.keys())[0]
-                print(Idx, Key)
+                print('%2s %s' % (Idx, Item[0]))
 
             if (aItems):
-                print(0, 'Exit []')
+                print(' 0', 'Exit []')
                 Str = input('Enter choice: ')
                 if (len(Str) == 0):
                     break
 
-                if (len(Str) == 1):
-                    Idx = ord(Str[0]) - ord('0')
-                    if (Idx == 0):
-                        break
-                    elif (Idx <= len(aItems)):
-                        Item = aItems[Idx - 1]
-                        Key  = list(Item.keys())[0]
-                        Func = Item[Key]
-                        if (Func):
-                            Func(aPath + '/' + Key)
+                Idx = int(Str)
+                if (Idx == 0):
+                    break
+                elif (Idx > len(aItems)):
+                    print('Wrong choice', Idx)
+                else:
+                    Name, Func, Param = aItems[Idx - 1]
+                    if (Func):
+                        Func(aPath + '/' + Name, Param)
             else:
                 input('Press ENTER to continue ...')
                 break
@@ -43,11 +41,10 @@ class TMenu():
     def Input(self, aItems: dict, aDef: dict = {}) -> dict:
         R = {}
 
-        Title = list(aItems.keys())[0]
+        Title, Items = aItems
         print()
         print('-', Title, '-')
 
-        Items = aItems[Title]
         for Idx, Item in enumerate(Items, 1):
             Name, Text, ValDef = Item
 

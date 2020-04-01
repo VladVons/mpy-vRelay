@@ -64,7 +64,7 @@ class TTaskIdle(TTask):
 
                 WDog.Enable = False
                 Menu = TMenuApp()
-                Menu.MMain('/Main')
+                Menu.MMain('/Main', [])
                 WDog.Enable = True
 
     async def DoLoop(self):
