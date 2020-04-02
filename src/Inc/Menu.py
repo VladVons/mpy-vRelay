@@ -11,32 +11,38 @@ class TMenu():
         Str = input('%s ?  Y/n:' % aMsg).lower()
         return (Str == 'y')
 
+    def WaitMsg(self, aMsg):
+        return input('%s (Press ENTER) ' % aMsg)
+
     def Parse(self, aPath: str, aItems: list):
         while True:
             print()
             print('Menu:', aPath)
 
             for Idx, Item in enumerate(aItems, 1):
-                print('%2s %s' % (Idx, Item[0]))
-
-            if (aItems):
-                print(' 0', 'Exit []')
-                Str = input('Enter choice: ')
-                if (len(Str) == 0):
-                    break
-
-                Idx = int(Str)
-                if (Idx == 0):
-                    break
-                elif (Idx > len(aItems)):
-                    print('Wrong choice', Idx)
+                Name, Func, Param = Item
+                if (Param):
+                    print('%2s %s %s' % (Idx, Name, Param))
                 else:
-                    Name, Func, Param = aItems[Idx - 1]
-                    if (Func):
-                        Func(aPath + '/' + Name, Param)
-            else:
-                input('Press ENTER to continue ...')
+                    print('%2s %s' % (Idx, Name))
+
+            if (not aItems):
+                self.WaitMsg('No items')
                 break
+
+            print(' 0', 'Exit')
+            Str = input('Enter choice :')
+            if (Str == '') or (Str == '0'):
+                break
+
+            Idx = int(Str)
+            if (Idx > len(aItems)):
+                self.WaitMsg('Out of range')
+                continue
+            else:
+                Name, Func, Param = aItems[Idx - 1]
+                if (Func):
+                    Func(aPath + '/' + Name, Param)
 
     def Input(self, aItems: dict, aDef: dict = {}) -> dict:
         R = {}

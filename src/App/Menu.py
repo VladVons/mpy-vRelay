@@ -11,15 +11,27 @@ from Inc.Conf import Conf
 
 class TMenuApp(TMenu):
     def MSetup(self, aPath: str, aParam: list):
+        from Inc.Util.UObj import GetTree
+
         Vars = Conf.Keys()
-        print(Conf.File, Vars)
+        for Var in GetTree(Vars):
+            print('%15s = %s' % (Var['Key'], Var['Val']))
+
         if (not self.AskYN('Cntinue')):
             return
 
         R = {}
-        Items = ['WiFi Access', [['STA_ESSID', 'SSID', 'oster.com.ua'], ['STA_Paswd', 'Password*', '']]]
+        Items = ['WiFi Access', [
+            ['STA_ESSID', 'SSID', 'oster.com.ua'], 
+            ['STA_Paswd', 'Password*', '']]
+        ]
         R.update(self.Input(Items, Vars))
-        Items = ['Mqtt Server', [['Mqtt_Host', 'Host', 'vpn2.oster.com.ua'], ['Mqtt_Login', 'Login', ''], ['Mqtt_Paswd', 'Password', '']]]
+
+        Items = ['Mqtt Server', [
+            ['Mqtt_Host', 'Host', 'vpn2.oster.com.ua'], 
+            ['Mqtt_Login', 'Login', ''], 
+            ['Mqtt_Paswd', 'Password', '']]
+        ]
         R.update(self.Input(Items, Vars))
 
         if (self.AskYN('Save')):
