@@ -14,15 +14,16 @@ Make_EspOpenSdk()
 {
   Log "$0->$FUNCNAME($*)"
 
-  apt install unzip unrar-free bzip2
-  apt install python-dev python-serial
-  apt install make autoconf automake libtool gcc g++ gperf flex bison texinfo gawk ncurses-dev libexpat-dev git help2man wget libtool-bin
+  sudo apt install unzip unrar-free bzip2
+  sudo apt install python-dev python-serial
+  sudo apt install make autoconf automake libtool gcc g++ gperf flex bison texinfo gawk ncurses-dev libexpat-dev git help2man wget libtool-bin
 
   cd $cDirMPY
 
   # need ~4G
   git clone --recursive https://github.com/pfalcon/esp-open-sdk.git
   cd esp-open-sdk
+  git pull
 
   git submodule sync
   git submodule update --init
@@ -45,6 +46,9 @@ InstallPkg()
   #https://github.com/micropython/micropython/issues/2700
   #micropython/ports/esp8266/boards/esp8266.ld -> irom0_0_seg :  org = 0x40209000, len = 0xa7000
   rm -R $cDirMPY/micropython/ports/esp8266/modules/Inc
+  cp -R $DirCur/src/Inc $cDirMPY/micropython/ports/esp8266/modules/
+
+  rm -R $cDirMPY/micropython/ports/esp8266/modules/App
   cp -R $DirCur/src/Inc $cDirMPY/micropython/ports/esp8266/modules/
 }
 
@@ -84,6 +88,6 @@ Make_MicroFirmware()
 }
 
 
-#Make_EspOpenSdk
+Make_EspOpenSdk
 Make_MicroPython
 Make_MicroFirmware

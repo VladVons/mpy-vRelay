@@ -10,15 +10,23 @@ export PATH=$PATH:$cDirMPY/esp-open-sdk/xtensa-lx106-elf/bin
 
 Make_EspOpenSdk()
 {
+
+  pip install --upgrade future pyparsing pyelftools
+
   cd $cDirMPY
 
   # need ~4G
   git clone --recursive https://github.com/espressif/esp-idf.git
   cd esp-idf
+  git pull
 
   git submodule update --init --recursive
 
   ./install.sh 
+  source ./export.sh
+
+  cd tools
+  ./idf.py build
 }
 
 
@@ -36,5 +44,5 @@ Make_MicroFirmware()
 }
 
 
-#Make_EspOpenSdk
-#Make_MicroFirmware
+Make_EspOpenSdk
+Make_MicroFirmware
