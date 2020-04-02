@@ -2,6 +2,7 @@
 *.mpy
 *.dbf
 *.dbl
+*.bin
 __pycache__
 release
 .idea
