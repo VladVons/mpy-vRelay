@@ -7,6 +7,8 @@ Description:.
 
 import machine
 import time
+import sys
+import select
 #
 from Inc.Log  import Log
 
@@ -28,6 +30,12 @@ def LedFlash(aPin: int, aCnt: int, aDelay: int):
         time.sleep(aDelay)
         Obj(0)
         time.sleep(aDelay)
+
+def GetKey():   
+    R = ''
+    while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+        R = sys.stdin.read(1)
+    return R
 
 
 class TWDog:
@@ -59,3 +67,4 @@ class TWDog:
 
     def Feed(self):
         self._Cnt = 0
+ 

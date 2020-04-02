@@ -32,22 +32,29 @@ def EnableAP(aMode: bool):
     return R
 
 
-def ConnectWait(aObj: WLAN, aCnt: int):
-    while (not aObj.isconnected()) and (aCnt > 0):
-        idle()
-        stdout.write('.')
+class TWLan():
+    Cnt = 10
+
+    def _Wait(self):
+        Cnt = self.Cnt
+        while (not self.Net.isconnected()) and (Cnt > 0):
+            idle()
+            stdout.write('.')
+            self.DoWait()
+            Cnt -= 1
+        return Cnt > 0
+
+    def Connect(self, aESSID: str, aPassw: str, aAddr: tuple = None):
+        Log.Print(1, 'i', 'Connect %s, %s, %s' % (aESSID, aPassw, aAddr))
+
+        Net = WLAN(STA_IF)
+        self.Net = Net
+
+        Net.active(True)
+        if (aAddr):
+            Net.ifconfig(aAddr)
+        Net.connect(aESSID, aPassw)
+        self._Wait()
+
+    def DoWait(self):
         sleep(0.5)
-        aCnt -= 1
-    return aCnt > 0
-
-
-def Connect(aESSID: str, aPassw: str, aAddr: tuple = None, aCnt = 10) -> WLAN:
-    Log.Print(1, 'i', 'Connect %s, %s, %s' % (aESSID, aPassw, aAddr))
-
-    R = WLAN(STA_IF)
-    R.active(True)
-    if (aAddr):
-        R.ifconfig(aAddr)
-    R.connect(aESSID, aPassw)
-    ConnectWait(R, aCnt)
-    return R

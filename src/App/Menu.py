@@ -7,29 +7,31 @@ License:     GNU, see LICENSE for more details
 
 from Inc.Menu import TMenu
 from Inc.Conf import Conf
+from Inc.Util.UObj import GetTree
+from Inc.Util.UArr import SortLD
 
 
 class TMenuApp(TMenu):
-    def MSetup(self, aPath: str, aParam: list):
-        from Inc.Util.UObj import GetTree
-
-        Vars = Conf.Keys()
-        for Var in GetTree(Vars):
+    def ShowTree(self, aData: dict):
+        for Var in SortLD(GetTree(aData), 'Key'):
             print('%15s = %s' % (Var['Key'], Var['Val']))
 
+    def MSetup(self, aPath: str, aParam: list):
+        Vars = Conf.Keys()
+        self.ShowTree(Vars)
         if (not self.AskYN('Cntinue')):
             return
 
         R = {}
         Items = ['WiFi Access', [
-            ['STA_ESSID', 'SSID', 'oster.com.ua'], 
+            ['STA_ESSID', 'SSID',      'oster.com.ua'], 
             ['STA_Paswd', 'Password*', '']]
         ]
         R.update(self.Input(Items, Vars))
 
         Items = ['Mqtt Server', [
-            ['Mqtt_Host', 'Host', 'vpn2.oster.com.ua'], 
-            ['Mqtt_Login', 'Login', ''], 
+            ['Mqtt_Host',  'Host',     'vpn2.oster.com.ua'], 
+            ['Mqtt_Login', 'Login',    ''], 
             ['Mqtt_Paswd', 'Password', '']]
         ]
         R.update(self.Input(Items, Vars))
@@ -37,7 +39,7 @@ class TMenuApp(TMenu):
         if (self.AskYN('Save')):
             Conf.update(R)
             Conf.Save() 
-            print(Conf.Keys())
+            self.ShowTree(Conf.Keys())
             print('Saved')
 
     def ApiExec(self, aPath: str, aParam: list):
@@ -47,7 +49,7 @@ class TMenuApp(TMenu):
             Data = Lib.TApi().Exec(*aParam)
         else:
             Data = Lib.TApi().Exec()
-        print(Data)
+        self.ShowTree(Data)
 
     def MApi(self, aPath: str, aParam: list):
         Func = self.ApiExec
@@ -59,6 +61,7 @@ class TMenuApp(TMenu):
             ['dev_sht31',  Func, [5, 4]],
             ['gpio_read',  Func, [0, 1, 2, 3, 4, 5, 12, 13, 14, 15, 16]],
             ['sys_info',   Func, []],
+            ['sys_mem',    Func, []],
             ['sys_reset',  Func, []]
         ]
         self.Parse(aPath, Items)

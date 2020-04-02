@@ -22,8 +22,7 @@ MODE_SLEEP = const(0)
 MODE_FORCED = const(1)
 MODE_NORMAL = const(3)
 
-class BME280:
-
+class BME280():
     def __init__(self,
                  mode=BME280_OSAMPLE_8,
                  address=BME280_I2CADDR,

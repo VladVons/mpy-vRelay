@@ -26,7 +26,7 @@ class TDbFields(dict):
         raise NotImplementedError()
 
     def Sort(self, aName = 'No'):
-        return UArr.SortD(self, aName)
+        return UArr.SortDD(self, aName)
 
     def Get(self, aName: str) -> TDbField:
         R = self.get(aName)

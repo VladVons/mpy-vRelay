@@ -56,16 +56,15 @@ class TTaskIdle(TTask):
         pass
 
     def tSetup(self):
-        while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
-            Ch = sys.stdin.read(1)
-            if (Ch == 'm'): 
-                from .Menu import TMenuApp
-                Log.Print(1, 'i', 'App suspended !')
+        Key = UHrd.GetKey()
+        if (Key == 'm'): 
+            from .Menu import TMenuApp
+            Log.Print(1, 'i', 'App suspended !')
 
-                WDog.Enable = False
-                Menu = TMenuApp()
-                Menu.MMain('/Main', [])
-                WDog.Enable = True
+            WDog.Enable = False
+            Menu = TMenuApp()
+            Menu.MMain('/Main', [])
+            WDog.Enable = True
 
     async def DoLoop(self):
         Log.Print(1, 'i', 'TTaskIdle %s' % self.Cnt)

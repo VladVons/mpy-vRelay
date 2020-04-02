@@ -12,23 +12,8 @@ import machine
 from Inc.Conf import Conf
 from Inc.Log  import Log
 from Inc.Task import Tasks
-from .Utils  import Reset
+from .Utils   import TWLanApp
 #from Inc.DB.Dbl import TDbl
-
-
-def Connect():
-    from Inc.NetWLan import Connect
-
-    Net = Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
-    if (not Net.isconnected()):
-        Net = Connect(Conf.STA_ESSID, Conf.STA_Paswd, None)
-        if (Net.isconnected()):
-            Conf['STA_Net'] = Net.ifconfig()
-            Conf.Save()
-        else:
-            Reset(0)
-    print(Net.ifconfig())
-    return Net.isconnected()
 
 
 def Run():
@@ -38,7 +23,8 @@ def Run():
     print('DSleep', DSleep)
 
     if (Conf.STA_ESSID):
-        if (Connect()):
+        WLan = TWLanApp()
+        if (WLan.TryConnect()):
             print()
 
             if (not DSleep):

@@ -1,4 +1,11 @@
+'''
+Author:      Vladimir Vons <VladVons@gmail.com>
+Created:     2020.04.01
+License:     GNU, see LICENSE for more details
+Description: micropython ESP8266
+             SHT31 temperature-humidity sensor
 # https://github.com/kfricke/micropython-sht31.git
+'''
 
 
 from machine import I2C
@@ -8,7 +15,7 @@ R_HIGH   = const(1)
 R_MEDIUM = const(2)
 R_LOW    = const(3)
 
-class SHT31(object):
+class SHT31():
     """
     This class implements an interface to the SHT31 temprature and humidity
     sensor from Sensirion.

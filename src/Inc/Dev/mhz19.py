@@ -2,7 +2,8 @@
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2018.04.25
 License:     GNU, see LICENSE for more details
-Description:
+Description: micropython ESP8266
+             mhz19 CO2 sensor
 '''
 
 from Inc.Dev.Serial import TSerial
