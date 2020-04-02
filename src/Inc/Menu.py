@@ -31,7 +31,7 @@ class TMenu():
                 break
 
             print(' 0', 'Exit')
-            Str = input('Enter choice :')
+            Str = input('Enter choice: ')
             if (Str == '') or (Str == '0'):
                 break
 

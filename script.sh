@@ -16,7 +16,7 @@ cRoot=""
 #download link http://micropython.org/download#esp8266
 
 ESP32=0
-CustomFW=1
+CustomFW=0
 
 if [ $ESP32 == 1 ]; then
   cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp32"

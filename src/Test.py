@@ -4,10 +4,13 @@
 import gc
 import time
 
-from Inc.Conf import Conf
-from App.Menu import TMenuApp
-Menu = TMenuApp()
-Menu.MMain('/Main', [])
+#from Inc.Conf import Conf
+#from App.Menu import TMenuApp
+#Menu = TMenuApp()
+#Menu.MMain('/Main', [])
 
 #for i in range(1, 16):
 #    print(hex(i)[-1])
+
+a1 = b'123'
+print(a1[:2])

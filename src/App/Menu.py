@@ -55,7 +55,8 @@ class TMenuApp(TMenu):
             ['dev_bme280', Func, [5, 4]],
             ['dev_dht11',  Func, [14]],
             ['dev_dht22',  Func, [14]],
-            ['dev_sht3x',  Func, [5, 4]],
+            ['dev_sht21',  Func, [5, 4]],
+            ['dev_sht31',  Func, [5, 4]],
             ['gpio_read',  Func, [0, 1, 2, 3, 4, 5, 12, 13, 14, 15, 16]],
             ['sys_info',   Func, []],
             ['sys_reset',  Func, []]

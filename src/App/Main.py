@@ -45,9 +45,9 @@ def Run():
                 from Inc.Util.UTime import SetTime
                 SetTime(Conf.get('TZone', 0))
 
-            if (Conf.Mqtt_Host):
-                from Inc.NetMqtt import TTaskMqtt
-                Tasks.Add(TTaskMqtt(Conf.Mqtt_Host), 0.1, 'mqtt')
+            #if (Conf.Mqtt_Host):
+            #    from Inc.NetMqtt import TTaskMqtt
+            #    Tasks.Add(TTaskMqtt(Conf.Mqtt_Host), 0.1, 'mqtt')
     else:
         from Inc.NetCaptive import TTaskCaptive
         Tasks.Add(TTaskCaptive(), 0.1)
@@ -55,9 +55,9 @@ def Run():
     from App.Idle import TTaskIdle
     Tasks.Add(TTaskIdle(), Conf.get('TIdle', 2), 'idle')
 
-    from App.Http import THttpApiApp
-    from Inc.NetHttp import TTaskHttpServer
-    Tasks.Add(TTaskHttpServer(THttpApiApp()), aAlias = 'http')
+    #from App.Http import THttpApiApp
+    #from Inc.NetHttp import TTaskHttpServer
+    #Tasks.Add(TTaskHttpServer(THttpApiApp()), aAlias = 'http')
 
     #from App.DoorCheck import TTaskDoorCheck
     #Tasks.Add(TTaskDoorCheck(Conf.get('PinBtn', 0), Conf.get('PinLed', 2), Conf.get('PinSnd', 13)), 0.5, 'door')
