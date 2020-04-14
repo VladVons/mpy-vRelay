@@ -148,11 +148,11 @@ Loop1()
 #Relay
 
 # 12128 10160
-Host="http://192.168.2.218"
-#$wget "$Host/info.py"
+Host="http://192.168.50.108"
+#$wget "$Host/sys_info.py"
 #$wget "$Host/dev_dht11.py"
-#$wget "$Host/dev_sht3x.py"
-$wget "$Host/dev_bme280.py"
+$wget "$Host/dev_sht21.py"
+#$wget "$Host/dev_sht31.py"
+#$wget "$Host/dev_bme280.py"
 #$wget "$Host/gpio_read.py?pin=0,1,2,3,4,5,12,13,14,15,16"
 #$wget "$Host/gpio_write.py?2=0,14=0"
-

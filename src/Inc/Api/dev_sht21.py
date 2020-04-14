@@ -16,11 +16,11 @@ from Inc.Api import TApiBase
 class TApi(TApiBase):
     def Exec(self, aScl: int, aSda: int) -> dict:
         i2c = machine.I2C(scl = machine.Pin(aScl), sda = machine.Pin(aSda))
-        #try:
-        Obj = SHT21(i2c)
-        R = [Obj.ReadTemper(), Obj.ReadHumid()]
-        #except Exception as E:
-        #    R = [None, None]
+        try:
+            Obj = SHT21(i2c)
+            R = [Obj.ReadTemper(), Obj.ReadHumid()]
+        except Exception as E:
+            R = [None, None]
         return {'temperature': R[0], 'humidity': R[1]}
 
     def Query(self, aData: dict) -> dict:

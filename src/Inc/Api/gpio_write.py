@@ -13,10 +13,13 @@ from Inc.Api import TApiBase
 class TApi(TApiBase):
     def Exec(self, aPairs: list) -> dict:
         R = {}
-        for PinNo, Val in aPairs:
-            Obj = Pin(PinNo, Pin.OUT)
-            Obj.value(Val)
-            R[str(PinNo)] = Obj.value()
+        try:
+            for PinNo, Val in aPairs:
+                Obj = Pin(PinNo, Pin.OUT)
+                Obj.value(Val)
+                R[str(PinNo)] = Obj.value()
+        except Exception as E:
+            R[str(PinNo)] = None
         return R
 
     def Query(self, aData: dict) -> dict:

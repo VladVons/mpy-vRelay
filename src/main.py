@@ -7,15 +7,13 @@ Description:.
 
 
 def Run():
+    #import time
     from App import Main
+
+    #print('sleep 1')
+    #time.sleep(1)
+
     Main.Run()
 
 
-def Test1():
-    import Test
-    #Test.Task1()
-    Test.Connect()
-
-
 Run()
-#Test1()

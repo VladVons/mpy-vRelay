@@ -53,7 +53,6 @@ class TTaskIdle(TTask):
 
     def tWatchDog(self):
         WDog.Feed()
-        pass
 
     def tSetup(self):
         Key = UHrd.GetKey()

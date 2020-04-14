@@ -36,10 +36,10 @@ class TMenuApp(TMenu):
         ]
         R.update(self.Input(Items, Vars))
 
+        self.ShowTree(R)
         if (self.AskYN('Save')):
             Conf.update(R)
             Conf.Save() 
-            self.ShowTree(Conf.Keys())
             print('Saved')
 
     def ApiExec(self, aPath: str, aParam: list):
@@ -50,6 +50,7 @@ class TMenuApp(TMenu):
         else:
             Data = Lib.TApi().Exec()
         self.ShowTree(Data)
+        self.WaitMsg()
 
     def MApi(self, aPath: str, aParam: list):
         Func = self.ApiExec

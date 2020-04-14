@@ -11,7 +11,7 @@ class TMenu():
         Str = input('%s ?  Y/n:' % aMsg).lower()
         return (Str == 'y')
 
-    def WaitMsg(self, aMsg):
+    def WaitMsg(self, aMsg = ''):
         return input('%s (Press ENTER) ' % aMsg)
 
     def Parse(self, aPath: str, aItems: list):
@@ -19,8 +19,7 @@ class TMenu():
             print()
             print('Menu:', aPath)
 
-            for Idx, Item in enumerate(aItems, 1):
-                Name, Func, Param = Item
+            for Idx, (Name, Func, Param) in enumerate(aItems, 1):
                 if (Param):
                     print('%2s %s %s' % (Idx, Name, Param))
                 else:
@@ -51,9 +50,7 @@ class TMenu():
         print()
         print('-', Title, '-')
 
-        for Idx, Item in enumerate(Items, 1):
-            Name, Text, ValDef = Item
-
+        for Idx, (Name, Text, ValDef) in enumerate(Items, 1):
             ValDef = aDef.get(Name, ValDef)
             Val = ''
             while Val == '':
