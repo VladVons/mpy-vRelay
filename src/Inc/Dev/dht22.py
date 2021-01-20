@@ -12,11 +12,11 @@ import time
 
 
 class DHT22():
-    def __init__(self, aPin):
+    def __init__(self, aPin: int):
         Pin = machine.Pin(aPin)
         self.Obj = dht.DHT22(Pin)
 
-    def Get(self):
+    def Get(self) -> list:
         time.sleep_ms(100)
         self.Obj.measure()
         time.sleep_ms(250)

@@ -10,7 +10,7 @@ from Inc.Dev.Serial import TSerial
 
 
 class MHZ19(TSerial):
-    def IsCheckSum(self, aData):
+    def IsCheckSum(self, aData: bytearray) -> bool:
         Sum = 0
         for i in range(1, 7):
             Sum += aData[i]
@@ -20,7 +20,7 @@ class MHZ19(TSerial):
         CheckSum = aData[-1]
         return (CheckSum == Sum)
 
-    def GetCO2(self):
+    def GetCO2(self) -> int:
         Out = b'\xff\x01\x86\x00\x00\x00\x00\x00\x79'
         In = self.Send(Out, 9)
         R = (In[2] * 256) + In[3]

@@ -20,6 +20,7 @@ class TApi(TApiBase):
             Obj = SHT31(i2c)
             R = Obj.get_temp_humi()
         except Exception as E:
+            print(E)
             R = [None, None]
         return {'temperature': R[0], 'humidity': R[1]}
 

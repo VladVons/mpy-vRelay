@@ -16,6 +16,7 @@ class TApi(TApiBase):
             Obj = MHZ19(aPort, aSpeed)
             R = Obj.GetCO2()
         except Exception as E:
+            print(E)
             R = None
         return {'co2': R}
 

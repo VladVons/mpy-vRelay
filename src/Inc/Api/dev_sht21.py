@@ -20,6 +20,7 @@ class TApi(TApiBase):
             Obj = SHT21(i2c)
             R = [Obj.ReadTemper(), Obj.ReadHumid()]
         except Exception as E:
+            print(E)
             R = [None, None]
         return {'temperature': R[0], 'humidity': R[1]}
 

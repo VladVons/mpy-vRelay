@@ -19,6 +19,7 @@ class TApi(TApiBase):
             Obj = DHT22(aPin)
             R = Obj.Get()
         except Exception as E:
+            print(E)
             R = [None, None]
         return {'temperature': R[0], 'humidity': R[1]}
 

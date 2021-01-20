@@ -11,7 +11,7 @@ import os
 
 
 class TSerial():
-    def __init__(self, aPort, aSpeed):
+    def __init__(self, aPort: int, aSpeed: int):
         # diasable terminal echo to uart
         os.dupterm(None, aPort)
 

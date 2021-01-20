@@ -1,4 +1,4 @@
-Alias = 'Test1'
+Alias = 'dht-3'
 TIdle = 2
 DSleep = 60
 STA_ESSID = 'oster.com.ua'

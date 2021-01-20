@@ -85,6 +85,6 @@ Make_MicroFirmware()
 }
 
 
-#Make_EspOpenSdk
-Make_MicroPython
-Make_MicroFirmware
+Make_EspOpenSdk
+#Make_MicroPython
+#Make_MicroFirmware

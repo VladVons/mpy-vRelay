@@ -31,7 +31,7 @@ else
     cFileImg="firmware-combined.bin"
   else
     cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp8266"
-    cFileImg="esp8266-20191220-v1.12.bin"
+    cFileImg="esp8266-20200911-v1.13.bin"
   fi
 
   cEraseCmd="esptool.py --port $cDev --baud $cSpeed1 erase_flash"
@@ -43,8 +43,8 @@ Upgrade()
 {
   Log "$0->$FUNCNAME"
 
-  sudo pip install esptool       --upgrade
-  sudo pip install adafruit-ampy --upgrade
+  sudo pip3 install esptool       --upgrade
+  sudo pip3 install adafruit-ampy --upgrade
   #sudo pip install picocom       --upgrade
   #pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U
 }
@@ -54,21 +54,21 @@ Install()
 {
   Log "$0->$FUNCNAME"
 
-  sudo apt-get install git
+  sudo apt install git
   # git clone https://github.com/VladVons/py-esp8266.git
 
-  sudo apt-get install pychecker pep8
+  #sudo apt install pychecker pep8
+  sudo apt install python3-pip
 
-  apt-get install python-pip
-
-  pip install esptool
-  pip install adafruit-ampy
-  pip install picocom
+  pip3 install esptool
+  pip3 install adafruit-ampy
+  pip3 install picocom
 
   Upgrade
 
-  usermod -a -G dialout linux
-  # logout
+  sudo usermod -a -G dialout vladvons
+  sudo usermod -a -G tty vladvons
+  # logout !!!
 }
 
 
@@ -104,7 +104,7 @@ EspFileList()
 
 EspSrcCopy()
 {
-  local aDir="$1"
+  local aDir=${1:-"src"};
   Log "$FUNCNAME($*)"
 
   #Skip="Inc"
@@ -118,6 +118,7 @@ EspSrcCopy()
   while read File; do
     if [[ "$Skip" != *"$File"* ]]; then
       ExecM "ampy --port $cDev --baud $cSpeed1 put $File"
+      #ampy --port /dev/ttyUSB0 --baud 115200 put src/Inc/Dev/ds18b20.py Inc/Dev/ds18b20.py
     fi
   done
 }

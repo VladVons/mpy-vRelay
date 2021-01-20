@@ -19,6 +19,7 @@ class TApi(TApiBase):
             Obj = BME280(i2c = i2c)
             R = Obj.read_compensated_data()
         except Exception as E:
+            print(E)
             R = [None, None, None]
         return {'temperature': R[0], 'humidity': R[2], 'preasure': R[1]}
 

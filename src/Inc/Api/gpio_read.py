@@ -18,6 +18,7 @@ class TApi(TApiBase):
                 Obj = Pin(PinNo, Pin.IN)
                 R[str(PinNo)] = Obj.value()
         except Exception as E:
+            print(E)
             R[str(PinNo)] = None
         return R
 
