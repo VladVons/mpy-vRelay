@@ -157,8 +157,8 @@ Host="http://10.10.10.226"
 #$wget "$Host/dev_bme280.py"
 
 $wget "$Host/dev_ds18b20.py"
-#$wget "$Host/dev_ds18b20.py?pin=14&id=28ff176193160491"
 #$wget "$Host/dev_ds18b20.py?pin=14"
+#$wget "$Host/dev_ds18b20.py?pin=14&id=28ff176193160491"
 
 
 #$wget "$Host/gpio_read.py?pin=0,1,2,3,4,5,12,13,14,15,16"
