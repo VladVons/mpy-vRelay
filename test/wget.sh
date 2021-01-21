@@ -148,7 +148,7 @@ Loop1()
 #Relay
 
 #
-Host="http://10.10.10.226"
+Host="http://10.10.10.105"
 #$wget "$Host/sys_info.py"
 #$wget "$Host/dev_dht11.py"
 #$wget "$Host/dev_dht22.py"
