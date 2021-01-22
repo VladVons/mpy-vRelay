@@ -114,15 +114,17 @@ Make_MicroFirmware()
   Log "$0->$FUNCNAME($*)"
 
   cd $cDirMPY/micropython/ports/esp8266
+  #make clean
   make
 
-  cd $cDirCur
-  cp $cDirMPY/micropython/ports/esp8266/build-GENERIC/firmware-combined.bin ./
+  echo "Firmware: $cDirMPY/micropython/ports/esp8266/build-GENERIC/firmware-combined.bin"
+  #cd $cDirCur
+  #cp $cDirMPY/micropython/ports/esp8266/build-GENERIC/firmware-combined.bin ./
 }
 
 
 #Install
 #Make_EspOpenSdk
 Make_MicroPython
-InstallPkg
+#InstallPkg
 Make_MicroFirmware
