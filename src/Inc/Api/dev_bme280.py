@@ -8,7 +8,7 @@ Description: micropython ESP8266
 
 import machine
 #
-from Inc.Dev.am2320 import BME280
+from Inc.Dev.bme280 import BME280
 from Inc.Api import TApiBase
 from Inc.Log import Log
 

@@ -8,19 +8,18 @@ Description: micropython ESP8266
 
 import machine
 #
-from Inc.Dev.bme280 import AM2320
+from Inc.Dev.am2320 import AM2320
 from Inc.Api import TApiBase
 from Inc.Log import Log
 
 
 class TApi(TApiBase):
     def Exec(self, aScl: int, aSda: int) -> dict:
-        i2c = machine.I2C(scl= machine.Pin(aScl), sda= machine.Pin(aSa))
+        i2c = machine.I2C(scl=machine.Pin(aScl), sda=machine.Pin(aSda))
         try:
             Obj = AM2320(i2c)
-            #Obj.measure()
-            #R = [Obj.temperature(), Obj.humidity()]
-            R = [Obj.temperature, Obj.relative_humidity]
+            Obj.measure()
+            R = [Obj.temperature(), Obj.humidity()]
         except Exception as E:
             Log.Print(1, 'Err: dev_am2320', 'Api()', E)
             R = [None, None]

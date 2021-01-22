@@ -10,7 +10,7 @@
 source ./common.sh
 
 mkdir -p $cDirMPY
-export PATH=$PATH:$cDirMPY/esp-open-sdk/xtensa-lx106-elf/bin
+export PATH=$PATH:~/.local/bin:$cDirMPY/esp-open-sdk/xtensa-lx106-elf/bin
 
 DirCur=$(pwd)
 
@@ -20,11 +20,11 @@ Install()
   sudo apt install make autoconf automake libtool gcc g++ gperf flex bison texinfo gawk ncurses-dev libexpat-dev git help2man wget libtool-bin libffi-dev
   sudo apt install sed git bash help2man
   #sudo apt install libncurses5-dev libc6-dev-amd64 gcc-multilib
-  apt-get install python2-dev
+  sudo apt install python2-dev
 
   # python2 pip 
-  python get-pip.py
   wget https://bootstrap.pypa.io/get-pip.py
+  python2 get-pip.py
   rm get-pip.py
   pip install pyserial
 
@@ -43,9 +43,10 @@ Make_EspOpenSdk()
   echo "Note. Dont use python virtenv"
   read -n 1 -r -s -p $'Press enter to continue...\n'
 
-  #patch error: too few arguments to function '_PyImport_FixupBuiltin'
   #export python=python2
   #mkdir /tmp/tmpbin && ln -s /usr/bin/python2.7 /tmp/tmpbin/python && export PATH=/tmp/tmpbin:${PATH}
+  #sudo ln -s /usr/bin/python2.7 /usr/bin/python
+
 
   cd $cDirMPY
 
@@ -126,5 +127,5 @@ Make_MicroFirmware()
 #Install
 #Make_EspOpenSdk
 Make_MicroPython
-#InstallPkg
+InstallPkg
 Make_MicroFirmware
