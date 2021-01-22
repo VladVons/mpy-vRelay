@@ -17,15 +17,16 @@ DirCur=$(pwd)
 Install() 
 {
   sudo apt install unzip unrar-free bzip2
-  sudo apt install python3-dev python3-serial python3-pip
   sudo apt install make autoconf automake libtool gcc g++ gperf flex bison texinfo gawk ncurses-dev libexpat-dev git help2man wget libtool-bin libffi-dev
   sudo apt install sed git bash help2man
   #sudo apt install libncurses5-dev libc6-dev-amd64 gcc-multilib
-  pip3 install rshell esptool
 
-  #curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
-  #sudo python2 get-pip.py
-  #pip install pyserial
+  #sudo apt install python3-dev python3-serial python3-pip
+  #pip3 install rshell esptool
+
+  ##curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
+  ##sudo python2 get-pip.py
+  ##pip install pyserial
 
   #compiler: xtensa-lx106-elf-gcc
   #sudo apt install gcc-xtensa-lx106 
