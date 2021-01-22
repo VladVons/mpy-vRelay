@@ -1,6 +1,7 @@
 Alias = 'dht22-1'
+Descr = 'frozen firmware'
 TIdle = 2
-DSleep = 60
+#DSleep = 60
 STA_ESSID = 'oster.com.ua'
 STA_Paswd = '19710000'
 #STA_Net = ('192.168.2.206', '255.255.255.0', '192.168.2.1', '192.168.2.1')

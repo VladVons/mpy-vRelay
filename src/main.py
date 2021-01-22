@@ -5,13 +5,20 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
+import time
+import gc
+
 
 def Run():
-    #import time
+    gc.collect()
+    print()
+    print('MemFree boot', gc.mem_free())
+
     from App import Main
 
-    #print('sleep 1')
-    #time.sleep(1)
+    print('MemFree App', gc.mem_free())
+    print('sleep 0.1')
+    time.sleep(0.1)
 
     Main.Run()
 

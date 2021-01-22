@@ -124,13 +124,33 @@ EspSrcCopy()
 }
 
 
+EspSrcCopy2()
+{
+  local aDir=${1:-"src"};
+  Log "$FUNCNAME($*)"
+
+  Skip="App Inc Test.py"
+  echo "Copy files in ESP"
+
+  cd $aDir
+
+  ls | sort |\
+  while read File; do
+    if [[ "$Skip" != *"$File"* ]]; then
+      ExecM "ampy --port $cDev --baud $cSpeed1 put $File"
+    fi
+  done
+}
+
+
+
 EspRelease()
 {
   Log "$0->$FUNCNAME"
   # https://github.com/bbcmicrobit/micropython/issues/555#issuecomment-419491671
 
   SkipCompile="boot.py,main.py,Options.py,__pycache__"
-  Compiler="/admin/py-esp/micropython/mpy-cross"
+  Compiler="$cDirMPY/micropython/mpy-cross/mpy-cross"
 
   DirOut="../release"
   cd ./src
@@ -163,4 +183,5 @@ case $1 in
     EspRelease|r)   EspRelease  $2 ;;
     EspFileList|l)  EspFileList $2 ;;
     EspSrcCopy|c)   EspSrcCopy  $2 ;;
+    EspSrcCopy2|c2) EspSrcCopy2 $2 ;;
 esac

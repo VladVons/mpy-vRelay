@@ -17,14 +17,18 @@ DirCur=$(pwd)
 Install() 
 {
   sudo apt install unzip unrar-free bzip2
-  sudo apt install python-dev python3-dev python3-serial python3-pip
-  sudo apt install make autoconf automake libtool gcc g++ gperf flex bison texinfo gawk ncurses-dev libexpat-dev git help2man wget libtool-bin
+  sudo apt install python3-dev python3-serial python3-pip
+  sudo apt install make autoconf automake libtool gcc g++ gperf flex bison texinfo gawk ncurses-dev libexpat-dev git help2man wget libtool-bin libffi-dev
   sudo apt install sed git bash help2man
-  #sudo apt install libffi-dev libncurses5-dev libc6-dev-amd64 gcc-multilib 
+  #sudo apt install libncurses5-dev libc6-dev-amd64 gcc-multilib
   pip3 install rshell esptool
-  #
-  #sudo apt install gcc-xtensa-lx106 
+
+  #curl https://bootstrap.pypa.io/get-pip.py --output get-pip.py
+  #sudo python2 get-pip.py
+  #pip install pyserial
+
   #compiler: xtensa-lx106-elf-gcc
+  #sudo apt install gcc-xtensa-lx106 
 
   #sudo apt install docker
   #read -p "Press enter to continue ..."
@@ -34,6 +38,13 @@ Install()
 Make_EspOpenSdk()
 {
   Log "$0->$FUNCNAME($*)"
+
+  echo "Note. Dont use python virtenv"
+  read -n 1 -r -s -p $'Press enter to continue...\n'
+
+  #patch error: too few arguments to function '_PyImport_FixupBuiltin'
+  #export python=python2
+  #mkdir /tmp/tmpbin && ln -s /usr/bin/python2.7 /tmp/tmpbin/python && export PATH=/tmp/tmpbin:${PATH}
 
   cd $cDirMPY
 
@@ -72,7 +83,7 @@ InstallPkg()
   #https://github.com/micropython/micropython/issues/2700
   #micropython/ports/esp8266/boards/esp8266.ld -> irom0_0_seg :  org = 0x40209000, len = 0xa7000
   rm -R $cDirMPY/micropython/ports/esp8266/modules/{Inc,App}
-  #cp -R $DirCur/src/{Inc,App} $cDirMPY/micropython/ports/esp8266/modules/
+  cp -R $DirCur/src/{Inc,App} $cDirMPY/micropython/ports/esp8266/modules/
 }
 
 

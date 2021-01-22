@@ -148,10 +148,11 @@ Loop1()
 #Relay
 
 #
-Host="http://10.10.10.101"
-#$wget "$Host/sys_info.py"
+Host="http://10.10.10.105"
+$wget "$Host/sys_info.py"
+
 #$wget "$Host/dev_dht11.py"
-$wget "$Host/dev_dht22.py"
+#$wget "$Host/dev_dht22.py"
 
 #$wget "$Host/dev_sht21.py"
 #$wget "$Host/dev_sht31.py"
@@ -159,7 +160,7 @@ $wget "$Host/dev_dht22.py"
 #$wget "$Host/dev_bme280.py"
 #$wget "$Host/dev_am2320.py"
 
-#$wget "$Host/dev_ds18b20.py"
+$wget "$Host/dev_ds18b20.py"
 #$wget "$Host/dev_ds18b20.py?pin=14"
 #$wget "$Host/dev_ds18b20.py?pin=14&id=28ff176193160491"
 
