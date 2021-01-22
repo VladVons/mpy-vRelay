@@ -9,6 +9,7 @@ import binascii
 
 from Inc.Dev.ds18b20 import DS1820
 from Inc.Api import TApiBase
+from Inc.Log import Log
 
 
 class TApi(TApiBase):
@@ -24,7 +25,7 @@ class TApi(TApiBase):
             for Item in Data:
                 R.append({'id':binascii.hexlify(Item['id']), 'value':Item['value']})
         except Exception as E:
-            print(E)
+            Log.Print(1, 'Err: dev_ds18b20', 'Api()', E)
 
         return R
 

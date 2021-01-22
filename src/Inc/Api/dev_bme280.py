@@ -8,8 +8,9 @@ Description: micropython ESP8266
 
 import machine
 #
-from Inc.Dev.bme280 import BME280
+from Inc.Dev.am2320 import BME280
 from Inc.Api import TApiBase
+from Inc.Log import Log
 
 
 class TApi(TApiBase):
@@ -19,7 +20,7 @@ class TApi(TApiBase):
             Obj = BME280(i2c = i2c)
             R = Obj.read_compensated_data()
         except Exception as E:
-            print(E)
+            Log.Print(1, 'Err: dev_bme280', 'Api()', E)
             R = [None, None, None]
         return {'temperature': R[0], 'humidity': R[2], 'preasure': R[1]}
 

@@ -8,6 +8,7 @@ Description:.
 from machine import Pin
 #
 from Inc.Api import TApiBase
+from Inc.Log import Log
 
 
 class TApi(TApiBase):
@@ -18,7 +19,7 @@ class TApi(TApiBase):
                 Obj = Pin(PinNo, Pin.IN)
                 R[str(PinNo)] = Obj.value()
         except Exception as E:
-            print(E)
+            Log.Print(1, 'Err: gpio_read', 'Api()', E)
             R[str(PinNo)] = None
         return R
 

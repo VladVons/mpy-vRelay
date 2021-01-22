@@ -8,6 +8,7 @@ Description:
 
 from Inc.Dev.mhz19 import MHZ19
 from Inc.Api import TApiBase
+from Inc.Log import Log
 
 
 class TApi(TApiBase):
@@ -16,7 +17,7 @@ class TApi(TApiBase):
             Obj = MHZ19(aPort, aSpeed)
             R = Obj.GetCO2()
         except Exception as E:
-            print(E)
+            Log.Print(1, 'Err: dev_mhz19', 'Api()', E)
             R = None
         return {'co2': R}
 

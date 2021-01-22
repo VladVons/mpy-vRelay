@@ -1,6 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # VladVons@gmail.com
 # Created: 2020.02.28
+#
+# Cross-installing packages with freezing
+#https://github.com/kevinkk525/pysmartnode/blob/master/tools/esp8266/esp8266_get_repository.sh
+
 
 source ./common.sh
 
@@ -9,18 +14,31 @@ export PATH=$PATH:$cDirMPY/esp-open-sdk/xtensa-lx106-elf/bin
 
 DirCur=$(pwd)
 
+Install() 
+{
+  sudo apt install unzip unrar-free bzip2
+  sudo apt install python-dev python3-dev python3-serial python3-pip
+  sudo apt install make autoconf automake libtool gcc g++ gperf flex bison texinfo gawk ncurses-dev libexpat-dev git help2man wget libtool-bin
+  sudo apt install sed git bash help2man
+  #sudo apt install libffi-dev libncurses5-dev libc6-dev-amd64 gcc-multilib 
+  pip3 install rshell esptool
+  #
+  #sudo apt install gcc-xtensa-lx106 
+  #compiler: xtensa-lx106-elf-gcc
+
+  #sudo apt install docker
+  #read -p "Press enter to continue ..."
+}
+
 
 Make_EspOpenSdk()
 {
   Log "$0->$FUNCNAME($*)"
 
-  sudo apt install unzip unrar-free bzip2
-  sudo apt install python-dev python-serial
-  sudo apt install make autoconf automake libtool gcc g++ gperf flex bison texinfo gawk ncurses-dev libexpat-dev git help2man wget libtool-bin
-
   cd $cDirMPY
 
-  # need ~4G
+  #need ~4G
+  #sudo docker run --rm -v $HOME:$HOME -u $UID -w $PWD larsks/esp-open-sdk
   git clone --recursive https://github.com/pfalcon/esp-open-sdk.git
   cd esp-open-sdk
   git pull
@@ -28,8 +46,16 @@ Make_EspOpenSdk()
   git submodule sync
   git submodule update --init
 
+  sed -i 's/GNU bash, version (3\.[1-9]|4)/GNU bash, version ([0-9\.]+)/' $cDirMPY/esp-open-sdk/crosstool-NG/configure.ac
+
+  #cd $cDirMPY/esp-open-sdk/crosstool-NG
+  #./bootstrap && ./configure --prefix=`pwd` && make && make install
+  #./ct-ng xtensa-lx106-elf
+  #./ct-ng build
+
   #make clean
-  make
+  #make -j
+  make STANDALONE=y
 }
 
 
@@ -46,7 +72,7 @@ InstallPkg()
   #https://github.com/micropython/micropython/issues/2700
   #micropython/ports/esp8266/boards/esp8266.ld -> irom0_0_seg :  org = 0x40209000, len = 0xa7000
   rm -R $cDirMPY/micropython/ports/esp8266/modules/{Inc,App}
-  cp -R $DirCur/src/{Inc,App} $cDirMPY/micropython/ports/esp8266/modules/
+  #cp -R $DirCur/src/{Inc,App} $cDirMPY/micropython/ports/esp8266/modules/
 }
 
 
@@ -68,8 +94,6 @@ Make_MicroPython()
 
   cd $cDirMPY/micropython/ports/unix
   make
-
-  InstallPkg
 }
 
 
@@ -85,6 +109,8 @@ Make_MicroFirmware()
 }
 
 
-Make_EspOpenSdk
-#Make_MicroPython
-#Make_MicroFirmware
+#Install
+#Make_EspOpenSdk
+Make_MicroPython
+InstallPkg
+Make_MicroFirmware
