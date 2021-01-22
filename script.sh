@@ -3,6 +3,8 @@
 
 source ./common.sh
 
+export PATH=$PATH:~/.local/bin
+
 #Dev=$(ls /dev/ttyUSB*)
 cDev="/dev/ttyUSB0"
 
