@@ -88,6 +88,7 @@ EspFirmware()
   File=$cDirImg/$cFileImg
   if [ -f $File ] ; then
     #EspErase
+    du -h $File
     ExecM "$cFirmwareCmd $File"
     #EspFileList
   else
