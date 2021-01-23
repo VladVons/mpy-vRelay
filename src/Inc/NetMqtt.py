@@ -15,7 +15,7 @@ from .Log import Log
 from .Task import TTask, Tasks
 
 
-def SendTo(aHost, aTopic, aMsg):
+def SendTo(aHost: str, aTopic: str, aMsg):
     Obj = MQTTClient('ClientID', aHost, 1883)
     try:
         Obj.connect()
@@ -27,8 +27,8 @@ def SendTo(aHost, aTopic, aMsg):
 
 
 class TTaskMqtt(TTask):
-    def __init__(self, aHost, aPort = 1883):
-        self.O = MQTTClient('ClientID', aHost, aPort)
+    def __init__(self, aHost: str, aPort: int = 1883, aUser: str = None, aPassword: str = None):
+        self.O = MQTTClient('ClientID', aHost, aPort, aUser, aPassword)
         self.O.set_callback(self.OnMessage)
 
     def Publish(self, aTopic: str, aMsg: str):
@@ -36,7 +36,7 @@ class TTaskMqtt(TTask):
             self.O.publish(aTopic, aMsg)
         except: pass
 
-    def OnMessage(self, aTopic, aMsg):
+    def OnMessage(self, aTopic: str, aMsg):
         print('OnMessage', aTopic, aMsg)
         Tasks.Post(self, {'Type': 'OnMsg', 'Param': [aTopic, aMsg]})
 

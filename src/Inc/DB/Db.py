@@ -20,12 +20,12 @@ class TDbField(dict):
  
 
 class TDbFields(dict):
-    Len = 0
+    Len: int = 0
 
     def Add(self, aName: str, aType: str, aLen: int):
         raise NotImplementedError()
 
-    def Sort(self, aName = 'No'):
+    def Sort(self, aName: str = 'No'):
         return UArr.SortDD(self, aName)
 
     def Get(self, aName: str) -> TDbField:
@@ -36,14 +36,14 @@ class TDbFields(dict):
 
 class TDb():
     def __init__(self):
-        self.Stream  = None
-        self.HeadLen = 0
-        self.RecLen  = 0
-        self.RecNo   = 0
-        self.RecSave = False
-        self.Buf     = bytearray()    
-        self.BufFill = b'\x00'
-        self.Fields  = TDbFields()
+        self.Stream = None
+        self.HeadLen: int = 0
+        self.RecLen: int = 0
+        self.RecNo: int = 0
+        self.RecSave: bool = False
+        self.Buf:bytearray = bytearray()
+        self.BufFill: bytes = b'\x00'
+        self.Fields: TDbFields = TDbFields()
 
     def __del__(self):
         self.Close()
@@ -108,7 +108,7 @@ class TDb():
             self.RecNo = max(0, self.GetSize() + aNo)
         self._RecRead()
 
-    def RecAdd(self, aCnt = 1):
+    def RecAdd(self, aCnt: int = 1):
         self._RecWrite()
 
         self.Buf = bytearray(self.BufFill * self.RecLen)
@@ -124,7 +124,7 @@ class TDb():
         self._StructWrite(aFields)
         self._StructRead()
 
-    def Open(self, aName: str, aROnly = False):
+    def Open(self, aName: str, aROnly: bool = False):
         self.Close()
 
         Mode = 'rb' if aROnly else 'rb+'

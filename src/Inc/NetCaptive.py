@@ -29,7 +29,7 @@ class TTaskCaptive(TTask):
         self.Sock = Sock
 
     @staticmethod
-    def Answer(aData: bytearray, aIP: str):
+    def Answer(aData: bytearray, aIP: str) -> bytes:
         # ** create the answer header **
         # copy the ID from incoming request
         R = aData[:2]

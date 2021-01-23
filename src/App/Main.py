@@ -33,7 +33,7 @@ def Run():
 
             if (Conf.Mqtt_Host):
                 from Inc.NetMqtt import TTaskMqtt
-                Tasks.Add(TTaskMqtt(Conf.Mqtt_Host), 0.1, 'mqtt')
+                Tasks.Add(TTaskMqtt(Conf.Mqtt_Host, Conf.Mqtt_User, Conf.Mqtt_Passw), 0.1, 'mqtt')
     else:
         from Inc.NetCaptive import TTaskCaptive
         Tasks.Add(TTaskCaptive(), 0.1)

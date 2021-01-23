@@ -7,11 +7,11 @@ Description:.
 
 
 class TMenu():
-    def AskYN(self, aMsg):
+    def AskYN(self, aMsg: str):
         Str = input('%s ?  Y/n:' % aMsg).lower()
         return (Str == 'y')
 
-    def WaitMsg(self, aMsg = ''):
+    def WaitMsg(self, aMsg: str = '') -> str:
         return input('%s (Press ENTER) ' % aMsg)
 
     def Parse(self, aPath: str, aItems: list):

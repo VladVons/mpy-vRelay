@@ -16,4 +16,3 @@ def Install(aName: str):
         upip.install(aName)
     else:
         print('Cant connect WiFi')
- 

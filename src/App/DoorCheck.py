@@ -12,11 +12,11 @@ from Inc.Task import TTask, Tasks
 
 
 class TTaskDoorCheck(TTask):
-    def __init__(self, aPinBtn, aPinLed, aPinSnd):
-        self.PinSnd = aPinSnd
-        self.PinLed = aPinLed
-        self.Last = 1
-        self.CntDoor = 0
+    def __init__(self, aPinBtn: int, aPinLed: int, aPinSnd: int):
+        self.PinSnd: int = aPinSnd
+        self.PinLed: int = aPinLed
+        self.Last:int = 1
+        self.CntDoor: int = 0
 
         self.Obj = machine.Pin(aPinBtn, machine.Pin.IN)
         self.Beep()
