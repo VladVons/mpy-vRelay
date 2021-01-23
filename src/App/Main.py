@@ -31,9 +31,9 @@ def Run():
                 from Inc.Util.UTime import SetTime
                 SetTime(Conf.get('TZone', 0))
 
-            #if (Conf.Mqtt_Host):
-            #    from Inc.NetMqtt import TTaskMqtt
-            #    Tasks.Add(TTaskMqtt(Conf.Mqtt_Host), 0.1, 'mqtt')
+            if (Conf.Mqtt_Host):
+                from Inc.NetMqtt import TTaskMqtt
+                Tasks.Add(TTaskMqtt(Conf.Mqtt_Host), 0.1, 'mqtt')
     else:
         from Inc.NetCaptive import TTaskCaptive
         Tasks.Add(TTaskCaptive(), 0.1)

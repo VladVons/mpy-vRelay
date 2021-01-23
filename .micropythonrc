@@ -1,0 +1,25 @@
+{
+  "upload": {
+    "port": "/dev/ttyUSB0",
+    "baud": 115200
+  },
+  "serial": {
+    "port": "/dev/ttyUSB0",
+    "baud": 115200
+  },
+  "paths": {
+    "root": "./myproject",
+    "ignore": {
+      "extensions": [
+        ".md"
+      ],
+      "directories": [
+        ".git",
+      ]
+    }
+  },
+  "tools": {
+    "ampy":   "~/virtenv/py3/bin/ampy",
+    "rshell": "~/virtenv/py3/bin/rshell"
+  }
+}
