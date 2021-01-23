@@ -26,5 +26,4 @@ def FileStat(aName: str) -> tuple:
 
 
 def FileExists(aName: str) -> bool:
-    return FileStat(aName) is not None 
-
+    return FileStat(aName) is not None
