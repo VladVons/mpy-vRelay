@@ -1,4 +1,4 @@
-Alias = 'am2320-1'
+Alias = 'dht22-3'
 Descr = 'frozen firmware'
 TIdle = 2
 #DSleep = 60

@@ -149,7 +149,8 @@ Loop1()
 
 #
 Host="http://10.10.10.224"
-#$wget "$Host/sys_info.py"
+$wget "$Host/sys_info.py"
+$wget "$Host/sys_mem1.py"
 
 #$wget "$Host/dev_dht11.py"
 $wget "$Host/dev_dht22.py"
