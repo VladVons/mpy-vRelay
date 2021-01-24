@@ -10,7 +10,7 @@ import time
 #
 from Inc.Log  import Log
 from Inc.Conf import Conf
-from Inc.NetWLan import TWLan
+from Inc.NetWLan import TWLan, EnableAP
 from Inc.Util import UHrd
 
 
@@ -26,6 +26,8 @@ def Reset(aSec: int = 0):
 
 class TWLanApp(TWLan):
     def TryConnect(self):
+        EnableAP(False)
+
         print('Press `m` to enter menu')
         self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
         if (not self.Net.isconnected()):

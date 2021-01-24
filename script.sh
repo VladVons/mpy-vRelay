@@ -64,7 +64,10 @@ Install()
 
   pip3 install esptool
   pip3 install adafruit-ampy
-  pip3 install picocom
+
+  #pip3 install picocom
+  sudo apt install picocom
+  #picocom /dev/ttyUSB0 -b115200
 
   Upgrade
 

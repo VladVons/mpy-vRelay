@@ -16,7 +16,11 @@ from Inc.NetHttp import THttpApi
 from .Utils   import Reset
 
 
+
 class THttpApiApp(THttpApi):
+    DirApiCore = 'Inc/Api'
+    DirApiUser = 'Api'
+
     def DoUrl(self, aPath: str, aQuery: dict, aData: bytearray) -> str:
         print('--- aPath', aPath, 'aQuery', aQuery, 'aData', aData)
         R = 'DoUrl()'
@@ -24,10 +28,10 @@ class THttpApiApp(THttpApi):
         Name, Ext = UStr.SplitPad(2, aPath.split('/')[-1], '.')
         if (Ext == 'py'):
             try:
-                if (UFS.FileExists('Api' + aPath)):
-                    Dir = 'Api'
+                if (UFS.FileExists(self.DirApiUser + aPath)):
+                    Dir = self.DirApiUser
                 else:
-                    Dir = 'Inc/Api'
+                    Dir = self.DirApiCore
                 #Lib = __import__((self.DirApi + '/' + Name).replace('/', '.'), None, None, ['TApi'])
                 Lib = __import__(Dir + '/' + Name)
                 R = Lib.TApi().Query(aQuery)

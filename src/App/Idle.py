@@ -21,7 +21,7 @@ WDog = UHrd.TWDog(0, 10)
 
 class TTaskIdle(TTask):
     BtnCnt = 0
- 
+
     def tLedBeat(self):
         O = machine.Pin(2, machine.Pin.OUT)
         O.value(not O.value())

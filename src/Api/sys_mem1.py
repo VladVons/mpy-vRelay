@@ -6,19 +6,17 @@ Description:.
 '''
 
 import gc
+import time
 #
 from Inc.Api import TApiBase
 
 
 class TApi(TApiBase):
-    def Exec(self) -> dict:
+    def Query(self, aData: dict) -> dict:
         gc.collect()
 
         R = {
-            'MemFree1':  gc.mem_free(),
-            'MemAlloc1': gc.mem_alloc(),
+            'MemFree':  gc.mem_free(),
+            'Uptime':    int(time.ticks_ms() / 1000)
         }
         return R
-
-    def Query(self, aData: dict) -> dict:
-        return self.Exec()

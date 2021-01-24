@@ -23,7 +23,7 @@ def EnableAP(aMode: bool):
     Log.Print(1, 'i', 'EnableAP %s' % aMode)
 
     R = WLAN(AP_IF)
-    R.active(False)
+    R.active(aMode)
     if (aMode):
         while (not R.active()):
             stdout.write('.')

@@ -76,11 +76,14 @@ InstallPkg()
 {
   Log "$0->$FUNCNAME($*)"
 
-  $cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('uasyncio')"
-  cp -R ~/.micropython/lib/uasyncio $cDirMPY/micropython/ports/esp8266/modules/
+  #$cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('uasyncio')"
+  #cp -R ~/.micropython/lib/uasyncio $cDirMPY/micropython/ports/esp8266/modules/
 
   $cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('umqtt.simple')"
   cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
+
+  #$cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('aiohttp')"
+  #cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
 
   #https://github.com/micropython/micropython/issues/2700
   #micropython/ports/esp8266/boards/esp8266.ld -> irom0_0_seg :  org = 0x40209000, len = 0xa7000
@@ -89,20 +92,27 @@ InstallPkg()
 }
 
 
-Make_MicroPython()
+Get_MicroPython()
 {
-  Log "$0->$FUNCNAME($*)"
-
   echo "cDirMPY: $cDirMPY"
   cd $cDirMPY
 
+  #git clone --single-branch -b v1.13 https://github.com/micropython/micropython.git
   git clone https://github.com/micropython/micropython.git
+
   cd $cDirMPY/micropython
   git pull
 
   git submodule sync
   git submodule update --init
+}
 
+
+Make_MicroPython()
+{
+  Log "$0->$FUNCNAME($*)"
+
+  cd $cDirMPY/micropython
   make -C mpy-cross
 
   cd $cDirMPY/micropython/ports/unix
@@ -119,13 +129,15 @@ Make_MicroFirmware()
   make
 
   echo "Firmware: $cDirMPY/micropython/ports/esp8266/build-GENERIC/firmware-combined.bin"
-  #cd $cDirCur
+  cd $cDirCur
   #cp $cDirMPY/micropython/ports/esp8266/build-GENERIC/firmware-combined.bin ./
+  ln -s $cDirMPY/micropython/ports/esp8266/build-GENERIC/firmware-combined.bin ./_inf/firmware-combined.bin
 }
 
 
 #Install
 #Make_EspOpenSdk
+#Get_MicroPython
 Make_MicroPython
 InstallPkg
 Make_MicroFirmware
