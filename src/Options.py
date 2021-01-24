@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 Alias = 'dht-2'
-=======
-Alias = 'dht22-3'
->>>>>>> 682bb1df2e1d2b819c3f4dbde9792bd41249b3e5
 Descr = 'frozen firmware'
 TIdle = 2
 #DSleep = 60

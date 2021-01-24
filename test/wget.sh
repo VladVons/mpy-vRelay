@@ -107,27 +107,4 @@ Loop()
 #Hosts="http://192.168.11.102"
 Hosts="http://10.10.10.227"
 #
-<<<<<<< HEAD
 Loop $Hosts
-=======
-Host="http://10.10.10.224"
-$wget "$Host/sys_info.py"
-$wget "$Host/sys_mem1.py"
-
-#$wget "$Host/dev_dht11.py"
-$wget "$Host/dev_dht22.py"
-
-#$wget "$Host/dev_sht21.py"
-#$wget "$Host/dev_sht31.py"
-
-#$wget "$Host/dev_bme280.py"
-#$wget "$Host/dev_am2320.py"
-
-#$wget "$Host/dev_ds18b20.py"
-#$wget "$Host/dev_ds18b20.py?pin=14"
-#$wget "$Host/dev_ds18b20.py?pin=14&id=28ff176193160491"
-
-
-#$wget "$Host/gpio_read.py?pin=0,1,2,3,4,5,12,13,14,15,16"
-#$wget "$Host/gpio_write.py?2=0,14=0"
->>>>>>> 682bb1df2e1d2b819c3f4dbde9792bd41249b3e5

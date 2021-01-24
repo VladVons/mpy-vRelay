@@ -17,13 +17,12 @@ cRoot=""
 
 #download link http://micropython.org/download#esp8266
 
-ESP32=0
-CustomFW=1
+ESP32=1
+CustomFW=0
 
 if [ $ESP32 == 1 ]; then
   cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp32"
-  #cFileImg="esp32-idf3-20191220-v1.12.bin"
-  cFileImg="esp32-idf3-20200331-v1.12-326-g8fff0b0ac.bin"
+  cFileImg="esp32-idf3-20200902-v1.13.bin"
 
   cEraseCmd="esptool.py --port $cDev --baud $cSpeed1 --chip esp32 erase_flash"
   cFirmwareCmd="esptool.py --port $cDev --baud $cSpeed2 --chip esp32 write_flash -z 0x1000"

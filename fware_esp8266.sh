@@ -117,6 +117,8 @@ Make_MicroPython()
 
   cd $cDirMPY/micropython/ports/unix
   make
+
+  #sudo cp micropython /usr/bin/
 }
 
 
