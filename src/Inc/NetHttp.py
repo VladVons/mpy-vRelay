@@ -61,7 +61,7 @@ class THttpApi():
         return UFS.FileLoad(self.DirRoot + Path, Mode)
 
 
-    def ParseUrl(self, aPath: str, aQuery: str, aData: bytearray) -> str:
+    async def ParseUrl(self, aPath: str, aQuery: str, aData: bytearray) -> str:
         if ('=' in aQuery):
             Query = dict(Pair.split('=') for Pair in aQuery.split('&'))
         else:
@@ -69,12 +69,12 @@ class THttpApi():
 
         Obj = UObj.GetAttr(self, self.GetMethod(aPath))
         if (Obj):
-            R = Obj(Query, aData)
+            R = await Obj(Query, aData)
         else:
-            R = self.DoUrl(aPath, Query, aData)
+            R = await self.DoUrl(aPath, Query, aData)
         return R
 
-    def DoUrl(self, aPath: str, aQuery: dict, aData: bytearray):
+    async def DoUrl(self, aPath: str, aQuery: dict, aData: bytearray):
         return self.LoadFile(aPath, aQuery, aData)
 
 
@@ -103,7 +103,7 @@ class TTaskHttpServer(TTask):
 
         try:
             await aWriter.awrite("HTTP/1.0 200 OK\r\n\r\n")
-            Data = self.Api.ParseUrl(R['path'], R['query'], R.get('content'))
+            Data = await self.Api.ParseUrl(R['path'], R['query'], R.get('content'))
 
             # ToDo. When many requests got exception:  OSError: [Errno 104] ECONNRESET
             await aWriter.awrite("%s\r\n" % Data)

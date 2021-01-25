@@ -95,7 +95,7 @@ Make_MicroFirmware()
   Log "$0->$FUNCNAME($*)"
 
   cd $cDirMPY/micropython/ports/esp8266
-  #make clean
+  make clean
   make submodules
   make
 

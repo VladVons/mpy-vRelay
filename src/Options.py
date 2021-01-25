@@ -1,4 +1,4 @@
-Alias = 'dht-2'
+Alias = 'ds18b20-1'
 Descr = 'frozen firmware'
 TIdle = 2
 #DSleep = 60
