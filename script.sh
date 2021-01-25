@@ -8,14 +8,11 @@ export PATH=$PATH:~/.local/bin
 #cDev=$(ls /dev/ttyUSB*)
 cDev="/dev/ttyUSB0"
 
-
 cSpeed1=115200
 cSpeed2=460800
 
-cRoot=""
-
 ESP32=1
-CustomFW=1
+CustomFW=0
 
 if [ $ESP32 == 1 ]; then
   if [ $CustomFW == 1 ]; then
@@ -49,7 +46,7 @@ Upgrade()
 
   sudo pip3 install esptool       --upgrade
   sudo pip3 install adafruit-ampy --upgrade
-  #sudo pip install picocom       --upgrade
+  sudo pip3 install picocom       --upgrade
   #pip list --outdated --format=freeze | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U
 }
 
@@ -106,7 +103,7 @@ EspFirmware()
 
 EspFileList()
 {
-  ExecM "ampy --port $cDev --baud $cSpeed1 ls $cRoot"
+  ExecM "ampy --port $cDev --baud $cSpeed1 ls"
 }
 
 

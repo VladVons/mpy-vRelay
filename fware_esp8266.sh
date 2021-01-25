@@ -96,6 +96,7 @@ Make_MicroFirmware()
 
   cd $cDirMPY/micropython/ports/esp8266
   #make clean
+  make submodules
   make
 
   echo "Firmware: $cDirMPY/micropython/ports/esp8266/build-GENERIC/firmware-combined.bin"
@@ -108,6 +109,7 @@ Make_MicroFirmware()
 #Install
 #Make_EspOpenSdk
 #Get_MicroPython
-Make_MicroPython
+#Make_MicroPython
+#
 InstallPkg
 Make_MicroFirmware
