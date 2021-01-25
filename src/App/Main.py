@@ -17,7 +17,7 @@ from .Utils   import TWLanApp
 
 
 def Run():
-    Log.Print(1, 'i', 'Main', os.uname())
+    Log.Print(1, 'i', 'Main---22', os.uname())
 
     DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
     print('DSleep', DSleep)

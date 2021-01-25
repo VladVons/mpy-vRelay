@@ -4,19 +4,28 @@
 
 source ./common.sh
 
-mkdir -p $cDirMPY
-export PATH=$PATH:$cDirMPY/esp-open-sdk/xtensa-lx106-elf/bin
+export PATH=$PATH:~/.local/bin:~/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/:
+
+
+Install()
+{
+  # see also fware_esp8266.sh
+  #sudo apt-get install git wget libncurses-dev flex bison gperf cmake ninja-build ccache libffi-dev libssl-dev
+  #sudo apt-get install python3 python3-pip python3-setuptools python3-serial python3-click python3-cryptography python3-future python3-pyparsing python3-pyelftools
+
+  # see also fware_esp8266.sh
+  sudo apt install cmake
+  pip3 install 'pyparsing<2.4'
+
+}
 
 
 Make_EspOpenSdk()
 {
-
-  pip install --upgrade future pyparsing pyelftools
-
   cd $cDirMPY
 
   # need ~4G
-  git clone --recursive https://github.com/espressif/esp-idf.git
+  git clone -b release/v4.0--recursive https://github.com/espressif/esp-idf.git
   cd esp-idf
   git pull
 
@@ -24,11 +33,7 @@ Make_EspOpenSdk()
 
   ./install.sh 
   source ./export.sh
-
-  cd tools
-  ./idf.py build
 }
-
 
 Make_MicroFirmware()
 {
@@ -36,13 +41,35 @@ Make_MicroFirmware()
   export BOARD=GENERIC
 
   cd $cDirMPY/micropython/ports/esp32
+  #make clean
+  make
   make submodules
-  #make
 
-  #cd $cDirCur
-  #cp $cDirMPY/micropython/ports/esp8266/build-GENERIC/firmware-combined.bin ./
+
+  cd $cDirCur
+  ln -s $cDirMPY/micropython/ports/esp32/build-GENERIC/firmware.bin ./_inf/firmware.bin
 }
 
 
-Make_EspOpenSdk
+InstallPkg()
+{
+  Log "$0->$FUNCNAME($*)"
+
+  $cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('umqtt.simple')"
+  cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
+
+  #$cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('aiohttp')"
+  #cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
+
+  rm -R $cDirMPY/micropython/ports/esp32/modules/{Inc,App}
+  cp -R $cDirCur/src/{Inc,App} $cDirMPY/micropython/ports/esp32/modules/
+}
+
+
+
+#Install
+#Make_EspOpenSdk
+#Get_MicroPython
+#Make_MicroPython
+InstallPkg
 Make_MicroFirmware

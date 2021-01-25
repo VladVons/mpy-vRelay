@@ -37,7 +37,7 @@ class TWLanApp(TWLan):
                 Conf.Save()
             else:
                 Reset(0)
-        print(self.Net.ifconfig())
+        Log.Print(1, 'i', 'TryConnect', self.Net.ifconfig())
         return self.Net.isconnected()
 
     def DoWait(self):

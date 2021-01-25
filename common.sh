@@ -6,6 +6,8 @@
 cDirMPY='/mnt/hdd/data1/work/micropython'
 cDirCur=$(pwd)
 
+mkdir -p $cDirMPY
+
 
 Log()
 {
@@ -25,3 +27,32 @@ ExecM()
   eval "$aExec"
 }
 
+
+Make_MicroPython()
+{
+  Log "$0->$FUNCNAME($*)"
+
+  cd $cDirMPY/micropython
+  make -C mpy-cross
+
+  cd $cDirMPY/micropython/ports/unix
+  make
+
+  #sudo cp micropython /usr/bin/
+}
+
+
+Get_MicroPython()
+{
+  echo "cDirMPY: $cDirMPY"
+  cd $cDirMPY
+
+  #git clone --single-branch -b v1.13 https://github.com/micropython/micropython.git
+  git clone https://github.com/micropython/micropython.git
+
+  cd $cDirMPY/micropython
+  git pull
+
+  git submodule sync
+  git submodule update --init
+}
