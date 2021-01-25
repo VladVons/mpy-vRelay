@@ -10,7 +10,8 @@ STA_Paswd = '19710000'
 #Mqtt_Host = 'vpn2.oster.com.ua'
 #Mqtt_User = 'test1'
 #Mqtt_Passw = 'test1'
-#
+
+# Door
 TZone = 2
 PinBtn = 0
 PinLed = 2

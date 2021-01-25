@@ -7,6 +7,7 @@ Description:.
 
 import machine
 #
+from Inc.Conf import Conf
 from Inc.Util import UHrd
 from Inc.Task import TTask, Tasks
 

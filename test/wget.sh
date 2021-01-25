@@ -14,6 +14,29 @@ ExecM()
 }
 
 
+Loop()
+{
+  local aHosts=$1;
+
+  TimeStart="$(date -u +%s)"
+  Cnt=0
+  while true; do
+    echo
+    Cnt=$((Cnt+1))
+    TimeNow="$(date -u +%s)"
+    echo "Cnt: $Cnt, Uptime: $((TimeNow-$TimeStart))"
+
+    for Host in $aHosts; do
+        echo $Host
+        HostMpy $Host
+        #HostHive $Host
+    done
+
+    sleep 1
+  done
+}
+
+
 HostHive()
 {
     local aHost=$1;
@@ -59,8 +82,8 @@ HostMpy()
     local aHost=$1;
 
     #
-    #$wget "$Host/sys_info.py"
-    $wget "$Host/sys_mem1.py"
+    $wget "$Host/sys_info.py"
+    #$wget "$Host/sys_mem1.py"
 
     #$wget "$Host/dev_dht11.py"
     #$wget "$Host/dev_dht22.py"
@@ -80,31 +103,8 @@ HostMpy()
 }
 
 
-Loop()
-{
-  local aHosts=$1;
-
-  TimeStart="$(date -u +%s)"
-  Cnt=0
-  while true; do
-    echo
-    Cnt=$((Cnt+1))
-    TimeNow="$(date -u +%s)"
-    echo "Cnt: $Cnt, Uptime: $((TimeNow-$TimeStart))"
-
-    for Host in $aHosts; do
-        echo $Host
-        HostMpy $Host
-        #HostHive $Host
-    done
-
-    sleep 1
-  done
-}
-
-
 #Hosts="http://dht4.lan"
 #Hosts="http://192.168.11.102"
-Hosts="http://10.10.10.227"
+Hosts="http://10.10.10.225"
 #
 Loop $Hosts

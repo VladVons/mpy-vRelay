@@ -11,6 +11,10 @@ V - Value
 '''
 
 import os
+import sys
+#
+from .Util import UFS
+from .Log  import Log
 
 
 class TConfD(dict):
@@ -29,6 +33,9 @@ class TConf(TConfD):
     def __init__(self, aFile: str):
         super().__init__() 
 
+        if (not UFS.FileExists(aFile +  '.py')):
+            aFile = aFile + '_' + sys.platform
+
         self.File = aFile + '.py'
         self.Load(aFile)
 
@@ -37,7 +44,8 @@ class TConf(TConfD):
             Obj = __import__(aFile)
             for K in dir(Obj):
                 self[K] = getattr(Obj, K)
-        except: pass
+        except: 
+            Log.Print(1, 'x', 'Load()', E)
 
     def Save(self):
         with open(self.File, 'w') as File:

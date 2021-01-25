@@ -16,7 +16,7 @@ from Inc.NetWLan import GetMac
 from Inc.Util import UTime
 from Inc.Api import TApiBase
 
-__version__ = '1.0.16, 2021.01.20'
+__version__ = '1.0.17, 2021.01.25'
 __author__  = 'Vladimir Vons, vladvons@gmail.com'
 
 
@@ -27,9 +27,10 @@ class TApi(TApiBase):
 
         R = {
             'Author':   __author__,
-            'SW':       __version__,
-            'FW':       os.uname().version,
-            'PW':       '%s.%s.%s' % (sys.version_info[0], sys.version_info[1], sys.version_info[2]),
+            'SoftWare': __version__,
+            'FirmWare': os.uname().version,
+            'Python':   '%s.%s.%s' % (sys.version_info[0], sys.version_info[1], sys.version_info[2]),
+            'Platform': sys.platform,
             'Alias':    Conf.Alias,
             'Descr':    Conf.Descr,
             'MemFree':  gc.mem_free(),

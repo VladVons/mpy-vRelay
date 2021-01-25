@@ -1,12 +1,16 @@
+#!/usr/bin/python3
 #!/usr/bin/micropython
+
+
 
 import gc
 import time
+import asyncio
 
-from Inc.Conf import Conf
-from App.Menu import TMenuApp
-Menu = TMenuApp()
-Menu.MMain('/Main', [])
+#from Inc.Conf import Conf
+#from App.Menu import TMenuApp
+#Menu = TMenuApp()
+#Menu.MMain('/Main', [])
 
 #for i in range(1, 16):
 #    print(hex(i)[-1])
@@ -22,4 +26,19 @@ Menu.MMain('/Main', [])
 #for i in V1:
 #    #print(i['Key'], i['Val'])
 #    print(i)
+
+
+def Test1():
+    print('Test1')
+
+async def Test2():
+    print('Test2')
+
+
+def Main():
+    Test1()
+    await Test2()
+
+
+Main()
 
