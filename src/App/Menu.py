@@ -9,6 +9,7 @@ from Inc.Menu import TMenu
 from Inc.Conf import Conf
 from Inc.Util.UObj import GetTree
 from Inc.Util.UArr import SortLD
+from Inc.Util.UHrd import GetInputChr
 
 
 class TMenuApp(TMenu):
@@ -16,10 +17,10 @@ class TMenuApp(TMenu):
         for Var in SortLD(GetTree(aData), 'Key'):
             print('%15s = %s' % (Var['Key'], Var['Val']))
 
-    def MSetup(self, aPath: str, aParam: list):
+    async def MSetup(self, aPath: str, aParam: list):
         Vars = Conf.Keys()
         self.ShowTree(Vars)
-        if (not self.AskYN('Cntinue')):
+        if (not await self.AskYN('Cntinue')):
             return
 
         R = {}
@@ -27,32 +28,32 @@ class TMenuApp(TMenu):
             ['STA_ESSID', 'SSID',      'oster.com.ua'], 
             ['STA_Paswd', 'Password*', '']]
         ]
-        R.update(self.Input(Items, Vars))
+        R.update(await self.Input(Items, Vars))
 
         Items = ['Mqtt Server', [
             ['Mqtt_Host',  'Host',     'vpn2.oster.com.ua'], 
             ['Mqtt_Login', 'Login',    ''], 
             ['Mqtt_Paswd', 'Password', '']]
         ]
-        R.update(self.Input(Items, Vars))
+        R.update(await self.Input(Items, Vars))
 
         self.ShowTree(R)
-        if (self.AskYN('Save')):
+        if (await self.AskYN('Save')):
             Conf.update(R)
             Conf.Save() 
             print('Saved')
 
-    def ApiExec(self, aPath: str, aParam: list):
+    async def ApiExec(self, aPath: str, aParam: list):
         Path = 'Inc.Api.' + aPath.split('/')[-1]
         Lib  = __import__(Path , None, None, ['TApi'])
         if (aParam):
-            Data = Lib.TApi().Exec(*aParam)
+            Data = await Lib.TApi().Exec(*aParam)
         else:
-            Data = Lib.TApi().Exec()
+            Data = await Lib.TApi().Exec()
         self.ShowTree(Data)
-        self.WaitMsg()
+        await self.WaitMsg()
 
-    def MApi(self, aPath: str, aParam: list):
+    async def MApi(self, aPath: str, aParam: list):
         Func = self.ApiExec
         Items = [
             ['dev_bme280',      Func, [5, 4]],
@@ -66,12 +67,11 @@ class TMenuApp(TMenu):
             ['sys_mem',         Func, []],
             ['sys_reset',       Func, []]
         ]
-        self.Parse(aPath, Items)
+        await self.Parse(aPath, Items)
 
-
-    def MMain(self, aPath: str, aParam: list):
+    async def MMain(self, aPath: str, aParam: list):
         Items = [
             ['Api',    self.MApi, []],
             ['Setup',  self.MSetup, []]
         ]
-        self.Parse(aPath, Items)
+        await self.Parse(aPath, Items)

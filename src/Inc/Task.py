@@ -23,17 +23,17 @@ class TTask():
     # Alias 
     # Parent
     # Pause
-    # Run
-    Cnt    = 0
-    Sleep  = 1
+    # IsRun
+    Cnt: int    = 0
+    Sleep: int  = 1
 
-    async def Loop(self):
+    async def Run(self):
         self.Pause = False
-        self.Run   = True
-        while self.Run:
+        self.IsRun = True
+        while self.IsRun:
             try:
                 self.DoEnter()
-                while self.Run:
+                while self.IsRun:
                     if (not self.Pause):
                         self.Cnt += 1
                         await self.DoLoop()
@@ -78,7 +78,7 @@ class TTasks():
             aTask.Sleep  = aSleep
             aTask.Parent = self
             self.Obj.append(aTask)
-            self.ELoop.create_task(aTask.Loop())
+            self.ELoop.create_task(aTask.Run())
 
     def Find(self, aAlias: str) -> TTask:
         for O in self.Obj:
@@ -92,7 +92,7 @@ class TTasks():
     def Stop(self):
         for Obj in self.Obj:
             Obj.DoExit()
-            Obj.Run = False
+            Obj.IsRun = False
 
     def Post(self, aOwner: TTask, aMsg):
         for Obj in self.Obj:

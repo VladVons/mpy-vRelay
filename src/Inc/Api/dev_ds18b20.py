@@ -13,7 +13,7 @@ from Inc.Log import Log
 
 
 class TApi(TApiBase):
-    def Exec(self, aPin: int, aIDs: list) -> dict:
+    async def Exec(self, aPin: int, aIDs: list) -> dict:
         HexID = []
         for ID in aIDs:
             HexID.append(binascii.unhexlify(ID))
@@ -21,19 +21,18 @@ class TApi(TApiBase):
         R = []
         try:
             Obj = DS1820(aPin)
-            Data = Obj.Get(HexID)
+            Data = await Obj.Get(HexID)
             for Item in Data:
                 R.append({'id':binascii.hexlify(Item['id']), 'value':Item['value']})
         except Exception as E:
             Log.Print(1, 'Err: dev_ds18b20', 'Api()', E)
-
         return R
 
-    def Query(self, aData: dict) -> dict:
+    async def Query(self, aData: dict) -> dict:
         Pin = int(aData.get('pin', '14'))
         Id  = aData.get('id')
         if (Id):
             Arr = Id.split(',')
         else:
             Arr = []
-        return self.Exec(Pin, Arr)
+        return await self.Exec(Pin, Arr)

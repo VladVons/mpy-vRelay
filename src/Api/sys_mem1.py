@@ -7,16 +7,18 @@ Description:.
 
 import gc
 import time
+import uasyncio as asyncio
 #
 from Inc.Api import TApiBase
 
 
 class TApi(TApiBase):
-    def Query(self, aData: dict) -> dict:
+    async def Query(self, aData: dict) -> dict:
         gc.collect()
 
         R = {
             'MemFree':  gc.mem_free(),
-            'Uptime':    int(time.ticks_ms() / 1000)
+            'Uptime':   int(time.ticks_ms() / 1000)
         }
+
         return R

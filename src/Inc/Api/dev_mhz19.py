@@ -12,16 +12,16 @@ from Inc.Log import Log
 
 
 class TApi(TApiBase):
-    def Exec(self, aPort: int, aSpeed: int) -> dict:
+    async def Exec(self, aPort: int, aSpeed: int) -> dict:
         try:
             Obj = MHZ19(aPort, aSpeed)
-            R = Obj.GetCO2()
+            R = await Obj.GetCO2()
         except Exception as E:
             Log.Print(1, 'Err: dev_mhz19', 'Api()', E)
             R = None
         return {'co2': R}
 
-    def Query(self, aData: dict) -> dict:
+    async def Query(self, aData: dict) -> dict:
         aPort  = int(aData.get('port', '1'))
         aSpeed = int(aData.get('speed', '9600'))
-        return self.Exec(aPort, aSpeed)
+        return await self.Exec(aPort, aSpeed)

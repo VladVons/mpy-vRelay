@@ -111,5 +111,5 @@ class TTaskHttpServer(TTask):
         except Exception as E:
             Data = Log.Print(1, 'x', 'CallBack()', E)
 
-    async def Loop(self):
+    async def Run(self):
         return await asyncio.start_server(self.CallBack, "0.0.0.0", 80)

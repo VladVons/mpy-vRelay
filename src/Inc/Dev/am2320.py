@@ -5,7 +5,9 @@ https://github.com/mcauser/micropython-am2320
 
 import ustruct
 import time
+import uasyncio as asyncio
 
+Lock = asyncio.Lock()
 
 class AM2320:
     def __init__(self, i2c=None, address=0x5c):
@@ -13,26 +15,27 @@ class AM2320:
         self.address = address
         self.buf = bytearray(8)
 
-    def measure(self):
+    def await measure(self):
         buf = self.buf
         address = self.address
-        # wake sensor
-        try:
-            self.i2c.writeto(address, b'')
-        except OSError:
-            print('Except OSError')
-            #pass
 
-        time.sleep_ms(10)
-        # read 4 registers starting at offset 0x00
-        self.i2c.writeto(address, b'\x03\x00\x04')
-        # wait at least 1.5ms
-        time.sleep_ms(2)
-        # read data
-        self.i2c.readfrom_mem_into(address, 0, buf)
-        crc = ustruct.unpack('<H', bytearray(buf[-2:]))[0]
-        if (crc != self.crc16(buf[:-2])):
-            raise Exception("checksum error")
+        async with Lock:
+            # wake sensor
+            try:
+                self.i2c.writeto(address, b'')
+            except OSError:
+                print('Except OSError')
+
+            await asyncio.sleep_ms(10)
+            # read 4 registers starting at offset 0x00
+            self.i2c.writeto(address, b'\x03\x00\x04')
+            # wait at least 1.5ms
+            await asyncio.sleep_ms(2)
+            # read data
+            self.i2c.readfrom_mem_into(address, 0, buf)
+            crc = ustruct.unpack('<H', bytearray(buf[-2:]))[0]
+            if (crc != self.crc16(buf[:-2])):
+                raise Exception("checksum error")
 
     def crc16(self, buf):
         crc = 0xFFFF

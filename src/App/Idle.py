@@ -9,6 +9,7 @@ Description:.
 import gc
 import sys
 import machine
+import network
 import select
 #
 from Inc.Conf import Conf
@@ -17,7 +18,7 @@ from Inc.Util import UHrd
 from Inc.Task import TTask, Tasks
 from .Utils   import Reset
 
-WDog = UHrd.TWDog(0, 10)
+WDog = UHrd.TWDog(0, 30)
 
 class TTaskIdle(TTask):
     BtnCnt = 0
@@ -49,18 +50,20 @@ class TTaskIdle(TTask):
 
     def tMemFree(self):
         gc.collect()
-        print('mem_free Led', gc.mem_free())
+        print('mem_free', gc.mem_free())
+
+        Net = network.WLAN(network.STA_IF)
+        print('ifconfig', Net.ifconfig()[0])
 
     def tWatchDog(self):
         WDog.Feed()
 
     def tSetup(self):
-        Key = UHrd.GetKey()
+        Key = UHrd.GetInputChr()
         if (Key == 'm'): 
-            from .Menu import TMenuApp
-            Log.Print(1, 'i', 'App suspended !')
-
             WDog.Enable = False
+
+            from .Menu import TMenuApp
             Menu = TMenuApp()
             Menu.MMain('/Main', [])
             WDog.Enable = True

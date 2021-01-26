@@ -8,8 +8,11 @@ Description: micropython ESP8266
 import time
 import machine
 import onewire
+import uasyncio as asyncio
 #
 from   ds18x20 import DS18X20
+
+Lock = asyncio.Lock()
 
 class DS1820():
     def __init__(self, aPin: int):
@@ -17,15 +20,16 @@ class DS1820():
         W1  = onewire.OneWire(Pin)
         self.Obj = DS18X20(W1)
 
-    def Get(self, aIDs: list) -> list:
+    async def Get(self, aIDs: list) -> list:
         R = []
         if (not aIDs): 
             #Roms = W1.scan() # hangs if no devices
             aIDs = self.Obj.scan()
 
-        self.Obj.convert_temp()
-        time.sleep_ms(750)
-        for ID in aIDs:
-            Value = self.Obj.read_temp(ID) 
-            R.append({'id':ID, 'value':Value})
+        async with Lock:
+            self.Obj.convert_temp()
+            await asyncio.sleep_ms(750)
+            for ID in aIDs:
+                Value = self.Obj.read_temp(ID) 
+                R.append({'id':ID, 'value':Value})
         return R

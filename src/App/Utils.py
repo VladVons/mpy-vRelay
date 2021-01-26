@@ -43,7 +43,7 @@ class TWLanApp(TWLan):
     def DoWait(self):
         time.sleep(0.5)
 
-        Key = UHrd.GetKey()
+        Key = UHrd.GetInputChr()
         if (Key == 'm'):
             from .Menu import TMenuApp
             Menu = TMenuApp()

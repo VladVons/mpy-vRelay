@@ -21,7 +21,7 @@ __author__  = 'Vladimir Vons, vladvons@gmail.com'
 
 
 class TApi(TApiBase):
-    def Exec(self) -> dict:
+    async def Exec(self) -> dict:
         gc.collect()
         Net = network.WLAN(network.STA_IF)
 
@@ -42,5 +42,5 @@ class TApi(TApiBase):
         }
         return R
 
-    def Query(self, aData: dict) -> dict:
-        return self.Exec()
+    async def Query(self, aData: dict) -> dict:
+        return await self.Exec()

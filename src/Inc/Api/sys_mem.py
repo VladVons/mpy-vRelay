@@ -11,7 +11,7 @@ from Inc.Api import TApiBase
 
 
 class TApi(TApiBase):
-    def Exec(self) -> dict:
+    async def Exec(self) -> dict:
         gc.collect()
 
         R = {
@@ -20,5 +20,5 @@ class TApi(TApiBase):
         }
         return R
 
-    def Query(self, aData: dict) -> dict:
-        return self.Exec()
+    async def Query(self, aData: dict) -> dict:
+        return await self.Exec()

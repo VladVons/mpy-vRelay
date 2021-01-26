@@ -12,7 +12,7 @@ from Inc.Log import Log
 
 
 class TApi(TApiBase):
-    def Exec(self, aPins: list) -> dict:
+    async def Exec(self, aPins: list) -> dict:
         R = {}
         try:
             for PinNo in aPins:
@@ -23,10 +23,10 @@ class TApi(TApiBase):
             R[str(PinNo)] = None
         return R
 
-    def Query(self, aData: dict) -> dict:
+    async def Query(self, aData: dict) -> dict:
         aPins = aData.get('pin', '').split(',')
 
         Param = []
         for Pin in aPins:
             Param.append(int(Pin))
-        return self.Exec(Param)
+        return await self.Exec(Param)

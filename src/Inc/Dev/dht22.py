@@ -9,15 +9,18 @@ Description: micropython ESP8266
 import machine
 import dht
 import time
+import uasyncio as asyncio
 
+Lock = asyncio.Lock()
 
 class DHT22():
     def __init__(self, aPin: int):
         Pin = machine.Pin(aPin)
         self.Obj = dht.DHT22(Pin)
 
-    def Get(self) -> list:
-        time.sleep_ms(100)
-        self.Obj.measure()
-        time.sleep_ms(250)
+    async def Get(self) -> list:
+        async with Lock:
+            await asyncio.sleep_ms(100)
+            self.Obj.measure()
+            await asyncio.sleep_ms(250)
         return [self.Obj.temperature(), self.Obj.humidity()]

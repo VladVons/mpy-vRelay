@@ -21,7 +21,7 @@ class THttpApiApp(THttpApi):
     DirApiCore = 'Inc/Api'
     DirApiUser = 'Api'
 
-    await def DoUrl(self, aPath: str, aQuery: dict, aData: bytearray) -> str:
+    async def DoUrl(self, aPath: str, aQuery: dict, aData: bytearray) -> str:
         print('--- aPath', aPath, 'aQuery', aQuery, 'aData', aData)
         R = 'DoUrl()'
 
@@ -43,7 +43,7 @@ class THttpApiApp(THttpApi):
         elif (aPath == '/generate_204'):
             aPath += '.html'
 
-            R = super().DoUrl(aPath, aQuery, aData)
+            R = await super().DoUrl(aPath, aQuery, aData)
             #R = UStr.TDictRepl({'$SSID': 'mySSID'}).Parse(R)
         elif (aPath == '/login'):
             Query = self.ParseQuery(aData.decode('utf-8'))
