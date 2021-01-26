@@ -58,16 +58,6 @@ class TTaskIdle(TTask):
     def tWatchDog(self):
         WDog.Feed()
 
-    def tSetup(self):
-        Key = UHrd.GetInputChr()
-        if (Key == 'm'): 
-            WDog.Enable = False
-
-            from .Menu import TMenuApp
-            Menu = TMenuApp()
-            Menu.MMain('/Main', [])
-            WDog.Enable = True
-
     async def DoLoop(self):
         Log.Print(1, 'i', 'TTaskIdle %s' % self.Cnt)
 
@@ -76,7 +66,6 @@ class TTaskIdle(TTask):
         self.tMemFree()
         self.tLedBeat()
         self.tConfClear()
-        self.tSetup()
 
     def DoExit(self):
         WDog.Stop()

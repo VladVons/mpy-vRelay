@@ -38,16 +38,16 @@ def Run():
         from Inc.NetCaptive import TTaskCaptive
         Tasks.Add(TTaskCaptive(), 0.1)
 
-    #from App.Idle import TTaskIdle
-    #Tasks.Add(TTaskIdle(), Conf.get('TIdle', 2), 'idle')
+    from App.Idle import TTaskIdle
+    Tasks.Add(TTaskIdle(), Conf.get('TIdle', 2), 'idle')
 
     from App.Http import THttpApiApp
     from Inc.NetHttp import TTaskHttpServer
     Tasks.Add(TTaskHttpServer(THttpApiApp()), aAlias = 'http')
 
-    from App.Menu import TMenuApp
-    from Inc.Menu import TTaskMenu
-    Tasks.Add(TTaskMenu(TMenuApp(), 'm'), aAlias = 'menu')
+    #from App.Menu import TMenuApp
+    #from Inc.Menu import TTaskMenu
+    #Tasks.Add(TTaskMenu(TMenuApp(), 'm'), aAlias = 'menu')
 
     #from App.DoorCheck import TTaskDoorCheck
     #Tasks.Add(TTaskDoorCheck(Conf.get('PinBtn', 0), Conf.get('PinLed', 2), Conf.get('PinSnd', 13)), 0.5, 'door')
