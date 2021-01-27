@@ -112,4 +112,7 @@ class TTaskHttpServer(TTask):
             Data = Log.Print(1, 'x', 'CallBack()', E)
 
     async def Run(self):
+        #No need internal loop
+        #await super().Run()
+
         return await asyncio.start_server(self.CallBack, "0.0.0.0", 80)

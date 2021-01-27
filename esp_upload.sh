@@ -4,13 +4,17 @@
 #add to ~/bashrc EOF source ~/esp_upload.sh and logout/logit to take effect
 #to exit from picocom Ctrl+A+X
 
-espt()
+
+cSpeed=115200
+cPort=/dev/ttyUSB0
+
+esp_term()
 {
-  picocom /dev/ttyUSB0 -b115200
+  picocom $cPort -b${cSpeed}
 }
 
 
-espf()
+esp_file()
 {
   aFile=$1;
 
@@ -20,12 +24,24 @@ espf()
   Find="src"
   Suffix=${Path#*$Find}
 
-  Cmd="ampy --port /dev/ttyUSB0 --baud 115200 put $aFile $Suffix"
+  Cmd="ampy --port $cPort --baud $cSpeed put $aFile $Suffix"
   echo $Cmd
   eval "$Cmd"
 
-  espt
+  esp_term
 }
 
 
-#espf dev_dht22.py
+esp()
+{
+  aFile=$1;
+
+  if [ -z "$aFile" ]; then
+    esp_term
+  else
+    esp_file $aFile
+  fi  
+}
+
+#esp dev_dht22.py
+#esp

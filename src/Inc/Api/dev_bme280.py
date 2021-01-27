@@ -20,7 +20,7 @@ class TApi(TApiBase):
             Obj = BME280(i2c = i2c)
             R = await Obj.read_compensated_data()
         except Exception as E:
-            Log.Print(1, 'Err: dev_bme280', 'Api()', E)
+            Log.Print(1, 'x', 'dev_bme280', E)
             R = [None, None, None]
         return {'temperature': R[0], 'humidity': R[2], 'preasure': R[1]}
 

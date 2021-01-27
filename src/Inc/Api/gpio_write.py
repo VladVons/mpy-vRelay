@@ -20,7 +20,7 @@ class TApi(TApiBase):
                 Obj.value(Val)
                 R[str(PinNo)] = Obj.value()
         except Exception as E:
-            Log.Print(1, 'Err: gpio_write', 'Api()', E)
+            Log.Print(1, 'x', 'gpio_write', E)
             R[str(PinNo)] = None
         return R
 

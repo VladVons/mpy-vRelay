@@ -17,7 +17,7 @@ class TApi(TApiBase):
             Obj = MHZ19(aPort, aSpeed)
             R = await Obj.GetCO2()
         except Exception as E:
-            Log.Print(1, 'Err: dev_mhz19', 'Api()', E)
+            Log.Print(1, 'x', 'dev_mhz19', E)
             R = None
         return {'co2': R}
 

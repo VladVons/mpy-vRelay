@@ -82,29 +82,33 @@ HostMpy()
     local aHost=$1;
 
     #
-    $wget "$Host/sys_info.py"
-    #$wget "$Host/sys_mem1.py"
+    #$wget "$aHost/sys_info.py"
+    $wget "$aHost/sys_mem1.py"
 
-    #$wget "$Host/dev_dht11.py"
-    #$wget "$Host/dev_dht22.py"
+    #$wget "$aHost/dev_dht11.py"
+    #$wget "$aHost/dev_dht22.py"
 
-    #$wget "$Host/dev_sht21.py"
-    #$wget "$Host/dev_sht31.py"
+    #$wget "$aHost/dev_sht21.py"
+    #$wget "$aHost/dev_sht31.py"
 
-    #$wget "$Host/dev_bme280.py"
-    #$wget "$Host/dev_am2320.py"
+    #$wget "$aHost/dev_bme280.py"
+    #$wget "$aHost/dev_am2320.py"
 
-    #$wget "$Host/dev_ds18b20.py"
-    #$wget "$Host/dev_ds18b20.py?pin=14"
-    #$wget "$Host/dev_ds18b20.py?pin=14&id=28ff176193160491"
+    #$wget "$aHost/dev_ds18b20.py"
+    #$wget "$aHost/dev_ds18b20.py?pin=14"
+    #$wget "$aHost/dev_ds18b20.py?pin=14&id=28ff176193160491"
 
-    #$wget "$Host/gpio_read.py?pin=0,1,2,3,4,5,12,13,14,15,16"
-    #$wget "$Host/gpio_write.py?2=0,14=0"
+    #$wget "$aHost/gpio_read.py?pin=0,1,2,3,4,5,12,13,14,15,16"
+    #$wget "$aHost/gpio_write.py?2=0,14=0"
+
+    $wget "$aHost/sys_update.py?url=http://download.oster.com.ua/www/relay/ver.json"
 }
 
 
 #Hosts="http://dht4.lan"
 #Hosts="http://192.168.11.102"
-Hosts="http://10.10.10.215"
+Hosts="http://10.10.10.105"
+#Hosts="http://10.10.10.105"
 #
-Loop $Hosts
+#Loop $Hosts
+$wget "$Hosts/sys_update.py?url=http://download.oster.com.ua/www/relay/ver.json"

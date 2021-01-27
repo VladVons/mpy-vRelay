@@ -82,6 +82,9 @@ class TTaskMenu(TTask):
         self.Key = aKey
 
     async def Run(self):
+        #No need internal loop
+        #await super().Run()
+
         Msg = 'Press `%s` to enter menu' % (self.Key)
         print(Msg)
         while True:

@@ -19,7 +19,7 @@ class TApi(TApiBase):
                 Obj = Pin(PinNo, Pin.IN)
                 R[str(PinNo)] = Obj.value()
         except Exception as E:
-            Log.Print(1, 'Err: gpio_read', 'Api()', E)
+            Log.Print(1, 'x', 'gpio_read', E)
             R[str(PinNo)] = None
         return R
 
