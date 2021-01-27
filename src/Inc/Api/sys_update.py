@@ -50,5 +50,4 @@ class TApi(TApiBase):
 
     async def Query(self, aData: dict) -> dict:
         Url = aData.get('url')
-        R = await self.Exec(Url)
-        return R
+        return await self.Exec(Url)
