@@ -15,7 +15,7 @@ class AM2320:
         self.address = address
         self.buf = bytearray(8)
 
-    def await measure(self):
+    async def measure(self):
         buf = self.buf
         address = self.address
 

@@ -2,9 +2,12 @@
 # VladVons@gmail.com
 # Created: 2020.02.28
 
+# https://github.com/kevinkk525/pysmartnode/blob/master/tools/esp32/esp32_get_repository.sh
+
 source ./common.sh
 
-export PATH=$PATH:~/.local/bin:~/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/:
+Compiler=~/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/
+export PATH=$PATH:~/.local/bin:$Compiler:
 
 
 Install()
@@ -16,19 +19,24 @@ Install()
   # see also fware_esp8266.sh
   sudo apt install cmake
   pip3 install 'pyparsing<2.4'
-
+  pip3 install pyserial
 }
 
 
 Make_EspOpenSdk()
 {
+  cd $cDirMPY/micropython/ports/esp32
+  HashMPY=`make | grep "Supported git hash (v4.0) (experimental):"`
+  HashMPY=${HashMPY:42}
+  echo "HashMPY $HashMPY"
+
   cd $cDirMPY
 
   # need ~4G
-  git clone -b release/v4.0--recursive https://github.com/espressif/esp-idf.git
+  git clone -b release/v4.0 --recursive https://github.com/espressif/esp-idf.git
   cd esp-idf
   git pull
-
+  git checkout $HashMPY
   git submodule update --init --recursive
 
   ./install.sh 
@@ -40,11 +48,12 @@ Make_MicroFirmware()
   export ESPIDF=$cDirMPY/esp-idf
   export BOARD=GENERIC
 
+  #source $cDirMPY/esp-idf/export.sh
+
   cd $cDirMPY/micropython/ports/esp32
   #make clean
   make
   make submodules
-
 
   cd $cDirCur
   ln -s $cDirMPY/micropython/ports/esp32/build-GENERIC/firmware.bin ./_inf/firmware.bin
@@ -68,9 +77,9 @@ InstallPkg()
 
 
 #Install
+#Get_MicroPython
 #Make_EspOpenSdk
-Get_MicroPython
-Make_MicroPython
+#Make_MicroPython
 #
 InstallPkg
 Make_MicroFirmware

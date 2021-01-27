@@ -55,4 +55,6 @@ Get_MicroPython()
 
   git submodule sync
   git submodule update --init
+
+  HashMPY=$(make | grep "Supported git hash (v4.0) (experimental):")
 }
