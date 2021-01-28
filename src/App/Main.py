@@ -35,6 +35,7 @@ def Run():
                 from Inc.NetMqtt import TTaskMqtt
                 Tasks.Add(TTaskMqtt(Conf.Mqtt_Host, Conf.Mqtt_User, Conf.Mqtt_Passw), 0.1, 'mqtt')
     else:
+        Log.Print(1, 'i', 'Task NetCaptive')
         from Inc.NetCaptive import TTaskCaptive
         Tasks.Add(TTaskCaptive(), 0.1)
 

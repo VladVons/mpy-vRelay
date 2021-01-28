@@ -8,7 +8,7 @@ Description:.
 import uasyncio as asyncio
 #
 from .Log  import Log
-from .Util import UFS, UObj, UStr
+from .Util import UFS, UObj, UStr, UHttp
 from .Task import TTask
 
 
@@ -16,20 +16,6 @@ class THttpApi():
     DirRoot = '/Web'
     FIndex  = '/index.html'
     F404    = '/page_404.html'
-
-    '''
-    @staticmethod
-    def GetMime(aExt: str) -> str:
-        R = {
-            'html' : 'text/html',
-            'css'  : 'text/css',
-            'js'   : 'text/javascript',
-            'png'  : 'image/png',
-            'gif'  : 'image/gif',
-            'jpg'  : 'image/jpeg'
-        }
-        return R.get(aExt, 'text/plain')
-    '''
 
     @staticmethod
     def GetMethod(aPath: str) -> str:
@@ -83,24 +69,11 @@ class TTaskHttpServer(TTask):
         self.Api = aApi
 
     async def CallBack(self, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter):
-        R = {}
-        while True:
-            Data = await aReader.readline()
-            if (Data == b'\r\n'):
-                break
-
-            Data = Data.decode('utf-8').strip()
-            if (len(R) == 0):
-                R['mode'], R['url'], R['prot'] = UStr.SplitPad(3, Data, ' ')
-                R['path'], R['query'] = UStr.SplitPad(2, R['url'], '?')
-            else:
-                Key, Value = UStr.SplitPad(2, Data, ':')
-                R[Key.lower()] = Value.strip()
-
+        R = await UHttp.ReadHead(aReader, True)
         Len = int(R.get('content-length', '0'))
         if (Len > 0):
             R['content'] = await aReader.read(Len)
-
+ 
         try:
             await aWriter.awrite("HTTP/1.0 200 OK\r\n\r\n")
             Data = await self.Api.ParseUrl(R['path'], R['query'], R.get('content'))

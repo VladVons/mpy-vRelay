@@ -43,11 +43,14 @@ class TLog():
     def AddEcho(self, aEcho: TEcho):
         self.Echoes.append(aEcho) 
 
-    def Print(self, aLevel: int, aType: str,  *aParam) -> str:
+    def Print(self, aLevel: int, aType: str, *aParam) -> str:
         R = '' 
         if (aLevel <= self.Level):
             self.Cnt += 1
             R = '%s,%03d,%d,%s,%s%s' % (UTime.GetDate(), self.Cnt, aLevel, aType, ' ' * aLevel, list(aParam))
+            if (aType == 'x') and (len(aParam) > 1):
+                sys.print_exception(aParam[1])
+
             for Echo in self.Echoes: 
                 Echo.Write(R)
         return R

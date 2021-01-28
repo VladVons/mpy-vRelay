@@ -44,7 +44,7 @@ class TConf(TConfD):
             Obj = __import__(aFile)
             for K in dir(Obj):
                 self[K] = getattr(Obj, K)
-        except: 
+        except Exception as E: 
             Log.Print(1, 'x', 'Load()', E)
 
     def Save(self):

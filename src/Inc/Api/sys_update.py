@@ -12,7 +12,7 @@ import uio
 from Inc.Api import TApiBase
 from Inc.Log import Log
 from Inc.Conf import Conf
-from Inc.Util.UNet import UrlLoad
+from Inc.Util.UHttp import UrlLoad
 
 
 class TApi(TApiBase):
@@ -48,6 +48,8 @@ class TApi(TApiBase):
         R = await TApi.DownloadList(aUrl)
         return {'result': R, 'alias': Conf.get('Alias'), 'hint': 'Reset ?'}
 
+
     async def Query(self, aData: dict) -> dict:
         Url = aData.get('url')
         return await self.Exec(Url)
+        # ToDo. No output in Http. Possible double write to stream, close, etc 

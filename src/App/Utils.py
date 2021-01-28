@@ -7,6 +7,7 @@ Description:.
 
 
 import time
+import uasyncio as asyncio
 #
 from Inc.Log  import Log
 from Inc.Conf import Conf
@@ -14,12 +15,11 @@ from Inc.NetWLan import TWLan, EnableAP
 from Inc.Util import UHrd
 
 
-
-def Reset(aSec: int = 0):
+async def Reset(aSec: int = 0):
     from Inc.Task import Tasks
 
     Log.Print(1, 'i', 'Reset', aSec)
-    UHrd.LedFlash(2, 3, 0.2)
+    await UHrd.ALedFlash(2, 3, 0.2)
     Tasks.Stop()
     UHrd.Reset(aSec)
 
@@ -43,9 +43,9 @@ class TWLanApp(TWLan):
     def DoWait(self):
         time.sleep(0.5)
 
-        Key = UHrd.GetInputChr()
-        if (Key == 'm'):
-            from .Menu import TMenuApp
-            Menu = TMenuApp()
-            Menu.MMain('/Main', [])
+        #Key = UHrd.GetInputChr()
+        #if (Key == 'm'):
+        #    from .Menu import TMenuApp
+        #    Menu = TMenuApp()
+        #    Menu.MMain('/Main', [])
   

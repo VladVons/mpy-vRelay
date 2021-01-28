@@ -20,7 +20,7 @@ from .Task import TTask
 class TTaskCaptive(TTask): 
     def __init__(self):
         AP = EnableAP(True)
-        AP.config(essid = 'oster-' + GetMac(AP), authmode = network.AUTH_OPEN)
+        AP.config(essid = 'vRelay-' + GetMac(AP), authmode = network.AUTH_OPEN)
         self.IP = AP.ifconfig()[0]
 
         Sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

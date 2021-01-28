@@ -32,6 +32,14 @@ def LedFlash(aPin: int, aCnt: int, aDelay: int):
         Obj(0)
         time.sleep(aDelay)
 
+async def ALedFlash(aPin: int, aCnt: int, aDelay: int):
+    Obj = machine.Pin(aPin, machine.Pin.OUT)
+    for i in range(aCnt):
+        Obj(1)
+        await asyncio.sleep(aDelay)
+        Obj(0)
+        await asyncio.sleep(aDelay)
+
 def GetInputChr():
     R = ''
     while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:

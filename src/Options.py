@@ -1,5 +1,5 @@
-Alias = 'ds18b20-1'
-Descr = 'frozen firmware'
+Alias = 'am2320'
+Descr = 'frozen'
 TIdle = 2
 #DSleep = 60
 #
@@ -16,3 +16,10 @@ TZone = 2
 PinBtn = 0
 PinLed = 2
 PinSnd = 13
+
+# Watch dog reboot
+WatchDog = 30
+
+# Watch host reboot
+#WatchHost = '10.10.10.10'
+#WatchHost_Cnt = 30

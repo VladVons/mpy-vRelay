@@ -10,6 +10,7 @@ from sys       import stdout
 from time      import sleep
 from machine   import idle
 from ubinascii import hexlify
+import uasyncio as asyncio
 #
 from .Log import Log
 
@@ -28,7 +29,7 @@ def EnableAP(aMode: bool):
         while (not R.active()):
             stdout.write('.')
             R.active(aMode)
-            sleep(0.5)
+            time.sleep(0.5)
     return R
 
 

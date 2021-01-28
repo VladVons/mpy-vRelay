@@ -40,7 +40,7 @@ class TTaskMqtt(TTask):
         print('OnMessage', aTopic, aMsg)
         Tasks.Post(self, {'Type': 'OnMsg', 'Param': [aTopic, aMsg]})
 
-    def DoEnter(self):
+    async def DoEnter(self):
         Log.Print(1, 'i', 'Mqtt.DoEnter')
 
         self.O.connect()
@@ -57,6 +57,6 @@ class TTaskMqtt(TTask):
             self.O.disconnect()
         except: pass
 
-    def DoExcept(self, aE):
+    async def DoExcept(self, aE):
         Log.Print(1, 'x', 'Mqtt DoExcept', aE)
         return 30

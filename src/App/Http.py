@@ -16,13 +16,12 @@ from Inc.NetHttp import THttpApi
 from .Utils   import Reset
 
 
-
 class THttpApiApp(THttpApi):
     DirApiCore = 'Inc/Api'
     DirApiUser = 'Api'
 
     async def DoUrl(self, aPath: str, aQuery: dict, aData: bytearray) -> str:
-        print('--- aPath', aPath, 'aQuery', aQuery, 'aData', aData)
+        #print('--- aPath', aPath, 'aQuery', aQuery, 'aData', aData)
         R = 'DoUrl()'
 
         Name, Ext = UStr.SplitPad(2, aPath.split('/')[-1], '.')

@@ -22,12 +22,12 @@ class TTaskDoorCheck(TTask):
         self.Obj = machine.Pin(aPinBtn, machine.Pin.IN)
         self.Beep()
 
-    def Beep(self):
+    async def Beep(self):
         Delay = 0.15
-        UHrd.LedFlash(self.PinLed, 2, Delay)
-        UHrd.LedFlash(self.PinSnd, 4, Delay)
+        await UHrd.ALedFlash(self.PinLed, 2, Delay)
+        await UHrd.ALedFlash(self.PinSnd, 4, Delay)
 
-    def tCheck(self):
+    async def tCheck(self):
         Value = self.Obj.value()
         if (Value != self.Last):
             self.Last = Value
@@ -41,4 +41,4 @@ class TTaskDoorCheck(TTask):
                     mqtt.Publish('MyTopic1', 'CntDoor %s' % self.CntDoor)
 
     async def DoLoop(self):
-        self.tCheck()
+        await self.tCheck()
