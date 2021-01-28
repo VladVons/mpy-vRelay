@@ -22,6 +22,7 @@ Tasks = None
 class TTask():
     # Alias 
     # Parent
+    # Task
     # Pause
     # IsRun
     Cnt: int    = 0
@@ -73,20 +74,21 @@ class TTasks():
         if (aTask not in self.Obj):
             if (not aAlias):
                 aAlias = type(aTask).__name__
+
             aTask.Alias = aAlias
- 
-            aTask.Sleep  = aSleep
+            aTask.Task  = aTask.Run()
+            aTask.Sleep = aSleep
             aTask.Parent = self
             self.Obj.append(aTask)
-            self.ELoop.create_task(aTask.Run())
+            self.ELoop.create_task(aTask.Task)
 
     def Find(self, aAlias: str) -> TTask:
         for O in self.Obj:
             if (O.Alias == aAlias):
                 return O
-        return None
 
     def Remove(self, aTask):
+        aTask.Task.cancel()
         self.Obj.remove(aTask)
 
     def Stop(self):
