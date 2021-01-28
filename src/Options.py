@@ -22,4 +22,4 @@ WatchDog = 30
 
 # Watch host reboot
 #WatchHost = '10.10.10.10'
-#WatchHost_Cnt = 30
+#WatchHost_Cnt = 5

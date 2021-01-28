@@ -64,9 +64,9 @@ class TTaskIdle(TTask):
         if (Conf.WatchHost) and (self.Cnt % Cnt == 0):
             from Inc.Util.UHttp import CheckHost
             if (not await CheckHost(Conf.WatchHost, 80, 3)):
-                Log.Print(1, 'i', 'WatchHost reset %s' % (Conf.WatchHost))
+                Log.Print(1, 'i', 'WatchHost %s reset %s' % (Conf.WatchHost, Cnt))
                 await asyncio.sleep(3)
-                Reset()
+                await Reset()
 
     async def DoLoop(self):
         Log.Print(1, 'i', 'TTaskIdle %s' % self.Cnt)
