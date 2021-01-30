@@ -10,6 +10,8 @@ import uasyncio as asyncio
 from .Log  import Log
 from .Util import UFS, UObj, UStr, UHttp
 
+# ToDo. Rebooting after a while. Cause: 10rst cause:2, boot mode:(3,7
+
 
 class THttpApi():
     DirRoot = '/Web'
