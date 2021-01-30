@@ -23,6 +23,7 @@ class TApi(TApiBase):
             await UrlLoad(aUrl, Buf)
             Data = Buf.getvalue().decode("utf-8")
             Data = json.loads(Data)
+            Buf.close()
         except Exception as E:
             Log.Print(1, 'x', 'DownloadList()', E)
             return False

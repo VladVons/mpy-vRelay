@@ -8,28 +8,23 @@ https://ansonvandoren.com/posts/esp8266-captive-web-portal-part-1/
 '''
 
 
-import uasyncio as asyncio
 import usocket as socket
-import network
-import time
 #
-from .NetWLan import EnableAP, GetMac
 from .Task import TTask
 
 
 class TTaskCaptive(TTask): 
-    def __init__(self):
-        AP = EnableAP(True)
-        AP.config(essid = 'vRelay-' + GetMac(AP), authmode = network.AUTH_OPEN)
-        self.IP = AP.ifconfig()[0]
+    def __init__(self, aIP: str):
+        self.IP = aIP
 
         Sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         Sock.setblocking(False)
         Sock.bind(('', 53))
         self.Sock = Sock
 
-    @staticmethod
-    def Answer(aData: bytearray, aIP: str) -> bytes:
+    def GetAnswer(self, aData: bytearray) -> bytes:
+        #print("In datagram ...", self.IP)
+
         # ** create the answer header **
         # copy the ID from incoming request
         R = aData[:2]
@@ -52,18 +47,14 @@ class TTaskCaptive(TTask):
         # set response length to 4 bytes (to hold one IPv4 address)
         R += b"\x00\x04"
         # now actually send the IP address as 4 bytes (without the "."s)
-        R += bytes(map(int, aIP.split(".")))
+        R += bytes(map(int, self.IP.split(".")))
         return R
 
     async def DoLoop(self):
         try:
             Data, Addr = self.Sock.recvfrom(1024)
-            print("In datagram ...", self.IP)
-            Data = self.Answer(Data, self.IP)
+            Data = self.GetAnswer(Data)
             self.Sock.sendto(Data, Addr)
             # here is the gateway to listen HTTP on /
         except: # timeout
             pass
-
-    def DoExit(self):
-        EnableAP(False)

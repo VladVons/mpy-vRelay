@@ -7,23 +7,25 @@ Description:.
 
 import time
 import gc
+import esp
 
 
-def Run():
+def Main():
+    esp.osdebug(None)
+
     gc.collect()
     print()
     print('MemFree boot', gc.mem_free())
 
     from App import Main
-
     print('MemFree App', gc.mem_free())
 
     print('sleep 0.1')
     time.sleep(0.1)
 
-    Main.Run()
+    Main.Main()
 
-
-Run()
+Main()
 #import Test
 
+print('End')

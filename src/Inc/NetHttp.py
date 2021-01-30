@@ -9,7 +9,6 @@ import uasyncio as asyncio
 #
 from .Log  import Log
 from .Util import UFS, UObj, UStr, UHttp
-from .Task import TTask
 
 
 class THttpApi():
@@ -28,8 +27,20 @@ class THttpApi():
             Key, Value = UStr.SplitPad(2, i, '=')
             R[Key] = Value
         return R
- 
-    def LoadFile(self, aPath: str, aQuery: str, aData: bytearray) -> str:
+
+    @staticmethod
+    async def FileToStream(aWriter: asyncio.StreamWriter, aName: str, aMode: str = 'r'):
+        #await aWriter.awrite(F.read() + '\r\n' - OK, but cant upload big files
+        #ToDo. When NetCaptive OSError: [Errno 104] ECONNRESET
+        with open(aName, aMode) as F:
+            while True:
+                Data = F.read(512)
+                if (not Data):
+                    break
+                await aWriter.awrite(Data)
+                #await asyncio.sleep_ms(10)
+
+    async def LoadFile(self, aWriter: asyncio.StreamWriter, aPath: str, aQuery: str, aData: bytearray):
         if (aPath == '/'):
             aPath = self.FIndex
 
@@ -44,10 +55,9 @@ class THttpApi():
             Mode = 'r'
         else:
             Mode = 'rb'
-        return UFS.FileLoad(self.DirRoot + Path, Mode)
+        await self.FileToStream(aWriter, self.DirRoot + Path, Mode)
 
-
-    async def ParseUrl(self, aPath: str, aQuery: str, aData: bytearray) -> str:
+    async def ParseUrl(self, aWriter: asyncio.StreamWriter, aPath: str, aQuery: str, aData: bytearray):
         if ('=' in aQuery):
             Query = dict(Pair.split('=') for Pair in aQuery.split('&'))
         else:
@@ -55,18 +65,12 @@ class THttpApi():
 
         Obj = UObj.GetAttr(self, self.GetMethod(aPath))
         if (Obj):
-            R = await Obj(Query, aData)
+            await Obj(aWriter, Query, aData)
         else:
-            R = await self.DoUrl(aPath, Query, aData)
-        return R
+            await self.DoUrl(aWriter, aPath, Query, aData)
 
-    async def DoUrl(self, aPath: str, aQuery: dict, aData: bytearray):
-        return self.LoadFile(aPath, aQuery, aData)
-
-
-class TTaskHttpServer(TTask):
-    def __init__(self, aApi: THttpApi):
-        self.Api = aApi
+    async def DoUrl(self, aWriter: asyncio.StreamWriter, aPath: str, aQuery: dict, aData: bytearray):
+        await self.LoadFile(aWriter, aPath, aQuery, aData)
 
     async def CallBack(self, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter):
         R = await UHttp.ReadHead(aReader, True)
@@ -76,16 +80,11 @@ class TTaskHttpServer(TTask):
  
         try:
             await aWriter.awrite("HTTP/1.0 200 OK\r\n\r\n")
-            Data = await self.Api.ParseUrl(R['path'], R['query'], R.get('content'))
-
-            # ToDo. When many requests got exception:  OSError: [Errno 104] ECONNRESET
-            await aWriter.awrite("%s\r\n" % Data)
+            await self.ParseUrl(aWriter, R['path'], R['query'], R.get('content'))
+            #await aWriter.awrite('\r\n')
             await aWriter.aclose()
         except Exception as E:
             Data = Log.Print(1, 'x', 'CallBack()', E)
 
-    async def Run(self):
-        #No need internal loop
-        #await super().Run()
-
-        return await asyncio.start_server(self.CallBack, "0.0.0.0", 80)
+    async def Run(self, aPort = 80):
+        await asyncio.start_server(self.CallBack, "0.0.0.0", aPort)

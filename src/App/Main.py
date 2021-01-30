@@ -8,6 +8,7 @@ Description:.
 
 import os
 import machine
+import uasyncio as asyncio
 #
 from Inc.Conf import Conf
 from Inc.Log  import Log
@@ -16,15 +17,18 @@ from .Utils   import TWLanApp
 #from Inc.DB.Dbl import TDbl
 
 
-def Run():
-    Log.Print(1, 'i', 'Main', os.uname())
+async def Run():
+    Log.Print(1, 'i', 'Run', os.uname())
 
     DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
     print('DSleep', DSleep)
 
+    from App.Menu import TMenuApp
+    asyncio.create_task(TMenuApp().Run('m'))
+
+    WLan = TWLanApp()
     if (Conf.STA_ESSID):
-        WLan = TWLanApp()
-        if (WLan.TryConnect()):
+        if (await WLan.TryConnect()):
             print()
 
             if (not DSleep):
@@ -33,22 +37,20 @@ def Run():
 
             if (Conf.Mqtt_Host):
                 from Inc.NetMqtt import TTaskMqtt
-                Tasks.Add(TTaskMqtt(Conf.Mqtt_Host, Conf.Mqtt_User, Conf.Mqtt_Passw), 0.1, 'mqtt')
+                Tasks.Add(TTaskMqtt(Conf.Mqtt_Host, Conf.get('Mqtt_Port', 1883), Conf.Mqtt_User, Conf.Mqtt_Passw), 0.1, 'mqtt')
     else:
-        Log.Print(1, 'i', 'Task NetCaptive')
+        Log.Print(1, 'i', 'NetCaptive')
+        APIF = await WLan.EnableAP(True)
+        IP = APIF.ifconfig()[0]
+
         from Inc.NetCaptive import TTaskCaptive
-        Tasks.Add(TTaskCaptive(), 0.1)
+        Tasks.Add(TTaskCaptive(IP), 0.1)
+
+    from App.Http import THttpApiApp
+    asyncio.create_task(THttpApiApp().Run())
 
     from App.Idle import TTaskIdle
     Tasks.Add(TTaskIdle(), Conf.get('TIdle', 2), 'idle')
-
-    from App.Http import THttpApiApp
-    from Inc.NetHttp import TTaskHttpServer
-    Tasks.Add(TTaskHttpServer(THttpApiApp()), aAlias = 'http')
-
-    #from App.Menu import TMenuApp
-    #from Inc.Menu import TTaskMenu
-    #Tasks.Add(TTaskMenu(TMenuApp(), 'm'), aAlias = 'menu')
 
     #from App.DoorCheck import TTaskDoorCheck
     #Tasks.Add(TTaskDoorCheck(Conf.get('PinBtn', 0), Conf.get('PinLed', 2), Conf.get('PinSnd', 13)), 0.5, 'door')
@@ -56,6 +58,10 @@ def Run():
     try:
         Tasks.Run()
     except KeyboardInterrupt:
-        print('CTRL-C')
+        print('Ctrl-C')
     finally:
         Tasks.Stop()
+
+
+def Main():
+    asyncio.run(Run())

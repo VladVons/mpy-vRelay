@@ -16,7 +16,6 @@ def FileLoad(aName: str, aMode: str = 'r') -> str:
         R = ''
     return R
 
-
 def FileStat(aName: str) -> tuple:
     try:
         R = os.stat(aName)

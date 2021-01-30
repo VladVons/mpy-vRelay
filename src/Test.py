@@ -13,11 +13,21 @@ import uasyncio as asyncio
 #from App.Utils import TWLanApp
 #from Inc.Util.UHttp import GetHttpHead
 
+def TestCB():
+    print('TestCB')
 
-async def Test1():
+
+async def Test1(aFunc):
     while True:
         print('Test1')
-        await asyncio.sleep(5)
+        aFunc()
+        await asyncio.sleep(1)
+
+
+async def Test1a():
+    while True:
+        print('Test1a')
+        await asyncio.sleep(3)
 
 
 def Print(aLevel: int, aType: str, *aParam) -> str:
@@ -27,6 +37,7 @@ def Print(aLevel: int, aType: str, *aParam) -> str:
     print('Type1', type(aParam[1]), dir(aParam[1]))
     print('Type2', type(aParam[1]), dir(1))
     print('Type3', type(aParam[1]), dir('1'))
+
 
 async def Test2():
     Url = "http://download.oster.com.ua/www/relay/ver.json"
@@ -48,7 +59,10 @@ def Connect():
 
 #Connect()
 
+#asyncio.run(Test1())
+#print('---x1')
+
 loop = asyncio.get_event_loop()
-#loop.create_task(Test1())
-loop.create_task(Test2())
+loop.create_task(Test1(TestCB))
+#loop.create_task(Test2())
 loop.run_forever()

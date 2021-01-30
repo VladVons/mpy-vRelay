@@ -31,11 +31,11 @@ async def CheckHost(aHost: str, aPort: int = 80, aTimeOut: int = 1) -> bool:
         R = False
     return R
 
-async def ReadHead(aReader, aServ = True) -> dict:
+async def ReadHead(aReader: asyncio.StreamReader, aServ = True) -> dict:
     R = {}
     while True:
         Data = await aReader.readline()
-        if (Data == b'\r\n'):
+        if (Data == b'\r\n') or (Data is None):
             break
 
         Data = Data.decode('utf-8').strip()
@@ -50,11 +50,11 @@ async def ReadHead(aReader, aServ = True) -> dict:
             R[Key.lower()] = Value.strip()
     return R
 
-async def UrlLoad(aUrl: str, aWriter):
+async def UrlLoad(aUrl: str, aStream):
     _, _, Host, Path = aUrl. split('/', 3)
     Reader, Writer = await asyncio.open_connection(Host, 80)
     Data = bytes('GET /%s HTTP/1.0\r\nHost: %s\r\n\r\n' % (Path, Host), 'utf8')
-    Writer.write(Data)
+    await Writer.awrite(Data)
     await Writer.drain()
 
     Head = await ReadHead(Reader, False)
@@ -65,8 +65,7 @@ async def UrlLoad(aUrl: str, aWriter):
                 Data = await Reader.read(512)
                 if (not Data):
                     break
-                aWriter.write(Data)
-                await asyncio.sleep(0.05)
-            aWriter.flush()
-    Writer.close()
+                aStream.write(Data)
+                await asyncio.sleep_ms(10)
+            aStream.flush()
     await Writer.wait_closed()

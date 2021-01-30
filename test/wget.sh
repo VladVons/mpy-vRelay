@@ -86,14 +86,14 @@ HostMpy()
     $wget "$aHost/sys_mem1.py"
 
     #$wget "$aHost/dev_dht11.py"
-    #$wget "$aHost/dev_dht22.py"
+    $wget "$aHost/dev_dht22.py"
 
     #$wget "$aHost/dev_sht21.py"
     #$wget "$aHost/dev_sht31.py"
 
     #$wget "$aHost/dev_bme280.py"
     #$wget "$aHost/dev_am2320.py"
-    $wget "$aHost/dev_am2320-1.py"
+    #$wget "$aHost/dev_am2320-1.py"
 
     #$wget "$aHost/dev_ds18b20.py"
     #$wget "$aHost/dev_ds18b20.py?pin=14"
@@ -112,4 +112,5 @@ Hosts="http://10.10.10.212"
 #
 Loop $Hosts
 #$wget "$Hosts/sys_mem1.py"
+#$wget "$Hosts/sys_update.py?url=http://download.oster.com.ua/www/relay/ver.json"
 #$wget "$Hosts/sys_update.py?url=http://download.oster.com.ua/www/relay/ver.json&key1=value1"

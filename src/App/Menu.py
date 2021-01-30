@@ -32,6 +32,7 @@ class TMenuApp(TMenu):
 
         Items = ['Mqtt Server', [
             ['Mqtt_Host',  'Host',     'vpn2.oster.com.ua'], 
+            ['Mqtt_Port',  'Port',     1883],
             ['Mqtt_Login', 'Login',    ''], 
             ['Mqtt_Paswd', 'Password', '']]
         ]
@@ -75,3 +76,6 @@ class TMenuApp(TMenu):
             ['Setup',  self.MSetup, []]
         ]
         await self.Parse(aPath, Items)
+
+    async def DoRun(self):
+        await self.MMain('/Main', [])

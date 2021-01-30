@@ -5,12 +5,11 @@ License:     GNU, see LICENSE for more details
 Description: 
 '''
 
-from network   import WLAN, STA_IF, AP_IF
-from sys       import stdout
-from time      import sleep
+from network   import WLAN, STA_IF, AP_IF, AUTH_OPEN
+from sys       import stdout, platform
 from machine   import idle
 from ubinascii import hexlify
-import uasyncio as asyncio
+from uasyncio  import sleep
 #
 from .Log import Log
 
@@ -20,42 +19,42 @@ def GetMac(aObj) -> str:
     return hexlify(MacBin).decode('utf-8')
 
 
-def EnableAP(aMode: bool):
-    Log.Print(1, 'i', 'EnableAP %s' % aMode)
-
-    R = WLAN(AP_IF)
-    R.active(aMode)
-    if (aMode):
-        while (not R.active()):
-            stdout.write('.')
-            R.active(aMode)
-            time.sleep(0.5)
-    return R
-
-
 class TWLan():
     Cnt = 10
+    Delay = 0.5
 
-    def _Wait(self):
+    async def _WaitForReady(self, aFunc):
         Cnt = self.Cnt
-        while (not self.Net.isconnected()) and (Cnt > 0):
+        while (not aFunc()) and (Cnt > 0):
             idle()
             stdout.write('.')
-            self.DoWait()
+            await sleep(self.Delay)
             Cnt -= 1
         return Cnt > 0
 
-    def Connect(self, aESSID: str, aPassw: str, aAddr: tuple = None):
-        Log.Print(1, 'i', 'Connect %s, %s, %s' % (aESSID, aPassw, aAddr))
+    async def Connect(self, aESSID: str, aPassw: str, aAddr: tuple = None):
+        Log.Print(1, 'i', 'Connect() %s, %s, %s' % (aESSID, aPassw, aAddr))
 
-        Net = WLAN(STA_IF)
-        self.Net = Net
+        # Improve connection integrity at cost of power consumption
+        if (platform == 'esp8266'):
+            from esp import sleep_type
+            sleep_type(0)
 
-        Net.active(True)
+        R = WLAN(STA_IF)
+        R.active(True)
         if (aAddr):
-            Net.ifconfig(aAddr)
-        Net.connect(aESSID, aPassw)
-        self._Wait()
+            R.ifconfig(aAddr)
+        R.connect(aESSID, aPassw)
+        await self._WaitForReady(R.isconnected)
 
-    def DoWait(self):
-        sleep(0.5)
+        return R
+
+    async def EnableAP(self, aMode: bool):
+        Log.Print(1, 'i', 'EnableAP() %s' % aMode)
+
+        R = WLAN(AP_IF)
+        R.active(aMode)
+        if (aMode):
+            R.config(essid = 'vRelay-' + GetMac(R)[-4:], authmode = AUTH_OPEN)
+            await self._WaitForReady(R.active)
+        return R

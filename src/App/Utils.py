@@ -11,7 +11,7 @@ import uasyncio as asyncio
 #
 from Inc.Log  import Log
 from Inc.Conf import Conf
-from Inc.NetWLan import TWLan, EnableAP
+from Inc.NetWLan import TWLan
 from Inc.Util import UHrd
 
 
@@ -25,27 +25,16 @@ async def Reset(aSec: int = 0):
 
 
 class TWLanApp(TWLan):
-    def TryConnect(self):
-        EnableAP(False)
+    async def TryConnect(self):
+        await self.EnableAP(False)
 
-        print('Press `m` to enter menu')
-        self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
-        if (not self.Net.isconnected()):
-            self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, None)
-            if (self.Net.isconnected()):
-                Conf['STA_Net'] = self.Net.ifconfig()
+        Net = await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
+        if (not Net.isconnected()):
+            await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, None)
+            if (Net.isconnected()):
+                Conf['STA_Net'] = Net.ifconfig()
                 Conf.Save()
             else:
                 Reset(0)
-        Log.Print(1, 'i', 'TryConnect', self.Net.ifconfig())
-        return self.Net.isconnected()
-
-    def DoWait(self):
-        time.sleep(0.5)
-
-        #Key = UHrd.GetInputChr()
-        #if (Key == 'm'):
-        #    from .Menu import TMenuApp
-        #    Menu = TMenuApp()
-        #    Menu.MMain('/Main', [])
-  
+        Log.Print(1, 'i', 'TryConnect', Net.ifconfig())
+        return Net.isconnected()

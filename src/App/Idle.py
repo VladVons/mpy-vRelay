@@ -69,12 +69,12 @@ class TTaskIdle(TTask):
                 await Reset()
 
     async def DoLoop(self):
-        Log.Print(1, 'i', 'TTaskIdle %s' % self.Cnt)
+        #Log.Print(1, 'i', 'TTaskIdle %s' % self.Cnt)
 
         self.tWatchDog()
         await self.tWatchHost()
         #self.tDSleep()
-        self.tMemFree()
+        #self.tMemFree()
         self.tLedBeat()
         self.tConfClear()
 

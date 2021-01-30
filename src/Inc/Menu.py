@@ -14,8 +14,8 @@ from .Task import TTask
 
 class TMenu():
     async def AskYN(self, aMsg: str):
-        Str = await GetInputStr('%s ?  Y/n:' % aMsg).lower()
-        return (Str == 'y')
+        Str = await GetInputStr('%s ?  Y/n:' % aMsg)
+        return (Str) and (Str.lower() == 'y')
 
     async def WaitMsg(self, aMsg: str = '') -> str:
         return await GetInputStr('%s (Press ENTER) ' % aMsg)
@@ -58,13 +58,16 @@ class TMenu():
 
         for Idx, (Name, Text, ValDef) in enumerate(Items, 1):
             ValDef = aDef.get(Name, ValDef)
-            Val = ''
-            while Val == '':
+            Last = Text[-1]
+            while True:
                 Val = await GetInputStr('%s/%s) %s [%s]:' % (Idx, len(Items), Text, ValDef))
-                if (not Val):
-                    if (Text[-1] != '*'):
-                        Val = ValDef
-                        break
+                if (Val == '-'):
+                    Val = ''
+                elif (not Val) and (ValDef):
+                    Val = ValDef
+
+                if (Last != '*') or ((Last == '*') and (Val)):
+                    break
 
             Type = type(ValDef).__name__
             if (Type == 'int'):
@@ -75,21 +78,16 @@ class TMenu():
             R[Name] = Val
         return R
 
-
-class TTaskMenu(TTask):
-    def __init__(self, aApi: TMenu, aKey: str):
-        self.Api = aApi
-        self.Key = aKey
-
-    async def Run(self):
-        #No need internal loop
-        #await super().Run()
-
-        Msg = 'Press `%s` to enter menu' % (self.Key)
+    async def Run(self, aKey: str):
+        Msg = 'Press `%s` to enter menu' % (aKey)
         print(Msg)
+
         while True:
             await asyncio.sleep(0.2)
             Key = GetInputChr()
-            if (Key == self.Key):
-                await self.Api.MMain('/Main', [])
+            if (Key == aKey):
+                await self.DoRun()
                 print(Msg)
+
+    async def DoRun(self):
+        pass
