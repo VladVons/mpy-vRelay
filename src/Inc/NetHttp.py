@@ -19,6 +19,16 @@ class THttpApi():
     F404    = '/page_404.html'
 
     @staticmethod
+    def GetHeader(aCode):
+        Codes = {
+                200: 'OK',
+                302: 'Redirect',
+                400: 'Bad request',
+                404: 'Not found'
+        }
+        return 'HTTP/1.0 %d %s\r\n\r\n' % (aCode, Codes.get(aCode, 'Unknown'))
+
+    @staticmethod
     def GetMethod(aPath: str) -> str:
         return 'p' + aPath.replace('/', '_')
 
@@ -48,9 +58,12 @@ class THttpApi():
 
         if (UFS.FileExists(self.DirRoot + aPath)):
             Path = aPath
+            Code = 200
         else:
             Log.Print(1, 'e', 'File not found %s' % self.DirRoot + aPath)
             Path = self.F404
+            Code = 404
+        await aWriter.awrite(self.GetHeader(Code))
 
         Ext = Path.split('.')[-1]
         if (Ext in ['html', 'txt', 'css', 'json']):
@@ -81,7 +94,7 @@ class THttpApi():
             R['content'] = await aReader.read(Len)
  
         try:
-            await aWriter.awrite("HTTP/1.0 200 OK\r\n\r\n")
+            #await aWriter.awrite("HTTP/1.0 200 OK\r\n\r\n")
             await self.ParseUrl(aWriter, R['path'], R['query'], R.get('content'))
             #await aWriter.awrite('\r\n')
             await aWriter.aclose()

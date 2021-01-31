@@ -23,7 +23,8 @@ __author__  = 'Vladimir Vons, vladvons@gmail.com'
 class TApi(TApiBase):
     async def Exec(self) -> dict:
         gc.collect()
-        Net = network.WLAN(network.STA_IF)
+        NetSTA = network.WLAN(network.STA_IF)
+        NetAP  = network.WLAN(network.AP_IF)
 
         R = {
             'Author':   __author__,
@@ -35,8 +36,10 @@ class TApi(TApiBase):
             'Descr':    Conf.Descr,
             'MemFree':  gc.mem_free(),
             'MemAlloc': gc.mem_alloc(),
-            'MAC':      GetMac(Net),
-            'IP4':      Net.ifconfig(),
+            'MAC':      GetMac(NetSTA),
+            'IP STA':   NetSTA.ifconfig(),
+            'IP AP':    NetAP.ifconfig(),
+            'Disk':     os.statvfs('/'),
             'Date':     UTime.GetDate(),
             'Uptime':   int(time.ticks_ms() / 1000)
         }

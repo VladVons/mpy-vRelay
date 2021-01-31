@@ -39,6 +39,7 @@ class THttpApiApp(THttpApi):
                 R = Log.Print(1, 'x', 'DoUrl()', E)
 
             #ToDo. When many requests got exception:  OSError: [Errno 104] ECONNRESET
+            await aWriter.awrite(self.GetHeader(200))
             await aWriter.awrite(R)
 
         elif (aPath == '/generate_204'):

@@ -36,9 +36,10 @@ async def Run():
                 SetTime(Conf.get('TZone', 0))
 
             if (Conf.Mqtt_Host):
-                from Inc.NetMqtt import TTaskMqtt
-                Tasks.Add(TTaskMqtt(Conf.Mqtt_Host, Conf.get('Mqtt_Port', 1883), Conf.Mqtt_User, Conf.Mqtt_Passw), 0.1, 'mqtt')
+                Plugin.LoadMod('App/NetMqtt', True)
     else:
+        #import App.NetCaptive as NetCaptive
+        #NetCaptive.Main()
         Plugin.LoadMod('App/NetCaptive', True)
 
     Plugin.LoadList(['App/HttpSrv', 'App/Menu'])

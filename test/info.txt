@@ -12,6 +12,21 @@
       /SoftWare = 1.1.01, 2021.01.30
         /Uptime = 22
 
+----- esp32
+         /Alias = am2320
+        /Author = Vladimir Vons, vladvons@gmail.com
+          /Date = 2021-01-31,10:56:41
+         /Descr = frozen
+      /FirmWare = v1.13 on 2020-09-02
+           /IP4 = ('10.10.10.208', '255.255.255.0', '10.10.10.1', '10.10.10.1')
+           /MAC = 30aea41ab0e0
+      /MemAlloc = 36624
+       /MemFree = 74544
+      /Platform = esp32
+        /Python = 3.4.0
+      /SoftWare = 1.1.01, 2021.01.30
+        /Uptime = 22
+ 
          /Alias = am2320
         /Author = Vladimir Vons, vladvons@gmail.com
           /Date = 2021-01-31,02:30:56

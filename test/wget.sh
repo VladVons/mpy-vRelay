@@ -108,7 +108,7 @@ HostMpy()
 
 #Hosts="http://dht4.lan"
 #Hosts="http://192.168.11.102"
-Hosts="http://10.10.10.105"
+Hosts="http://10.10.10.32"
 #
 Loop $Hosts
 #$wget "$Hosts/sys_mem1.py"
