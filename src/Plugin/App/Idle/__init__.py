@@ -1,4 +1,3 @@
-import uasyncio as asyncio
 from .Options import *
 
 
