@@ -36,11 +36,11 @@ async def Run():
                 SetTime(Conf.get('TZone', 0))
 
             if (Conf.Mqtt_Host):
-                Plugin.LoadMod('App/NetMqtt', True)
+                Plugin.LoadMod('App/Mqtt', True)
     else:
-        #import App.NetCaptive as NetCaptive
-        #NetCaptive.Main()
-        Plugin.LoadMod('App/NetCaptive', True)
+        #import App.Captive as NetCaptive
+        #Captive.Main()
+        Plugin.LoadMod('App/Captive', True)
 
     Plugin.LoadList(['App/HttpSrv', 'App/Menu'])
     Plugin.LoadDir('Plugin/App')

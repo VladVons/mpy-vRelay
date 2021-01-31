@@ -12,7 +12,7 @@ import time
 import network
 #
 from Inc.Conf import Conf
-from Inc.NetWLan import GetMac
+from Inc.WLan import GetMac
 from Inc.Util import UTime
 from Inc.Api import TApiBase
 

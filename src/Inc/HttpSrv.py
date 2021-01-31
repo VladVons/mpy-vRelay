@@ -43,7 +43,7 @@ class THttpApi():
     @staticmethod
     async def FileToStream(aWriter: asyncio.StreamWriter, aName: str, aMode: str = 'r'):
         #await aWriter.awrite(F.read() + '\r\n' - OK, but cant upload big files
-        #ToDo. When NetCaptive OSError: [Errno 104] ECONNRESET
+        #ToDo. When Captive OSError: [Errno 104] ECONNRESET
         with open(aName, aMode) as F:
             while True:
                 Data = F.read(512)

@@ -74,11 +74,8 @@ InstallPkg()
 {
   Log "$0->$FUNCNAME($*)"
 
-  #$cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('uasyncio')"
-  #cp -R ~/.micropython/lib/uasyncio $cDirMPY/micropython/ports/esp8266/modules/
-
-  #$cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('umqtt.simple')"
-  #cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
+  $cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('umqtt.simple')"
+  cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
 
   #$cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('aiohttp')"
   #cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
@@ -108,8 +105,8 @@ Make_MicroFirmware()
 
 #Install
 #Make_EspOpenSdk
-Get_MicroPython
-Make_MicroPython
+#Get_MicroPython
+#Make_MicroPython
 #
 InstallPkg
 Make_MicroFirmware

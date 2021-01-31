@@ -11,7 +11,7 @@ import uasyncio as asyncio
 #
 from Inc.Log  import Log
 from Inc.Conf import Conf
-from Inc.NetWLan import TWLan
+from Inc.WLan import TWLan
 from Inc.Util import UHrd
 
 

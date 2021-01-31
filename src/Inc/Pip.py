@@ -6,7 +6,7 @@ License:     GNU, see LICENSE for more details
 
 import upip 
 #
-from .NetWLan import Connect
+from .WLan import Connect
 from .Conf import Conf
 
 

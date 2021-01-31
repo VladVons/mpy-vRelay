@@ -12,7 +12,7 @@ import json
 from Inc.Conf import Conf
 from Inc.Log  import Log
 from Inc.Util import UStr, UFS
-from Inc.NetHttp import THttpApi
+from Inc.HttpSrv import THttpApi
 from App.Utils import Reset
 
 

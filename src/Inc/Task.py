@@ -6,17 +6,9 @@ Description:.
 '''
 
 import sys
-
-try:
-    import uasyncio as asyncio
-except:
-    from .Pip import Install
-    #Install('uasyncio')
-
+import uasyncio as asyncio
+#
 from .Log import Log
-
-
-Tasks = None
 
 
 class TTask():
