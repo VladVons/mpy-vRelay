@@ -23,6 +23,6 @@ def FileStat(aName: str) -> tuple:
         R = None
     return R
 
-
 def FileExists(aName: str) -> bool:
     return FileStat(aName) is not None
+

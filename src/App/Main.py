@@ -13,6 +13,7 @@ import uasyncio as asyncio
 from Inc.Conf import Conf
 from Inc.Log  import Log
 from Inc.Task import Tasks
+from Inc.Plugin import TPlugin
 from .Utils   import TWLanApp
 #from Inc.DB.Dbl import TDbl
 
@@ -23,8 +24,7 @@ async def Run():
     DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
     print('DSleep', DSleep)
 
-    from App.Menu import TMenuApp
-    asyncio.create_task(TMenuApp().Run('m'))
+    Plugin = TPlugin()
 
     WLan = TWLanApp()
     if (Conf.STA_ESSID):
@@ -39,21 +39,10 @@ async def Run():
                 from Inc.NetMqtt import TTaskMqtt
                 Tasks.Add(TTaskMqtt(Conf.Mqtt_Host, Conf.get('Mqtt_Port', 1883), Conf.Mqtt_User, Conf.Mqtt_Passw), 0.1, 'mqtt')
     else:
-        Log.Print(1, 'i', 'NetCaptive')
-        APIF = await WLan.EnableAP(True)
-        IP = APIF.ifconfig()[0]
+        Plugin.LoadMod('App/NetCaptive', True)
 
-        from Inc.NetCaptive import TTaskCaptive
-        Tasks.Add(TTaskCaptive(IP), 0.1)
-
-    from App.Http import THttpApiApp
-    asyncio.create_task(THttpApiApp().Run())
-
-    from App.Idle import TTaskIdle
-    Tasks.Add(TTaskIdle(), Conf.get('TIdle', 2), 'idle')
-
-    #from App.DoorCheck import TTaskDoorCheck
-    #Tasks.Add(TTaskDoorCheck(Conf.get('PinBtn', 0), Conf.get('PinLed', 2), Conf.get('PinSnd', 13)), 0.5, 'door')
+    Plugin.LoadList(['App/HttpSrv', 'App/Menu'])
+    Plugin.LoadDir('Plugin/App')
 
     try:
         Tasks.Run()

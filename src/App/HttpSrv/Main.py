@@ -13,12 +13,12 @@ from Inc.Conf import Conf
 from Inc.Log  import Log
 from Inc.Util import UStr, UFS
 from Inc.NetHttp import THttpApi
-from .Utils   import Reset
+from App.Utils import Reset
 
 
 class THttpApiApp(THttpApi):
     DirApiCore = 'Inc/Api'
-    DirApiUser = 'Api'
+    DirApiUser = 'Plugin/Api'
 
     async def DoUrl(self, aWriter: asyncio.StreamWriter, aPath: str, aQuery: dict, aData: bytearray) -> str:
         #print('--- aPath', aPath, 'aQuery', aQuery, 'aData', aData)

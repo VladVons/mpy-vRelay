@@ -16,7 +16,7 @@ from Inc.Conf import Conf
 from Inc.Log  import Log
 from Inc.Util import UHrd
 from Inc.Task import TTask, Tasks
-from .Utils   import Reset
+from App.Utils import Reset
 
 
 WDog = UHrd.TWDog(0, Conf.get('WatchDog', 30))

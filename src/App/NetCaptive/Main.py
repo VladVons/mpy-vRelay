@@ -10,7 +10,7 @@ https://ansonvandoren.com/posts/esp8266-captive-web-portal-part-1/
 
 import usocket as socket
 #
-from .Task import TTask
+from Inc.Task import TTask
 
 
 class TTaskCaptive(TTask): 

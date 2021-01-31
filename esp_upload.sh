@@ -1,12 +1,28 @@
 #!/bin/bash
 
-# VladVons@gmail.com, 2021.01.25
+#VladVons, 2021.01.25
 #add to ~/bashrc EOF source ~/esp_upload.sh and logout/logit to take effect
 #to exit from picocom Ctrl+A+X
+#
+#esp
+#esp dev_dht22.py dev_sht31.py 
 
 
 cSpeed=115200
 cPort=/dev/ttyUSB0
+
+
+esp_install()
+{
+  sudo pip3 install esptool
+  sudo pip3 install adafruit-ampy
+  sudo pip3 install picocom
+
+  # add current user preveleges
+  sudo usermod -a -G dialout $USER
+  sudo usermod -a -G tty $USER
+}
+
 
 esp_term()
 {
@@ -18,8 +34,6 @@ esp_file()
 {
   aFile=$1;
 
-  killall picocom
-
   Path="$(pwd)/$aFile"
   Find="src"
   Suffix=${Path#*$Find}
@@ -27,8 +41,6 @@ esp_file()
   Cmd="ampy --port $cPort --baud $cSpeed put $aFile $Suffix"
   echo $Cmd
   eval "$Cmd"
-
-  esp_term
 }
 
 
@@ -39,9 +51,12 @@ esp()
   if [ -z "$aFile" ]; then
     esp_term
   else
-    esp_file $aFile
-  fi  
-}
+    killall picocom
 
-#esp dev_dht22.py
-#esp
+    for File in $*; do
+        esp_file $File
+    done
+
+    esp_term
+  fi
+}

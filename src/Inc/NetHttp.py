@@ -14,7 +14,7 @@ from .Util import UFS, UObj, UStr, UHttp
 
 
 class THttpApi():
-    DirRoot = '/Web'
+    DirRoot = '/Plugin/Web'
     FIndex  = '/index.html'
     F404    = '/page_404.html'
 

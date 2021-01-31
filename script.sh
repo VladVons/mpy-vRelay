@@ -11,7 +11,7 @@ cDev="/dev/ttyUSB0"
 cSpeed1=115200
 cSpeed2=460800
 
-ESP32=0
+ESP32=1
 CustomFW=1
 
 if [ $ESP32 == 1 ]; then

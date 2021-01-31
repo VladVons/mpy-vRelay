@@ -1,0 +1,28 @@
+         /Alias = am2320
+        /Author = Vladimir Vons, vladvons@gmail.com
+          /Date = 2021-01-31,02:34:15
+         /Descr = frozen
+      /FirmWare = v1.13-320-g407df82f8 on 2021-01-31
+           /IP4 = ('10.10.10.105', '255.255.255.0', '10.10.10.1', '10.10.10.1')
+           /MAC = ecfabcbc9d6d
+      /MemAlloc = 19104
+       /MemFree = 18848
+      /Platform = esp8266
+        /Python = 3.4.0
+      /SoftWare = 1.1.01, 2021.01.30
+        /Uptime = 22
+
+         /Alias = am2320
+        /Author = Vladimir Vons, vladvons@gmail.com
+          /Date = 2021-01-31,02:30:56
+         /Descr = frozen
+      /FirmWare = v1.13-320-g407df82f8 on 2021-01-31
+           /IP4 = ('10.10.10.208', '255.255.255.0', '10.10.10.1', '10.10.10.1')
+           /MAC = a4cf1289b330
+      /MemAlloc = 19136
+       /MemFree = 92032
+      /Platform = esp32
+        /Python = 3.4.0
+      /SoftWare = 1.1.01, 2021.01.30
+        /Uptime = 54
+

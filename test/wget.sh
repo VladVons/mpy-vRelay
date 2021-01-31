@@ -82,8 +82,8 @@ HostMpy()
     local aHost=$1;
 
     #
-    #$wget "$aHost/sys_info.py"
-    $wget "$aHost/sys_mem1.py"
+    $wget "$aHost/sys_info.py"
+    #$wget "$aHost/sys_mem1.py"
 
     #$wget "$aHost/dev_dht11.py"
     #$wget "$aHost/dev_dht22.py"
@@ -95,7 +95,7 @@ HostMpy()
     #$wget "$aHost/dev_am2320.py"
     #$wget "$aHost/dev_am2320-1.py"
 
-    $wget "$aHost/dev_ds18b20.py"
+    #$wget "$aHost/dev_ds18b20.py"
     #$wget "$aHost/dev_ds18b20.py?pin=14"
     #$wget "$aHost/dev_ds18b20.py?pin=14&id=28ff176193160491"
 
