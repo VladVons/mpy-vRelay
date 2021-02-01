@@ -20,8 +20,8 @@ PinLed = 2
 PinSnd = 13
 
 # Watch dog reboot
-WatchDog = 30
+#WatchDog = 10
 
 # Watch host reboot
 #WatchHost = '10.10.10.10'
-#WatchHost_Cnt = 360
+WatchHost_Cnt = 10
