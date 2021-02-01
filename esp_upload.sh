@@ -7,14 +7,18 @@
 #### enter terminal
 #esp
 
-##### copy files to device and ener terminal
+##### send files to device and ener terminal
 #esp dev_dht22.py dev_sht31.py
 
-##### copy files to device
+##### send files to device
 #espf dev_dht22.py dev_sht31.py
 
-##### copy files to device from current directory
+##### send files from current directory to device
 #espd
+
+
+##### receive files from device from current directory
+#espg
 
 
 cSpeed=115200
@@ -32,47 +36,66 @@ _esp_install()
   sudo usermod -a -G tty $USER
 }
 
-_esp_term()
+_esp_terminal()
 {
   picocom $cPort -b${cSpeed}
 }
 
-_esp_file()
+_esp_file_transfare()
 {
-  aFile=$1;
+  aMode=$1; aFile=$2; 
 
   Path="$(pwd)/$aFile"
   Find="src"
   Suffix=${Path#*$Find}
 
-  Cmd="ampy --port $cPort --baud $cSpeed put $aFile $Suffix"
+  if [ "$aMode" == "put" ]; then
+    Cmd="ampy --port $cPort --baud $cSpeed put $aFile $Suffix"
+  elif [ "$aMode" == "get" ]; then
+    Cmd="ampy --port $cPort --baud $cSpeed get $Suffix"
+  else 
+    Cmd="echo unknown mode $aMode"
+  fi
+
   echo $Cmd
   eval "$Cmd"
 }
 
-espf()
+
+# receive files from device
+espg()
 {
   for File in $*; do
-    _esp_file $File
+    _esp_file_transfare get $File
   done
 }
 
+##### send files to device from current directory
 espd()
 {
   for File in $(ls -1); do
-    _esp_file $File
+    _esp_file_transfare put $File
   done
 }
 
+##### send files to device
+espf()
+{
+  for File in $*; do
+    _esp_file_transfare put $File
+  done
+}
+
+##### send files to device and enter terminal
 esp()
 {
   aFile=$1;
 
   if [ -z "$aFile" ]; then
-    _esp_term
+    _esp_terminal
   else
     killall picocom
     espf $*
-    _esp_term
+    _esp_terminal
   fi
 }

@@ -32,7 +32,5 @@ class TApi(TApiBase):
                 Log.Print(1, 'i', 'sys_sleep', R)
             return R
 
-
     async def Query(self, aData: dict) -> dict:
-        R = await self.Exec(self.Get(aData, 'delay'), self.Get(aData, 'async'), self.Get(aData, 'echo'))
-        return R
+        return await self.ExecDef(aData, ['delay', 'async', 'echo'])

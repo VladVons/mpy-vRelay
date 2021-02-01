@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-wget="wget --read-timeout=3 --tries=1 -qO-"
+wget="wget --read-timeout=5 --tries=1 -qO-"
 
 
 ExecM()
@@ -85,7 +85,7 @@ HostMpy()
     #$wget "$aHost/sys_info.py"
     $wget "$aHost/sys_mem1.py"
 
-    $wget "$aHost/sys_sleep.py?delay=1&async=1&echo=1"
+    #$wget "$aHost/sys_sleep.py?delay=1&async=1&echo=1"
 
     $wget "$aHost/dev_ds18b20.py"
     #$wget "$aHost/dev_ds18b20.py?pin=14"
@@ -110,9 +110,10 @@ HostMpy()
 
 #Hosts="http://dht4.lan"
 #Hosts="http://192.168.11.102"
-Hosts="http://10.10.10.203"
+Hosts="http://10.10.10.32"
 #
-Loop $Hosts
+#Loop $Hosts
+#$wget "$Hosts/sys_sleep.py?delay=1&async=1&echo=1"
+$wget "$Hosts/sys_sleep.py?delay=2&echo=1"
 #$wget "$Hosts/sys_mem1.py"
 #$wget "$Hosts/sys_update.py?url=http://download.oster.com.ua/www/relay/ver.json"
-#$wget "$Hosts/sys_update.py?url=http://download.oster.com.ua/www/relay/ver.json&key1=value1"

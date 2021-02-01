@@ -10,15 +10,8 @@ Description: micropython ESP8266
 class TApiBase():
     Param = {}
 
-    def Get(self, aData, aKey: str):
-        Diff = set(list(aData.keys())) - set(list(self.Param.keys()))
-        if (Diff):
-            raise Exception('Unknown %s' % Diff)
-
+    def Get(self, aData: dict, aKey: str):
         Def = self.Param.get(aKey)
-        if (Def is None):
-            raise Exception('Unknown %s' % aKey)
-
         Val = aData.get(aKey)
         if (Val is None):
             Val = Def
@@ -31,3 +24,15 @@ class TApiBase():
             elif (Type == 'bool'):
                 Val = bool(int(Val))
         return Val
+
+
+    async def ExecDef(self, aData: dict, aParam: list):
+        Diff = set(list(aData.keys())) - set(list(self.Param.keys()))
+        if (Diff):
+            raise Exception('Unknown %s' % Diff)
+
+        Arr = []
+        for Param in aParam:
+            Arr.append(self.Get(aData, Param))
+
+        return await self.Exec(*Arr)
