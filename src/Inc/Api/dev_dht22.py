@@ -15,6 +15,10 @@ from Inc.Log import Log
 
 
 class TApi(TApiBase):
+    Param = {
+        'pin': 14
+    }
+
     async def Exec(self, aPin: int) -> dict:
         try:
             Obj = DHT22(aPin)
@@ -25,5 +29,5 @@ class TApi(TApiBase):
         return {'temperature': R[0], 'humidity': R[1]}
 
     async def Query(self, aData: dict) -> dict:
-        Pin = int(aData.get('pin', '14'))
+        Pin = self.Get(aData, 'pin')
         return await self.Exec(Pin)

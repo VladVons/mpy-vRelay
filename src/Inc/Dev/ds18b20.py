@@ -25,11 +25,11 @@ class DS1820():
         if (not aIDs): 
             #Roms = W1.scan() # hangs if no devices
             aIDs = self.Obj.scan()
-
         async with Lock:
             self.Obj.convert_temp()
             await asyncio.sleep_ms(750)
             for ID in aIDs:
                 Value = self.Obj.read_temp(ID) 
                 R.append({'id':ID, 'value':Value})
+
         return R

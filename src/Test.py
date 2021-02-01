@@ -10,8 +10,8 @@ import uasyncio as asyncio
 #
 from Inc.Conf import Conf
 from Inc.Log import Log
-from App.Utils import TWLanApp
-from Inc.Plugin import TPlugin
+#from App.Utils import TWLanApp
+#from Inc.Plugin import TPlugin
 
 
 def TestCB():
@@ -25,10 +25,12 @@ async def Test1():
 
 
 async def Test2():
-    Plugin = TPlugin()
-    Plugin.LoadDir('App')
-    Plugin.LoadDir('Plugin/App')
-
+    #Plugin = TPlugin()
+    #Plugin.LoadDir('App')
+    #Plugin.LoadDir('Plugin/App')
+    aData = {'delay': '1', 'async': '1'}
+    v = bool((aData.get('async', '0')))
+    print('v', v, type(v))
 
 def Connect():
     if (Conf.STA_ESSID):
@@ -37,8 +39,8 @@ def Connect():
             print('Net OK')
 
 
-#Stream()
 
+#Stream()
 Connect()
 
 #asyncio.run(Test1())
@@ -49,3 +51,4 @@ asyncio.run(Test2())
 #loop.create_task(Test1())
 #loop.create_task(Test2())
 #loop.run_forever()
+

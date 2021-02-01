@@ -12,22 +12,7 @@ def SplitPad(aCnt: int, aStr: str, aDelim: str) -> list:
         R.append('')
     return R
 
-
-def ConvertTo(aData):
-    if ( (aData) and (type(aData).__name__ in ['str', 'unicode']) ):
-        if (aData[0] == '"') and (aData[-1] == '"'):
-            aData = aData[1:-1]
-        elif (aData.lower() in ['true', 'false']):
-            aData = bool(aData)
-        elif (aData.isdigit()):
-            aData = int(aData)
-        elif (IsFloat(aData)):
-            aData = ToFloat(aData)
-        elif (IsArr(aData)):
-            aData = json.loads(aData)
-    return aData
-
-
+'''
 class TDictRepl:
     def __init__(self, aDict: dict = {}):
         self.Dict = aDict
@@ -49,3 +34,4 @@ class TDictRepl:
 
         self.Dict = {}
         return aStr
+'''

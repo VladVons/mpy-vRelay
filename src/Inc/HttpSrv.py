@@ -12,21 +12,48 @@ from .Util import UFS, UObj, UStr, UHttp
 
 # ToDo. Rebooting after a while. Cause: 10rst cause:2, boot mode:(3,7
 
+class THeader(list):
+    @staticmethod
+    def GetHead(aCode: int) -> str:
+        Arr = {
+            200: 'OK',
+            302: 'Redirect',
+            400: 'Bad request',
+            404: 'Not found'
+        }
+        return Arr.get(aCode, 'Unknown')
+
+    @staticmethod
+    def GetMime(aExt: str) -> str:
+        Arr = {
+            'html': 'text/html',
+            'css':  'text/css',
+            'js':   'text/javascript',
+            'json': 'text/json',
+            'png':  'image/png',
+            'gif':  'image/gif',
+            'jpg':  'image/jpeg',
+            'ico':  'image/x-icon',
+            'zip':  'application/zip'
+        }
+        return Arr.get(aExt, 'text/plain')
+
+    def __str__(self):
+        return '\r\n'.join(self)
+
+    def Create(self, aCode, aType, aLen):
+        self.clear()
+        self.append('HTTP/1.1 %d %s' % (aCode, self.GetHead(aCode)))
+        self.append('Content-Type: %s' % self.GetMime(aType))
+        self.append('Server: MicroPy')
+        self.append('Content-Length: %d' % aLen)
+        self.append('\r\n')
+
 
 class THttpApi():
     DirRoot = '/Plugin/Web'
     FIndex  = '/index.html'
     F404    = '/page_404.html'
-
-    @staticmethod
-    def GetHeader(aCode):
-        Codes = {
-                200: 'OK',
-                302: 'Redirect',
-                400: 'Bad request',
-                404: 'Not found'
-        }
-        return 'HTTP/1.0 %d %s\r\n\r\n' % (aCode, Codes.get(aCode, 'Unknown'))
 
     @staticmethod
     def GetMethod(aPath: str) -> str:
@@ -50,7 +77,7 @@ class THttpApi():
                 if (not Data):
                     break
                 await aWriter.awrite(Data)
-                #await asyncio.sleep_ms(10)
+                await asyncio.sleep_ms(10)
 
     async def LoadFile(self, aWriter: asyncio.StreamWriter, aPath: str, aQuery: str, aData: bytearray):
         if (aPath == '/'):
@@ -63,13 +90,16 @@ class THttpApi():
             Log.Print(1, 'e', 'File not found %s' % self.DirRoot + aPath)
             Path = self.F404
             Code = 404
-        await aWriter.awrite(self.GetHeader(Code))
 
         Ext = Path.split('.')[-1]
         if (Ext in ['html', 'txt', 'css', 'json']):
             Mode = 'r'
         else:
             Mode = 'rb'
+
+        Header = THeader()
+        Header.Create(Code, Ext, UFS.FileSize(self.DirRoot + Path))
+        await aWriter.awrite(str(Header))
         await self.FileToStream(aWriter, self.DirRoot + Path, Mode)
 
     async def ParseUrl(self, aWriter: asyncio.StreamWriter, aPath: str, aQuery: str, aData: bytearray):
@@ -94,9 +124,7 @@ class THttpApi():
             R['content'] = await aReader.read(Len)
  
         try:
-            #await aWriter.awrite("HTTP/1.0 200 OK\r\n\r\n")
             await self.ParseUrl(aWriter, R['path'], R['query'], R.get('content'))
-            #await aWriter.awrite('\r\n')
             await aWriter.aclose()
         except Exception as E:
             Data = Log.Print(1, 'x', 'CallBack()', E)

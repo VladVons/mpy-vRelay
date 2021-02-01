@@ -13,6 +13,11 @@ from Inc.Log import Log
 
 
 class TApi(TApiBase):
+    Param = {
+        'pin': 14,
+        'id': ''
+    }
+
     async def Exec(self, aPin: int, aIDs: list) -> dict:
         HexID = []
         for ID in aIDs:
@@ -29,8 +34,8 @@ class TApi(TApiBase):
         return R
 
     async def Query(self, aData: dict) -> dict:
-        Pin = int(aData.get('pin', '14'))
-        Id  = aData.get('id')
+        Pin = self.Get(aData, 'pin')
+        Id  = self.Get(aData, 'id')
         if (Id):
             Arr = Id.split(',')
         else:

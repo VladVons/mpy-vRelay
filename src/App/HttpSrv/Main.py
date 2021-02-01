@@ -12,7 +12,7 @@ import json
 from Inc.Conf import Conf
 from Inc.Log  import Log
 from Inc.Util import UStr, UFS
-from Inc.HttpSrv import THttpApi
+from Inc.HttpSrv import THttpApi, THeader
 from App.Utils import Reset
 
 
@@ -38,8 +38,9 @@ class THttpApiApp(THttpApi):
             except Exception as E:
                 R = Log.Print(1, 'x', 'DoUrl()', E)
 
-            #ToDo. When many requests got exception:  OSError: [Errno 104] ECONNRESET
-            await aWriter.awrite(self.GetHeader(200))
+            Header = THeader()
+            Header.Create(200, 'json', len(R))
+            await aWriter.awrite(str(Header))
             await aWriter.awrite(R)
 
         elif (aPath == '/generate_204'):

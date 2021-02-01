@@ -10,19 +10,6 @@ import uasyncio as asyncio
 #
 from .UStr import SplitPad
 
-'''
-def GetMime(aExt: str) -> str:
-    R = {
-        'html' : 'text/html',
-        'css'  : 'text/css',
-        'js'   : 'text/javascript',
-        'png'  : 'image/png',
-        'gif'  : 'image/gif',
-        'jpg'  : 'image/jpeg'
-    }
-    return R.get(aExt, 'text/plain')
-'''
-
 async def CheckHost(aHost: str, aPort: int = 80, aTimeOut: int = 1) -> bool:
     try:
         await asyncio.wait_for(asyncio.open_connection(aHost, aPort), timeout=aTimeOut)

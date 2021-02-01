@@ -6,41 +6,28 @@ Description: micropython ESP8266
 '''
 
 
-'''
-#from Inc.Log import Log
 
 class TApiBase():
-    Param = [{}]
+    Param = {}
 
-    def Query(self, aData: dict) -> dict:
-        Params = []
-
-        if (self.Param == [{}]):
-            Keys1 = []
-        else:
-            Keys1 = [list(P.keys())[0] for P in self.Param]
-
-        Keys2 = list(aData.keys())
-        Diff  = set(Keys2) - set(Keys1)
+    def Get(self, aData, aKey: str):
+        Diff = set(list(aData.keys())) - set(list(self.Param.keys()))
         if (Diff):
-            Msg = Log.Print(1, 'x', 'Query()', Diff, E)
-            raise Exception(Msg)
+            raise Exception('Unknown %s' % Diff)
 
-        for Param in self.Param:
-            for Key, Val in Param.items():
-                ValData = aData.get(Key)
-                if (ValData is None):
-                    ValData = Val
-                Params.append(ValData)
+        Def = self.Param.get(aKey)
+        if (Def is None):
+            raise Exception('Unknown param %s' % aKey)
 
-        if (Params):
-            return self.Exec(*Params)
+        Val = aData.get(aKey)
+        if (Val is None):
+            Val = Def
         else:
-            return self.Exec()
-
-    def Exec(self, *aParam) -> dict:
-        pass
-'''
-
-class TApiBase():
-    pass
+            Type = type(Def).__name__
+            if (Type == 'int'):
+                Val = int(Val)
+            elif (Type == 'float'):
+                Val = float(Val)
+            elif (Type == 'bool'):
+                Val = bool(Val)
+        return Val

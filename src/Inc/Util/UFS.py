@@ -26,3 +26,5 @@ def FileStat(aName: str) -> tuple:
 def FileExists(aName: str) -> bool:
     return FileStat(aName) is not None
 
+def FileSize(aName: str) -> int:
+    return FileStat(aName)[6]
