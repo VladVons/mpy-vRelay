@@ -10,7 +10,10 @@ import uasyncio as asyncio
 from .Log  import Log
 from .Util import UFS, UObj, UStr, UHttp
 
-# ToDo. Rebooting after a while. Cause: 10rst cause:2, boot mode:(3,7
+#https://github.com/peterhinch/micropython-samples/blob/master/resilient/README.md
+# ToDo. Rebooting after a while. Cause:
+#rst cause:2, boot mode:(3,7)
+#rst cause:2, boot mode:(3,6)
 
 class THeader(list):
     @staticmethod
@@ -119,6 +122,8 @@ class THttpApi():
 
     async def CallBack(self, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter):
         R = await UHttp.ReadHead(aReader, True)
+        Log.Print(2, 'i', 'CallBack()', 'path: %s, query: %s, content: %s' % (R.get('path'), R.get('query'), R.get('content')))
+
         Len = int(R.get('content-length', '0'))
         if (Len > 0):
             R['content'] = await aReader.read(Len)

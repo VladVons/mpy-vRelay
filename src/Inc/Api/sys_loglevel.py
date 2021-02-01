@@ -5,20 +5,19 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-import machine
-import uasyncio as asyncio
-#
 from Inc.Api import TApiBase
+from Inc.Log import Log
 
 
 class TApi(TApiBase):
     Param = {
-        'delay': 1
+        'level': 1
     }
 
-    async def Exec(self, aDelay: int = 1) -> dict:
-        await asyncio.sleep(aDelay)
-        machine.reset()
+    async def Exec(self, aLevel: int) -> dict:
+        R = {'old': Log.Level, 'new': aLevel}
+        Log.Level = aLevel
+        return R
 
     async def Query(self, aData: dict) -> dict:
-        return await self.ExecDef(aData, ['delay'])
+        return await self.ExecDef(aData, ['level'])
