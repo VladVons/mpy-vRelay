@@ -20,16 +20,19 @@ class TApi(TApiBase):
         'echo': True
     }
 
-    async def Exec(self, aDelay: float, aAsync: bool) -> dict:
+    async def Exec(self, aDelay: float, aAsync: bool, aEcho: bool) -> dict:
         async with Lock:
             if (aAsync):
                 await asyncio.sleep(aDelay)
             else:
                 time.sleep(aDelay)
-        return {'delay': aDelay, 'async': aAsync}
+
+            R = {'delay': aDelay, 'async': aAsync, 'echo': aEcho}
+            if (aEcho):
+                Log.Print(1, 'i', 'sys_sleep', R)
+            return R
+
 
     async def Query(self, aData: dict) -> dict:
-        R = await self.Exec(self.Get(aData, 'delay'), self.Get(aData, 'async'))
-        if (self.Get(aData, 'echo')):
-            Log.Print(1, 'i', 'Query()', R)
+        R = await self.Exec(self.Get(aData, 'delay'), self.Get(aData, 'async'), self.Get(aData, 'echo'))
         return R

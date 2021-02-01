@@ -34,7 +34,7 @@ class THttpApiApp(THttpApi):
                 #Lib = __import__((self.DirApi + '/' + Name).replace('/', '.'), None, None, ['TApi'])
                 Lib = __import__(Dir + '/' + Name)
                 R = await Lib.TApi().Query(aQuery)
-                R = json.dumps(R)
+                R = json.dumps(R) + '\r\n'
             except Exception as E:
                 R = Log.Print(1, 'x', 'DoUrl()', E)
 
