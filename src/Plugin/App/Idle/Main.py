@@ -60,11 +60,13 @@ class TTaskIdle(TTask):
         WDog.Feed()
 
     async def tWatchHost(self):
-        Cnt = Conf.get('WatchHost_Cnt', 60)
-        if (Conf.WatchHost) and (self.Cnt % Cnt == 0):
+        Cnt = Conf.get('WatchHost_Cnt', 0)
+        if (Cnt > 0) and (self.Cnt % Cnt == 0):
+            Net = network.WLAN(network.STA_IF)
+            Host = Conf.get('WatchHost', Net.ifconfig()[2]) # or gateway
             from Inc.Util.UHttp import CheckHost
-            if (not await CheckHost(Conf.WatchHost, 80, 3)):
-                Log.Print(1, 'i', 'WatchHost %s reset %s' % (Conf.WatchHost, Cnt))
+            if (not await CheckHost(Host, 80, 3)):
+                Log.Print(1, 'i', 'WatchHost %s reset %s' % (Host, Cnt))
                 await asyncio.sleep(3)
                 await Reset()
 
