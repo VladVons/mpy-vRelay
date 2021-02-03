@@ -11,7 +11,7 @@ import json
 #
 from Inc.Conf import Conf
 from Inc.Log  import Log
-from Inc.Util import UStr, UFS
+from Inc.Util import UStr, UFS, UHttp
 from Inc.HttpSrv import THttpApi, THeader
 from App.Utils import Reset
 
@@ -50,11 +50,19 @@ class THttpApiApp(THttpApi):
         elif (aPath == '/login'):
             if (aData):
                 Query = self.ParseQuery(aData.decode('utf-8'))
-                Conf['STA_ESSID'] = Query.get('STA_ESSID')
-                Conf['STA_Paswd'] = Query.get('STA_Paswd')
+                Conf['STA_ESSID'] = Query.get('_STA_ESSID')
+                Conf['STA_Paswd'] = Query.get('_STA_Paswd')
                 Conf.Save()
                 Reset()
 
+        elif (aPath == '/upload'):
+            if (aData):
+                Data = UHttp.UrlPercent(aData)
+                print('--Data', Data)
+
+                Pairs = Data.split('&')
+                for Pair in Pairs:
+                    Key, Value = Pair.split('=')
+                    print(Key, Value)
         else:
             await self.LoadFile(aWriter, aPath, aQuery, aData)
-        return R

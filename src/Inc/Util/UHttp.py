@@ -56,3 +56,14 @@ async def UrlLoad(aUrl: str, aStream):
                 await asyncio.sleep_ms(10)
             aStream.flush()
     await Writer.wait_closed()
+
+def UrlPercent(aData: bytearray) -> bytearray:
+    Bits = aData.split(b'%')
+    Arr = [Bits[0]]
+    for Item in Bits[1:]:
+        Code = Item[:2]
+        Char = bytes([int(Code, 16)])
+        Arr.append(Char)
+        Arr.append(Item[2:].replace(b'+', b' '))
+    Res = b''.join(Arr)
+    return Res.decode('utf-8')
