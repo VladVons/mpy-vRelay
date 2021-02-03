@@ -20,20 +20,22 @@ class THttpApiApp(THttpApi):
     DirApiCore = 'Inc/Api'
     DirApiUser = 'Plugin/Api'
 
-    async def DoUrl(self, aWriter: asyncio.StreamWriter, aPath: str, aQuery: dict, aData: bytearray) -> str:
-        #print('--- aPath', aPath, 'aQuery', aQuery, 'aData', aData)
-        R = 'DoUrl()'
+    async def DoUrl(self, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter, aHead: dict):
+        Path = aHead['path']
+        Query = self.ParseQuery(aHead['query'])
+        LenData = int(aHead.get('content-length', '0'))
+        print(Path, Query, LenData)
 
-        Name, Ext = UStr.SplitPad(2, aPath.split('/')[-1], '.')
+        Name, Ext = UStr.SplitPad(2, Path.split('/')[-1], '.')
         if (Ext == 'py'):
             try:
-                if (UFS.FileExists(self.DirApiUser + aPath)):
+                if (UFS.FileExists(self.DirApiUser + Path)):
                     Dir = self.DirApiUser
                 else:
                     Dir = self.DirApiCore
                 #Lib = __import__((self.DirApi + '/' + Name).replace('/', '.'), None, None, ['TApi'])
                 Lib = __import__(Dir + '/' + Name)
-                R = await Lib.TApi().Query(aQuery)
+                R = await Lib.TApi().Query(Query)
                 R = json.dumps(R) + '\r\n'
             except Exception as E:
                 R = Log.Print(1, 'x', 'DoUrl()', E)
@@ -43,26 +45,52 @@ class THttpApiApp(THttpApi):
             await aWriter.awrite(str(Header))
             await aWriter.awrite(R)
 
-        elif (aPath == '/generate_204'):
-            await self.LoadFile(aWriter, aPath + '.html', aQuery, aData)
+        elif (Path == '/generate_204'):
+            await self.LoadFile(aWriter, Path + '.html')
             #R = UStr.TDictRepl({'$SSID': 'mySSID'}).Parse(R)
 
-        elif (aPath == '/login'):
-            if (aData):
-                Query = self.ParseQuery(aData.decode('utf-8'))
+        elif (Path == '/login'):
+            if (LenData > 0):
+                Data = await aReader.read(LenData)
+                Query = self.ParseQuery(Data.decode('utf-8'))
                 Conf['STA_ESSID'] = Query.get('_STA_ESSID')
                 Conf['STA_Paswd'] = Query.get('_STA_Paswd')
                 Conf.Save()
                 Reset()
 
-        elif (aPath == '/upload'):
-            if (aData):
-                Data = UHttp.UrlPercent(aData)
-                print('--Data', Data)
+        elif (Path == '/upload'):
+            if (LenData > 0):
+                print(aHead)
+                print()
+                Data = await aReader.read(LenData)
+                print('--x1', Data)
 
-                Pairs = Data.split('&')
-                for Pair in Pairs:
-                    Key, Value = Pair.split('=')
-                    print(Key, Value)
+                R = 'OK'
+                Header = THeader()
+                Header.Create(200, 'txt', len(R))
+                await aWriter.awrite(str(Header))
+                await aWriter.awrite(R)
+
+                #R = []
+                #while True:
+                #    Data = await aReader.readline()
+                #    if (Data == b'\r\n'):
+                #        break
+
+                #    Data = Data.decode('utf-8').strip()
+
+                #    R.append(Data)
+                #print(R)
+
+                #Data = await aReader.read(LenData)
+                #print('--x1', Data)
+
+                #Data = UHttp.UrlPercent(Data)
+                #print('--x2', Data)
+
+                #Pairs = Data.split('&')
+                #for Pair in Pairs:
+                #    Key, Value = Pair.split('=')
+                #    print(Key, Value)
         else:
-            await self.LoadFile(aWriter, aPath, aQuery, aData)
+            await self.LoadFile(aWriter, Path)

@@ -72,8 +72,6 @@ class THttpApi():
 
     @staticmethod
     async def FileToStream(aWriter: asyncio.StreamWriter, aName: str, aMode: str = 'r'):
-        #await aWriter.awrite(F.read() + '\r\n' - OK, but cant upload big files
-        #ToDo. When Captive OSError: [Errno 104] ECONNRESET
         with open(aName, aMode) as F:
             while True:
                 Data = F.read(512)
@@ -82,7 +80,7 @@ class THttpApi():
                 await aWriter.awrite(Data)
                 await asyncio.sleep_ms(10)
 
-    async def LoadFile(self, aWriter: asyncio.StreamWriter, aPath: str, aQuery: str, aData: bytearray):
+    async def LoadFile(self, aWriter: asyncio.StreamWriter, aPath: str):
         if (aPath == '/'):
             aPath = self.FIndex
 
@@ -105,31 +103,20 @@ class THttpApi():
         await aWriter.awrite(str(Header))
         await self.FileToStream(aWriter, self.DirRoot + Path, Mode)
 
-    async def ParseUrl(self, aWriter: asyncio.StreamWriter, aPath: str, aQuery: str, aData: bytearray):
-        if ('=' in aQuery):
-            Query = dict(Pair.split('=') for Pair in aQuery.split('&'))
-        else:
-            Query = dict()
-
-        Obj = UObj.GetAttr(self, self.GetMethod(aPath))
-        if (Obj):
-            await Obj(aWriter, Query, aData)
-        else:
-            await self.DoUrl(aWriter, aPath, Query, aData)
-
-    async def DoUrl(self, aWriter: asyncio.StreamWriter, aPath: str, aQuery: dict, aData: bytearray):
-        await self.LoadFile(aWriter, aPath, aQuery, aData)
+    async def DoUrl(self, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter, aHead: dict):
+        await self.LoadFile(aWriter, aHead['path'])
 
     async def CallBack(self, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter):
-        R = await UHttp.ReadHead(aReader, True)
-        Log.Print(2, 'i', 'CallBack()', 'path: %s, query: %s, content: %s' % (R.get('path'), R.get('query'), R.get('content')))
+        Head = await UHttp.ReadHead(aReader, True)
+        Log.Print(2, 'i', 'CallBack()', 'path: %s, query: %s' % (Head.get('path'), Head.get('query')))
 
-        Len = int(R.get('content-length', '0'))
-        if (Len > 0):
-            R['content'] = await aReader.read(Len)
- 
+        Method = self.GetMethod(Head.get('path'))
+        Obj = UObj.GetAttr(self, Method)
         try:
-            await self.ParseUrl(aWriter, R['path'], R['query'], R.get('content'))
+            if (Obj):
+                await Obj(aReader, aWriter, Head)
+            else:
+                await self.DoUrl(aReader, aWriter, Head)
             await aWriter.aclose()
         except Exception as E:
             Data = Log.Print(1, 'x', 'CallBack()', E)

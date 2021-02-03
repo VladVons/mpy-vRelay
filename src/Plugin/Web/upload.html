@@ -5,16 +5,18 @@
         <title>Upload files</title>
     </head>
    <body>
-      <form action="/upload" method="post">
+      <form enctype="multipart/form-data" action="/upload" method="post">
         <table class="box">
             <caption>Upload files</caption>
             <tr>
-                <td><input type="file" name="_Name" multiple></td>
+                <td><input type="file" name = "filename" multiple></td>
             </tr>
             <tr>
                 <td><input type="text" placeholder="/" name="_Path" required /></td>
             </tr>
-            <td align="center"><button type="submit" class="btn">upload</button></td>
+            <tr>
+                <td align="center"><button type="submit" class="btn">upload</button></td>
+            </tr>
         </table>
       </form>
    </body>
