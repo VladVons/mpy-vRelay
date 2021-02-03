@@ -57,7 +57,7 @@ async def UrlLoad(aUrl: str, aStream):
             aStream.flush()
     await Writer.wait_closed()
 
-def UrlPercent(aData: bytearray) -> bytearray:
+def UrlPercent(aData: bytearray) -> str:
     Bits = aData.split(b'%')
     Arr = [Bits[0]]
     for Item in Bits[1:]:
