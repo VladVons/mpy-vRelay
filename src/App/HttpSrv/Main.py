@@ -24,7 +24,7 @@ class THttpApiApp(THttpApi):
         Path = aHead['path']
         Query = self.ParseQuery(aHead['query'])
         LenData = int(aHead.get('content-length', '0'))
-        print(Path, Query, LenData)
+        #print('--DoUrl Head', aHead)
 
         Name, Ext = UStr.SplitPad(2, Path.split('/')[-1], '.')
         if (Ext == 'py'):
@@ -40,10 +40,7 @@ class THttpApiApp(THttpApi):
             except Exception as E:
                 R = Log.Print(1, 'x', 'DoUrl()', E)
 
-            Header = THeader()
-            Header.Create(200, 'json', len(R))
-            await aWriter.awrite(str(Header))
-            await aWriter.awrite(R)
+            await self.Answer(aWriter, 200, 'json', R)
 
         elif (Path == '/generate_204'):
             await self.LoadFile(aWriter, Path + '.html')
@@ -60,37 +57,18 @@ class THttpApiApp(THttpApi):
 
         elif (Path == '/upload'):
             if (LenData > 0):
-                print(aHead)
-                print()
-                Data = await aReader.read(LenData)
-                print('--x1', Data)
+                from .Upload import TMulUpload
 
-                R = 'OK'
-                Header = THeader()
-                Header.Create(200, 'txt', len(R))
-                await aWriter.awrite(str(Header))
-                await aWriter.awrite(R)
+                Ref = aHead.get('referer')
+                if (Ref):
+                    Url, QueryR = UStr.SplitPad(2, Ref, '?')
+                    QueryR = self.ParseQuery(QueryR)
+                    Dir = QueryR.get('path', '')
+                else:
+                    Dir = ''
 
-                #R = []
-                #while True:
-                #    Data = await aReader.readline()
-                #    if (Data == b'\r\n'):
-                #        break
-
-                #    Data = Data.decode('utf-8').strip()
-
-                #    R.append(Data)
-                #print(R)
-
-                #Data = await aReader.read(LenData)
-                #print('--x1', Data)
-
-                #Data = UHttp.UrlPercent(Data)
-                #print('--x2', Data)
-
-                #Pairs = Data.split('&')
-                #for Pair in Pairs:
-                #    Key, Value = Pair.split('=')
-                #    print(Key, Value)
+                R = await TMulUpload().Upload(aReader, aHead, Dir)
+                R = json.dumps(R) + '\r\n'
+                await self.Answer(aWriter, 200, 'txt', R)
         else:
             await self.LoadFile(aWriter, Path)

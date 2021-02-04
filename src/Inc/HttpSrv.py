@@ -80,6 +80,13 @@ class THttpApi():
                 await aWriter.awrite(Data)
                 await asyncio.sleep_ms(10)
 
+    @staticmethod
+    async def Answer(aWriter: asyncio.StreamWriter, aCode: int, aType: str, aData):
+        Header = THeader()
+        Header.Create(aCode, aType, len(aData))
+        await aWriter.awrite(str(Header))
+        await aWriter.awrite(aData)
+
     async def LoadFile(self, aWriter: asyncio.StreamWriter, aPath: str):
         if (aPath == '/'):
             aPath = self.FIndex
