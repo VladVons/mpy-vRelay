@@ -35,14 +35,14 @@ class TWLanApp(TWLan):
                 return True
             else:
                 Net.disconnect()
-                await asyncio.sleep(Cnt)
-        Reset(0)
+                await asyncio.sleep(Cnt * 2)
+        await Reset(0)
 
     async def CheckConnect(self):
         Net = network.WLAN(network.STA_IF)
         Host = Conf.get('WatchHost', Net.ifconfig()[2]) # or gateway
 
         from Inc.Util.UHttp import CheckHost
-        if (not await CheckHost(Host, 80, 3)):
+        if (not await CheckHost(Host, 80, 5)):
             Log.Print(1, 'i', 'CheckConnect')
             await self.TryConnect()

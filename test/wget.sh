@@ -82,7 +82,7 @@ HostMpy()
     local aHost=$1;
 
     #
-    #$wget "$aHost/sys_info.py"
+    $wget "$aHost/sys_info.py"
     $wget "$aHost/sys_mem1.py"
 
     #$wget "$aHost/sys_sleep.py?delay=1&async=1&echo=1"
