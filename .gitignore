@@ -3,6 +3,7 @@
 *.dbf
 *.dbl
 *.bin
+wget-log.*
 __pycache__
 release
 .idea
