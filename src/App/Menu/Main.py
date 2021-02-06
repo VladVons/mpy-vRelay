@@ -7,19 +7,21 @@ License:     GNU, see LICENSE for more details
 
 from Inc.Menu import TMenu
 from Inc.Conf import Conf
-from Inc.Util.UObj import GetTree
-from Inc.Util.UArr import SortLD
 from Inc.Util.UHrd import GetInputChr
-
+#
 
 class TMenuApp(TMenu):
-    def ShowTree(self, aData: dict):
-        for Var in SortLD(GetTree(aData), 'Key'):
-            print('%15s = %s' % (Var['Key'], Var['Val']))
+    async def _ExecApi(self, aPath: str, aParam: list):
+        Path = 'Inc.Api.' + aPath.split('/')[-1]
+        Lib  = __import__(Path , None, None, ['TApi'])
+        await self.Exec(Lib.TApi().Exec, aParam)
+
+    async def _ExecObj(self, aPath: str, aParam: list):
+        await self.Exec(aParam[0], aParam[1])
 
     async def MSetup(self, aPath: str, aParam: list):
         Vars = Conf.Keys()
-        self.ShowTree(Vars)
+        self._ShowTree(Vars)
         if (not await self.AskYN('Cntinue')):
             return
 
@@ -38,24 +40,14 @@ class TMenuApp(TMenu):
         ]
         R.update(await self.Input(Items, Vars))
 
-        self.ShowTree(R)
+        self._ShowTree(R)
         if (await self.AskYN('Save')):
             Conf.update(R)
             Conf.Save() 
             print('Saved')
 
-    async def ApiExec(self, aPath: str, aParam: list):
-        Path = 'Inc.Api.' + aPath.split('/')[-1]
-        Lib  = __import__(Path , None, None, ['TApi'])
-        if (aParam):
-            Data = await Lib.TApi().Exec(*aParam)
-        else:
-            Data = await Lib.TApi().Exec()
-        self.ShowTree(Data)
-        await self.WaitMsg()
-
     async def MApi(self, aPath: str, aParam: list):
-        Func = self.ApiExec
+        Func = self._ExecApi
         Items = [
             ['dev_bme280',      Func, [5, 4]],
             ['dev_dht11',       Func, [14]],
@@ -70,9 +62,19 @@ class TMenuApp(TMenu):
         ]
         await self.Parse(aPath, Items)
 
+    async def MMisc(self, aPath: str, aParam: list):
+        from App.Utils import TWLanApp
+        WLanApp = TWLanApp()
+
+        Items = [
+            ['connect',         self._ExecObj, [WLanApp.TryConnect, []]]
+        ]
+        await self.Parse(aPath, Items)
+
     async def MMain(self, aPath: str, aParam: list):
         Items = [
             ['Api',    self.MApi, []],
+            ['Misc',   self.MMisc, []],
             ['Setup',  self.MSetup, []]
         ]
         await self.Parse(aPath, Items)

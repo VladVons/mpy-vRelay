@@ -62,21 +62,9 @@ class TTaskIdle(TTask):
     async def tWatchHost(self):
         Cnt = Conf.get('WatchHost_Cnt', 0)
         if (Cnt > 0) and (self.Cnt % Cnt == 0):
-            Net = network.WLAN(network.STA_IF)
-            Host = Conf.get('WatchHost', Net.ifconfig()[2]) # or gateway
-
-            from Inc.Util.UHttp import CheckHost
-            if (not await CheckHost(Host, 80, 3)):
-                from App.Utils import TWLanApp
-                WLan = TWLanApp()
-                for Try in range(3):
-                    if (await WLan.TryConnect()):
-                        return
-                    await asyncio.sleep(60)
-
-                Log.Print(1, 'i', 'WatchHost %s reset %s' % (Host, Cnt))
-                await asyncio.sleep(3)
-                await Reset()
+            from App.Utils import TWLanApp
+            WLan = TWLanApp()
+            await WLan.CheckConnect()
 
     async def DoLoop(self):
         #Log.Print(1, 'i', 'TTaskIdle %s' % self.Cnt)

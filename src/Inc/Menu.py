@@ -8,7 +8,8 @@ Description:
 import uasyncio as asyncio
 #
 from Inc.Util.UHrd  import GetInputStr, GetInputChr
-
+from Inc.Util.UObj import GetTree
+from Inc.Util.UArr import SortLD
 
 
 class TMenu():
@@ -18,6 +19,17 @@ class TMenu():
 
     async def WaitMsg(self, aMsg: str = '') -> str:
         return await GetInputStr('%s (Press ENTER) ' % aMsg)
+
+    async def Exec(self, aFunc, aParam: list):
+        if (aParam):
+            Data = await aFunc(*aParam)
+        else:
+            Data = await aFunc()
+
+        for Var in SortLD(GetTree(Data), 'Key'):
+            print('%15s = %s' % (Var['Key'], Var['Val']))
+
+        await self.WaitMsg()
 
     async def Parse(self, aPath: str, aItems: list):
         while True:

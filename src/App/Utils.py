@@ -7,6 +7,7 @@ Description:.
 
 
 import time
+import network
 import uasyncio as asyncio
 #
 from Inc.Log  import Log
@@ -25,16 +26,23 @@ async def Reset(aSec: int = 0):
 
 
 class TWLanApp(TWLan):
-    async def TryConnect(self):
+    async def TryConnect(self, aCnt: int = 3) -> bool:
         await self.EnableAP(False)
 
-        Net = await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
-        if (not Net.isconnected()):
-            await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, None)
+        for Cnt in range(aCnt):
+            Net = await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
             if (Net.isconnected()):
-                Conf['STA_Net'] = Net.ifconfig()
-                Conf.Save()
+                return True
             else:
-                Reset(0)
-        Log.Print(1, 'i', 'TryConnect', Net.ifconfig())
-        return Net.isconnected()
+                Net.disconnect()
+                await asyncio.sleep(Cnt)
+        Reset(0)
+
+    async def CheckConnect(self):
+        Net = network.WLAN(network.STA_IF)
+        Host = Conf.get('WatchHost', Net.ifconfig()[2]) # or gateway
+
+        from Inc.Util.UHttp import CheckHost
+        if (not await CheckHost(Host, 80, 3)):
+            Log.Print(1, 'i', 'CheckConnect')
+            await self.TryConnect()

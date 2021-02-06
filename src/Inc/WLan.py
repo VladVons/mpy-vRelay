@@ -47,6 +47,7 @@ class TWLan():
         R.connect(aESSID, aPassw)
         await self._WaitForReady(R.isconnected)
 
+        Log.Print(1, 'i', 'Net', R.ifconfig())
         return R
 
     async def EnableAP(self, aMode: bool):
