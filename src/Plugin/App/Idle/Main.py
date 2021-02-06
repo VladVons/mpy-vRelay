@@ -17,6 +17,7 @@ from Inc.Log  import Log
 from Inc.Util import UHrd
 from Inc.Task import TTask, Tasks
 from App.Utils import Reset
+from App.Utils import TWLanApp
 
 
 WDog = UHrd.TWDog(0, Conf.get('WatchDog', 30))
@@ -59,10 +60,15 @@ class TTaskIdle(TTask):
     def tWatchDog(self):
         WDog.Feed()
 
+    async def tWatchConnect(self):
+        Net = network.WLAN(network.STA_IF)
+        if (not Net.isconnected):
+            WLan = TWLanApp()
+            await WLan.TryConnect()
+
     async def tWatchHost(self):
         Cnt = Conf.get('WatchHost_Cnt', 0)
         if (Cnt > 0) and (self.Cnt % Cnt == 0):
-            from App.Utils import TWLanApp
             WLan = TWLanApp()
             await WLan.CheckConnect()
 
@@ -71,6 +77,7 @@ class TTaskIdle(TTask):
 
         self.tWatchDog()
         await self.tWatchHost()
+        await self.tWatchConnect()
         #self.tDSleep()
         #self.tMemFree()
         self.tLedBeat()
