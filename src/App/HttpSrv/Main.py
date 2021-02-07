@@ -64,6 +64,7 @@ class THttpApiApp(THttpApi):
                     Url, QueryR = UStr.SplitPad(2, Ref, '?')
                     QueryR = self.ParseQuery(QueryR)
                     Dir = QueryR.get('path', '')
+                    UFS.MkDir(Dir)
                 else:
                     Dir = ''
 

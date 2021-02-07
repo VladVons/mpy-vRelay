@@ -8,10 +8,16 @@ import uio
 import json
 import uasyncio as asyncio
 #
-from Inc.Conf import Conf
+#from Inc.Conf import Conf
 from Inc.Log import Log
+from Inc.Util import UFS
+
 #from App.Utils import TWLanApp
 #from Inc.Plugin import TPlugin
+
+#UFS.MkDir('1/2/3/4')
+
+print('1234/'[:-1])
 
 
 def TestCB():
@@ -41,12 +47,12 @@ def Connect():
 
 
 #Stream()
-Connect()
+#Connect()
 
 #asyncio.run(Test1())
 #print('---x1')
 
-asyncio.run(Test2())
+#asyncio.run(Test2())
 #loop = asyncio.get_event_loop()
 #loop.create_task(Test1())
 #loop.create_task(Test2())
