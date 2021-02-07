@@ -40,8 +40,10 @@ class TMenu():
                 if (Param):
                     print('%2s %s %s' % (Idx, Name, Param))
                 else:
-                    print('%2s %s' % (Idx, Name))
-
+                    if (Func):
+                        print('%2s %s' % (Idx, Name))
+                    else:
+                        print('%2s %s' % (' ', Name))
             if (not aItems):
                 await self.WaitMsg('No items')
                 break
