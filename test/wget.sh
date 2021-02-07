@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-wget="wget --read-timeout=5 --tries=1 -qO-"
+wget="wget --read-timeout=6 --tries=1 -qO-"
 
 
 ExecM()
@@ -82,12 +82,12 @@ HostMpy()
     local aHost=$1;
 
     #
-    $wget "$aHost/sys_info.py"
+    #$wget "$aHost/sys_info.py"
     $wget "$aHost/sys_mem1.py"
 
     #$wget "$aHost/sys_sleep.py?delay=1&async=1&echo=1"
 
-    #$wget "$aHost/dev_ds18b20.py"
+    $wget "$aHost/dev_ds18b20.py"
     #$wget "$aHost/dev_ds18b20.py?pin=14"
     #$wget "$aHost/dev_ds18b20.py?pin=14&id=28ff176193160491"
 
@@ -110,7 +110,7 @@ HostMpy()
 
 #Hosts="http://dht4.lan"
 #Hosts="http://192.168.11.105"
-Hosts="http://10.10.10.32"
+Hosts="http://10.10.10.105"
 #
 Loop $Hosts
 #$wget "$Hosts/sys_sleep.py?delay=1&async=1&echo=1"

@@ -105,8 +105,8 @@ Make_MicroFirmware()
 
 #Install
 #Make_EspOpenSdk
-Get_MicroPython
-Make_MicroPython
+#Get_MicroPython
+#Make_MicroPython
 #
 InstallPkg
 Make_MicroFirmware

@@ -1,9 +1,11 @@
 #!/bin/bash
 
 
-rm wget-log.*
+Cmd="./wget.sh"
 
-for i in {1..25}; do
+for i in {1..5}; do
     echo "i: $i"
-    xfce4-terminal --hold --geometry=10x10 --command="./wget.sh"
+    xfce4-terminal --minimize --hold --geometry=10x10 --initial-title="$Cmd $i" --command="$Cmd"
 done
+
+rm wget-log.*

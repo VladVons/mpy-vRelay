@@ -1,5 +1,5 @@
-Alias = 'dht22-1'
-#Alias = 'ds18b20'
+#Alias = 'dht22-1'
+Alias = 'ds18b20'
 Descr = 'frozen'
 #
 TIdle = 2

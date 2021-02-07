@@ -14,7 +14,9 @@ from Inc.Conf import Conf
 from Inc.Log  import Log
 from Inc.Task import Tasks
 from Inc.Plugin import TPlugin
+from Inc.Util import UHrd
 from .Utils   import TWLanApp
+
 #from Inc.DB.Dbl import TDbl
 
 
@@ -23,6 +25,8 @@ async def Run():
 
     DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
     print('DSleep', DSleep)
+
+    await UHrd.ALedFlash(Conf.get('PinLed', 2), 3, 0.5)
 
     Plugin = TPlugin()
 
