@@ -17,7 +17,9 @@ from Inc.Util import UFS
 
 #UFS.MkDir('1/2/3/4')
 
-print('1234/'[:-1])
+str1 = '1234'
+str1[1] = 'x'
+print(str1)
 
 
 def TestCB():

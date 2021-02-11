@@ -6,7 +6,7 @@ Description:.
 '''
 
 from Inc.Api import TApiBase
-from Inc.Util.UHttp import UrlPercent
+from Inc.Http.HttpLib import UrlPercent
 
 
 class TApi(TApiBase):

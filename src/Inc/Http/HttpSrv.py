@@ -7,8 +7,9 @@ Description:.
 
 import uasyncio as asyncio
 #
-from .Log  import Log
-from .Util import UFS, UObj, UStr, UHttp
+from Inc.Log  import Log
+from Inc.Util import UFS, UObj, UStr
+from .HttpLib import ReadHead
 
 #https://github.com/peterhinch/micropython-samples/blob/master/resilient/README.md
 # ToDo. Rebooting after a while. Cause:
@@ -115,14 +116,18 @@ class THttpApi():
         await self.LoadFile(aWriter, aHead['path'])
 
     async def CallBack(self, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter):
-        Head = await UHttp.ReadHead(aReader, True)
+        Head = await ReadHead(aReader, True)
         Log.Print(2, 'i', 'CallBack()', 'path: %s, query: %s' % (Head.get('path'), Head.get('query')))
+        Path = Head.get('path')
 
-        Method = self.GetMethod(Head.get('path'))
+        Method = self.GetMethod(Path)
         Obj = UObj.GetAttr(self, Method)
         try:
             if (Obj):
                 await Obj(aReader, aWriter, Head)
+            elif (UFS.FileExists(self.DirRoot + '/' + Method + '.py')):
+                Lib = __import__(self.DirRoot + '/' + Method)
+                await Lib.THttpApiEx(self).Query(aReader, aWriter, Head)
             else:
                 await self.DoUrl(aReader, aWriter, Head)
             await aWriter.aclose()

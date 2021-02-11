@@ -12,7 +12,7 @@ import uio
 from Inc.Api import TApiBase
 from Inc.Log import Log
 from Inc.Conf import Conf
-from Inc.Util.UHttp import UrlLoad
+from Inc.Http.HttpLib import UrlLoad
 
 
 class TApi(TApiBase):

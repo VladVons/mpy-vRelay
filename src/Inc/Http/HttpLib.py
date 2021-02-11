@@ -8,7 +8,8 @@ Description:.
 #import socket
 import uasyncio as asyncio
 #
-from .UStr import SplitPad
+from Inc.Util.UStr import SplitPad
+
 
 async def CheckHost(aHost: str, aPort: int = 80, aTimeOut: int = 1) -> bool:
     try:

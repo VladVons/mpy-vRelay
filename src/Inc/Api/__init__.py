@@ -36,3 +36,6 @@ class TApiBase():
             Arr.append(self.Get(aData, Param))
 
         return await self.Exec(*Arr)
+
+    async def Exec(self):
+        pass
