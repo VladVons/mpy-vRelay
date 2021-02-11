@@ -7,7 +7,7 @@ Description:
 
 import uasyncio as asyncio
 #
-from Inc.Util.UHrd  import GetInputStr, GetInputChr
+from Inc.Util.UKbd  import GetInputStr, GetInputChr
 from Inc.Util.UObj import GetTree
 from Inc.Util.UArr import SortLD
 

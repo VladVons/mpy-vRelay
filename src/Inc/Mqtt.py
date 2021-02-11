@@ -52,11 +52,7 @@ class TTaskMqtt(TTask):
     async def DoLoop(self):
         self.O.check_msg()
 
-    def DoExit(self):
+    async def DoExit(self):
         try:
             self.O.disconnect()
         except: pass
-
-    async def DoExcept(self, aE):
-        Log.Print(1, 'x', 'Mqtt DoExcept', aE)
-        return 30

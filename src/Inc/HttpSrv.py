@@ -15,6 +15,7 @@ from .Util import UFS, UObj, UStr, UHttp
 #rst cause:2, boot mode:(3,7)
 #rst cause:2, boot mode:(3,6)
 
+
 class THeader(list):
     @staticmethod
     def GetHead(aCode: int) -> str:

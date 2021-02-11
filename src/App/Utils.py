@@ -20,8 +20,8 @@ async def Reset(aSec: int = 0):
     from Inc.Task import Tasks
 
     Log.Print(1, 'i', 'Reset', aSec)
-    await UHrd.ALedFlash(2, 3, 0.2)
-    Tasks.Stop()
+    await UHrd.LedFlash(2, 3, 0.2)
+    await Tasks.Stop()
     UHrd.Reset(aSec)
 
 

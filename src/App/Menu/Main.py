@@ -7,7 +7,7 @@ License:     GNU, see LICENSE for more details
 
 from Inc.Menu import TMenu
 from Inc.Conf import Conf
-from Inc.Util.UHrd import GetInputChr
+from Inc.Util.UKbd import GetInputChr
 #
 
 class TMenuApp(TMenu):

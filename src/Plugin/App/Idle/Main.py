@@ -7,10 +7,8 @@ Description:.
 
 
 import gc
-import sys
-import machine
-import network
-import uasyncio as asyncio
+from network import WLAN, STA_IF
+from machine import WDT, Pin
 #
 from Inc.Conf import Conf
 from Inc.Log  import Log
@@ -20,13 +18,14 @@ from App.Utils import Reset
 from App.Utils import TWLanApp
 
 
-WDog = UHrd.TWDog(0, Conf.get('WatchDog', 30))
+wdt = WDT(timeout = Conf.get('WatchDog', 30 * 1000))
+
 
 class TTaskIdle(TTask):
     BtnCnt = 0
 
     def tLedBeat(self):
-        O = machine.Pin(2, machine.Pin.OUT)
+        O = Pin(2, Pin.OUT)
         O.value(not O.value())
 
         if (self.Cnt % 5 == 0):
@@ -36,7 +35,7 @@ class TTaskIdle(TTask):
                 mqtt.Publish('MyTopic1', 'tLedBeat %s' % self.Cnt)
 
     def tConfClear(self):
-        O = machine.Pin(0, machine.Pin.IN, machine.Pin.PULL_UP)
+        O = Pin(0, Pin.IN, Pin.PULL_UP)
         if (not O.value()):
             self.BtnCnt += 1
             if (self.BtnCnt > 2):
@@ -54,14 +53,14 @@ class TTaskIdle(TTask):
         gc.collect()
         print('mem_free', gc.mem_free())
 
-        Net = network.WLAN(network.STA_IF)
+        Net = WLAN(STA_IF)
         print('ifconfig', Net.ifconfig()[0])
 
     def tWatchDog(self):
-        WDog.Feed()
+        wdt.feed()
 
     async def tWatchConnect(self):
-        Net = network.WLAN(network.STA_IF)
+        Net = WLAN(STA_IF)
         if (not Net.isconnected):
             WLan = TWLanApp()
             await WLan.TryConnect()
@@ -83,9 +82,9 @@ class TTaskIdle(TTask):
         self.tLedBeat()
         self.tConfClear()
 
-    def DoExit(self):
-        WDog.Stop()
-        UHrd.LedFlash(2, 3, 0.2)
+    async def DoExit(self):
+        #WDog.Stop()
+        await UHrd.LedFlash(2, 3, 0.2)
 
-    def DoPost(self, aOwner: TTask, aMsg):
+    async def DoPost(self, aOwner: TTask, aMsg):
         print('InIdle', aOwner.Alias, aMsg)

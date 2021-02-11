@@ -24,8 +24,8 @@ class TTaskDoorCheck(TTask):
 
     async def Beep(self):
         Delay = 0.15
-        await UHrd.ALedFlash(self.PinLed, 2, Delay)
-        await UHrd.ALedFlash(self.PinSnd, 4, Delay)
+        await UHrd.LedFlash(self.PinLed, 2, Delay)
+        await UHrd.LedFlash(self.PinSnd, 4, Delay)
 
     async def tCheck(self):
         Value = self.Obj.value()

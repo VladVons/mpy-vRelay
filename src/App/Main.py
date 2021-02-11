@@ -26,7 +26,7 @@ async def Run():
     DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
     print('DSleep', DSleep)
 
-    await UHrd.ALedFlash(Conf.get('PinLed', 2), 3, 0.5)
+    await UHrd.LedFlash(Conf.get('PinLed', 2), 3, 0.5)
 
     Plugin = TPlugin()
 
@@ -54,7 +54,7 @@ async def Run():
     except KeyboardInterrupt:
         print('Ctrl-C')
     finally:
-        Tasks.Stop()
+        await Tasks.Stop()
 
 
 def Main():
