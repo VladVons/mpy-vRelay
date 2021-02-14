@@ -14,6 +14,7 @@ import uasyncio as asyncio
 #from Inc.Conf import Conf
 from Inc.Log import Log
 from Inc.Util import UFS
+from Inc.KbdTerm import TKbdTerm
 
 #from App.Utils import TWLanApp
 #from Inc.Plugin import TPlugin
@@ -33,7 +34,12 @@ async def ATest1():
         await asyncio.sleep(1)
 
 async def ATest2():
-    pass
+    KbdTerm = TKbdTerm()
+    while True:
+        C = KbdTerm.GetChr()
+        if (C):
+            print('C', C)
+        await asyncio.sleep(0.1)
 
 def Connect():
     if (Conf.STA_ESSID):
@@ -42,15 +48,15 @@ def Connect():
             print('Net OK')
 
 
-Test1()
+#Test1()
 #Connect()
 
 #asyncio.run(Test1())
 #print('---x1')
 
 #asyncio.run(ATest1())
-#loop = asyncio.get_event_loop()
-#loop.create_task(ATest1())
-#loop.create_task(ATest2())
-#loop.run_forever()
+loop = asyncio.get_event_loop()
+loop.create_task(ATest1())
+loop.create_task(ATest2())
+loop.run_forever()
 

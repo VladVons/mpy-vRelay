@@ -1,6 +1,6 @@
 '''
 Author:      Vladimir Vons, Oster Inc.
-Created:     2020.02.24
+Created:     2021.02.14
 License:     GNU, see LICENSE for more details
 Description:.
 '''
@@ -18,15 +18,14 @@ def GetInputChr():
     return R
 '''
 
-
 class TKbdTerm():
     def __init__(self):
         self.Poller = select.poll()
         self.Poller.register(sys.stdin, select.POLLIN)
 
     def GetChr(self):
-        if (self.Poller.ipoll()):
-            return sys.stdin.read(1)
+        for s, ev in self.Poller.poll(500):
+            return s.read(1)
 
     async def Input(self, aPrompt = ''):
         R = ''
