@@ -7,8 +7,7 @@ License:     GNU, see LICENSE for more details
 
 from Inc.Menu import TMenu
 from Inc.Conf import Conf
-from Inc.Util.UKbd import GetInputChr
-#
+
 
 class TMenuApp(TMenu):
     async def _ExecApi(self, aPath: str, aParam: list):

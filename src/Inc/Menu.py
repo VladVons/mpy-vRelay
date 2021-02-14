@@ -7,18 +7,18 @@ Description:
 
 import uasyncio as asyncio
 #
-from Inc.Util.UKbd  import GetInputStr, GetInputChr
 from Inc.Util.UObj import GetTree
 from Inc.Util.UArr import SortLD
+from Inc.KbdTerm  import TKbdTerm
 
 
 class TMenu():
     async def AskYN(self, aMsg: str):
-        Str = await GetInputStr('%s ?  Y/n:' % aMsg)
+        Str = await KbdTerm.Input('%s ?  Y/n:' % aMsg)
         return (Str) and (Str.lower() == 'y')
 
     async def WaitMsg(self, aMsg: str = '') -> str:
-        return await GetInputStr('%s (Press ENTER) ' % aMsg)
+        return await KbdTerm.Input('%s (Press ENTER) ' % aMsg)
 
     async def Exec(self, aFunc, aParam: list):
         if (aParam):
@@ -49,7 +49,7 @@ class TMenu():
                 break
 
             print(' 0', 'Exit')
-            Str = await GetInputStr('Enter choice: ')
+            Str = await KbdTerm.Input('Enter choice: ')
             if (Str == '') or (Str == '0') or (not Str.isdigit()):
                 break
 
@@ -73,7 +73,7 @@ class TMenu():
             ValDef = aDef.get(Name, ValDef)
             Last = Text[-1]
             while True:
-                Val = await GetInputStr('%s/%s) %s [%s]:' % (Idx, len(Items), Text, ValDef))
+                Val = await KbdTerm.Input('%s/%s) %s [%s]:' % (Idx, len(Items), Text, ValDef))
                 if (Val == '-'):
                     Val = ''
                 elif (not Val) and (ValDef):
@@ -97,10 +97,13 @@ class TMenu():
 
         while True:
             await asyncio.sleep(0.2)
-            Key = GetInputChr()
+            Key = KbdTerm.GetChr()
             if (Key == aKey):
                 await self.DoRun()
                 print(Msg)
 
     async def DoRun(self):
         pass
+
+
+KbdTerm = TKbdTerm()

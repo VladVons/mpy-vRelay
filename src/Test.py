@@ -6,6 +6,8 @@ import os
 import sys
 import uio
 import json
+import time
+import select
 import uasyncio as asyncio
 #
 #from Inc.Conf import Conf
@@ -15,30 +17,26 @@ from Inc.Util import UFS
 #from App.Utils import TWLanApp
 #from Inc.Plugin import TPlugin
 
-#UFS.MkDir('1/2/3/4')
-
-str1 = '1234'
-str1[1] = 'x'
-print(str1)
-
-
-def TestCB():
-    print('TestCB')
-
-
-async def Test1():
+def Test1():
+    poller = select.poll()
+    poller.register(sys.stdin, select.POLLIN)
     while True:
-        print('Test1')
+        events = poller.poll()
+        if (events):
+            char = sys.stdin.read(1)
+            print('char', char, ord(char))
+        #for Arr in poll.poll(5):
+            #print('Test1', Arr)
+            #poll.modify(sys.stdin, select.POLLIN)
+        #time.sleep(1)
+
+async def ATest1():
+    while True:
+        print('ATest1')
         await asyncio.sleep(1)
 
-
-async def Test2():
-    #Plugin = TPlugin()
-    #Plugin.LoadDir('App')
-    #Plugin.LoadDir('Plugin/App')
-    aData = {'delay': '1', 'async': '1'}
-    v = bool((aData.get('async', '0')))
-    print('v', v, type(v))
+async def ATest2():
+    pass
 
 def Connect():
     if (Conf.STA_ESSID):
@@ -47,16 +45,15 @@ def Connect():
             print('Net OK')
 
 
-
-#Stream()
+Test1()
 #Connect()
 
 #asyncio.run(Test1())
 #print('---x1')
 
-#asyncio.run(Test2())
+#asyncio.run(ATest1())
 #loop = asyncio.get_event_loop()
-#loop.create_task(Test1())
-#loop.create_task(Test2())
+#loop.create_task(ATest1())
+#loop.create_task(ATest2())
 #loop.run_forever()
 
