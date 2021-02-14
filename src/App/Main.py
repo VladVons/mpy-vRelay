@@ -46,7 +46,7 @@ async def Run():
         #Captive.Main()
         Plugin.LoadMod('App/Captive', True)
 
-    Plugin.LoadList(['App/HttpSrv', 'App/Menu'])
+    Plugin.LoadList(['App/HttpSrv', 'App/Menu', 'App/WDog'])
     Plugin.LoadDir('Plugin/App')
 
     try:

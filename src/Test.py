@@ -8,6 +8,7 @@ import uio
 import json
 import time
 import select
+import machine
 import uasyncio as asyncio
 #
 #from Inc.Conf import Conf
@@ -18,17 +19,13 @@ from Inc.Util import UFS
 #from Inc.Plugin import TPlugin
 
 def Test1():
-    poller = select.poll()
-    poller.register(sys.stdin, select.POLLIN)
+    wdt = machine.WDT()
+    Cnt = 0
     while True:
-        events = poller.poll()
-        if (events):
-            char = sys.stdin.read(1)
-            print('char', char, ord(char))
-        #for Arr in poll.poll(5):
-            #print('Test1', Arr)
-            #poll.modify(sys.stdin, select.POLLIN)
-        #time.sleep(1)
+        print('Cnt', Cnt)
+        time.sleep(0.1)
+        Cnt += 1
+
 
 async def ATest1():
     while True:

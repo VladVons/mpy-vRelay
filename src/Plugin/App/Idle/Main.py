@@ -8,7 +8,7 @@ Description:.
 
 import gc
 from network import WLAN, STA_IF
-from machine import WDT, Pin
+from machine import Pin
 #
 from Inc.Conf import Conf
 from Inc.Log  import Log
@@ -16,9 +16,6 @@ from Inc.Util import UHrd
 from Inc.Task import TTask, Tasks
 from App.Utils import Reset
 from App.Utils import TWLanApp
-
-
-wdt = WDT(timeout = Conf.get('WatchDog', 30 * 1000))
 
 
 class TTaskIdle(TTask):
@@ -56,9 +53,6 @@ class TTaskIdle(TTask):
         Net = WLAN(STA_IF)
         print('ifconfig', Net.ifconfig()[0])
 
-    def tWatchDog(self):
-        wdt.feed()
-
     async def tWatchConnect(self):
         Net = WLAN(STA_IF)
         if (not Net.isconnected):
@@ -74,7 +68,6 @@ class TTaskIdle(TTask):
     async def DoLoop(self):
         #Log.Print(1, 'i', 'TTaskIdle %s' % self.Cnt)
 
-        self.tWatchDog()
         await self.tWatchHost()
         await self.tWatchConnect()
         #self.tDSleep()
