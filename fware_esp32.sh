@@ -48,6 +48,7 @@ Make_MicroFirmware()
   export ESPIDF=$cDirMPY/esp-idf
   export BOARD=GENERIC
 
+  #export PATH=$PATH:$cDirMPY/esp-idf/tools:
   #source $cDirMPY/esp-idf/export.sh
 
   cd $cDirMPY/micropython/ports/esp32

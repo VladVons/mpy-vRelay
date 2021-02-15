@@ -3,7 +3,9 @@ Author:      Vladimir Vons, Oster Inc.
 Created:     2021.02.15
 License:     GNU, see LICENSE for more details
 Description:
+
 https://github.com/kipe/pycron
+https://crontab.guru/examples.html
 
 Minute  Hour    DOM     Month   DOW
 *       8-20    *       *       *
