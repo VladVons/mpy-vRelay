@@ -6,4 +6,4 @@ def Main():
     from Inc.Task import Tasks
     from .Main import TTaskIdle
 
-    Tasks.Add(TTaskIdle(), Conf.get('TIdle', 1), 'idle')
+    Tasks.Add(TTaskIdle(), Conf.get('TIdle', 2), 'idle')

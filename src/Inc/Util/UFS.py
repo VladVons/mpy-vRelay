@@ -11,6 +11,7 @@ import os
 def FileLoad(aName: str, aMode: str = 'r') -> str:
     with open(aName, aMode) as F:
         R = F.read()
+    return R 
 
 def FileStat(aName: str) -> tuple:
     try:

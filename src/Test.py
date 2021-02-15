@@ -19,6 +19,7 @@ from Inc.KbdTerm import TKbdTerm
 #from App.Utils import TWLanApp
 #from Inc.Plugin import TPlugin
 
+
 def Test1():
     wdt = machine.WDT()
     Cnt = 0
@@ -28,19 +29,6 @@ def Test1():
         Cnt += 1
 
 
-async def ATest1():
-    while True:
-        print('ATest1')
-        await asyncio.sleep(1)
-
-async def ATest2():
-    KbdTerm = TKbdTerm()
-    while True:
-        C = KbdTerm.GetChr()
-        if (C):
-            print('C', C)
-        await asyncio.sleep(0.1)
-
 def Connect():
     if (Conf.STA_ESSID):
         WLan = TWLanApp()
@@ -48,15 +36,30 @@ def Connect():
             print('Net OK')
 
 
+
+class TClass():
+    async def ATest1(self):
+        while True:
+            print('ATest1')
+            await asyncio.sleep(1)
+
+    async def ATest2(self):
+        KbdTerm = TKbdTerm()
+        while True:
+            C = KbdTerm.GetChr()
+            if (C):
+                print('C', C)
+            await asyncio.sleep(0.1)
+
+
+    def Run(self):
+        loop = asyncio.get_event_loop()
+        loop.create_task(self.ATest1())
+        loop.create_task(self.ATest2())
+        loop.run_forever()
+
 #Test1()
 #Connect()
 
-#asyncio.run(Test1())
-#print('---x1')
-
-#asyncio.run(ATest1())
-loop = asyncio.get_event_loop()
-loop.create_task(ATest1())
-loop.create_task(ATest2())
-loop.run_forever()
-
+#Class = TClass()
+#Class.Run()

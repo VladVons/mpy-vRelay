@@ -10,7 +10,7 @@ import time
 import os
 import sys
 #
-from .Util import UTime
+from .Util.UTime import GetDate, GetTime
 
 
 class TEcho():
@@ -47,7 +47,7 @@ class TLog():
         R = '' 
         if (aLevel <= self.Level):
             self.Cnt += 1
-            R = '%s,%03d,%d,%s,%s%s' % (UTime.GetDate(), self.Cnt, aLevel, aType, ' ' * aLevel, list(aParam))
+            R = '%s,%s,%03d,%d,%s,%s%s' % (GetDate(), GetTime(), self.Cnt, aLevel, aType, ' ' * aLevel, list(aParam))
             if (aType == 'x') and (len(aParam) > 1):
                 sys.print_exception(aParam[1])
 

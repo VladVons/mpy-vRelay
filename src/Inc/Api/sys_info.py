@@ -13,7 +13,7 @@ import network
 #
 from Inc.Conf import Conf
 from Inc.WLan import GetMac
-from Inc.Util import UTime
+from Inc.Util.UTime import GetDate, GetTime
 from Inc.Api import TApiBase
 
 __version__ = '1.1.01, 2021.01.30'
@@ -40,7 +40,7 @@ class TApi(TApiBase):
             'IP STA':   NetSTA.ifconfig(),
             'IP AP':    NetAP.ifconfig(),
             'Disk':     os.statvfs('/'),
-            'Date':     UTime.GetDate(),
+            'Date':     '%s, %s'% (GetDate(), GetTime()),
             'Uptime':   int(time.ticks_ms() / 1000)
         }
         return R

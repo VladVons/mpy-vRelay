@@ -56,7 +56,7 @@ Make_MicroFirmware()
   make submodules
 
   cd $cDirCur
-  ln -s $cDirMPY/micropython/ports/esp32/build-GENERIC/firmware.bin ./_inf/firmware.bin
+  #ln -s $cDirMPY/micropython/ports/esp32/build-GENERIC/firmware.bin ./_inf/firmware.bin
 }
 
 
@@ -77,9 +77,10 @@ InstallPkg()
 
 
 #Install
-#Get_MicroPython
 #Make_EspOpenSdk
+#
+#Get_MicroPython
 #Make_MicroPython
 #
-InstallPkg
+#InstallPkg
 Make_MicroFirmware
