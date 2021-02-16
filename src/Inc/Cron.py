@@ -10,21 +10,28 @@ https://crontab.guru/examples.html
 Minute  Hour    DOM     Month   DOW
 *       8-20    *       *       *
 
-IsNow('* 6,7,8-20 * * *')
+IsNow('*/3 6,3-5 * * 2')
 '''
 
 
 import time
 
 def _Parse(aValue: str, aTarget: int) -> bool:
-    if (aValue == '*'):
-        return True
-
     for Value in aValue.split(','):
-        if ('-' in Value):
+        # *
+        if (aValue == '*'):
+            return True
+        # 3-5
+        elif ('-' in Value):
             Start, End = Value.split('-')
-            if (aTarget in range(int(Start), int(End) + 1)):
+            if (int(Start) <= aTarget <= int(End)):
                 return True
+        # */3
+        elif ('/' in Value):
+            _, Step = Value.split('/')
+            if (aTarget % int(Step) == 0):
+                return True
+        # 2
         elif (aTarget == int(Value)):
             return True
     return False

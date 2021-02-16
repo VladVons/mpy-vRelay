@@ -63,3 +63,9 @@ class TClass():
 
 #Class = TClass()
 #Class.Run()
+
+
+#Minute  Hour    DOM     Month   DOW
+from Inc.Cron import IsNow
+print(IsNow('38-40 * * * *'))
+
