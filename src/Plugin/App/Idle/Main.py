@@ -9,8 +9,10 @@ Description:.
 import gc
 from network import WLAN, STA_IF
 from machine import Pin
+import uasyncio as asyncio
 #
 from Inc.Conf import Conf
+from Inc.Plugin import Plugin
 from Inc.Log  import Log
 from App.Utils import TWLanApp
 
@@ -73,7 +75,7 @@ class TIdle():
     #async def DoPost(self, aOwner: TTask, aMsg):
     #    print('InIdle', aOwner.Alias, aMsg)
 
-    sync def Run():
+    async def Run(self):
         while True:
             await self.tWatchHost()
             await self.tWatchConnect()
@@ -84,3 +86,6 @@ class TIdle():
 
             self.CntLoop += 1
             await asyncio.sleep(2)
+
+            if (self.CntLoop % 3 == 0):
+                await Plugin.Post(self, 'from Idle')

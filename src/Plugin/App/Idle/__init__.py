@@ -2,6 +2,9 @@ from .Options import *
 
 
 def Main():
+    import uasyncio as asyncio
     from .Main import TIdle
 
-    asyncio.create_task(TIdle().Run())
+    R = TIdle()
+    asyncio.create_task(R.Run())
+    return R

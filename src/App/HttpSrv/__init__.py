@@ -5,4 +5,6 @@ def Main():
     import uasyncio as asyncio
     from .Main import THttpApiApp
 
-    asyncio.create_task(THttpApiApp().Run())
+    R = THttpApiApp()
+    asyncio.create_task(R.Run())
+    return R

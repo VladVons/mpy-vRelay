@@ -66,6 +66,13 @@ class TClass():
 
 
 #Minute  Hour    DOM     Month   DOW
-from Inc.Cron import IsNow
-print(IsNow('38-40 * * * *'))
+#from Inc.Cron import IsNow
+#print(IsNow('38-40 * * * *'))
+
+Dict1 = {}
+Dict1['One'] = 1
+Dict1['Two'] = 2
+Val = 'xxx'
+for Key in Dict1.values():
+    print(Key, Val)
 

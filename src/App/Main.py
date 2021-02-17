@@ -12,7 +12,7 @@ import uasyncio as asyncio
 #
 from Inc.Conf import Conf
 from Inc.Log  import Log
-from Inc.Plugin import TPlugin
+from Inc.Plugin import Plugin
 from Inc.Util import UHrd
 from .Utils   import TWLanApp
 
@@ -26,8 +26,6 @@ async def Run():
     print('DSleep', DSleep)
 
     await UHrd.LedFlash(Conf.get('PinLed', 2), 3, 0.5)
-
-    Plugin = TPlugin()
 
     WLan = TWLanApp()
     if (Conf.STA_ESSID):

@@ -8,13 +8,12 @@ Description:
 import os, sys, gc
 #
 from Inc.Log  import Log
-from Inc.Util.UFS import FileLoad
 
 
 class TPlugin():
     def __init__(self):
         self.Data = {}
- 
+
     def LoadDir(self, aDir: str):
         Files = os.ilistdir(aDir)
         for Info in Files:
@@ -33,8 +32,7 @@ class TPlugin():
 
             Mod = __import__(aPath)
             if (aForce) or (getattr(Mod, 'AutoLoad', False)):
-                self.Data[aPath] = Mod
-                Mod.Main()
+                self.Data[aPath] = Mod.Main()
 
                 gc.collect()
                 Log.Print(1, 'i', 'Load()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - gc.mem_free(), gc.mem_free()))
@@ -43,3 +41,11 @@ class TPlugin():
                 for Item in sys.modules:
                     if (aPath in Item):
                         del sys.modules[Item]
+
+    async def Post(self, aOwner, aMsg):
+        for Obj in self.Data.values():
+            if (Obj != aOwner) and (hasattr(Obj, '_DoPost')):
+                if (await Obj._DoPost(aOwner, aMsg)):
+                    break
+
+Plugin = TPlugin()
