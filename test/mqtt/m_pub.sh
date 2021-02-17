@@ -1,10 +1,12 @@
 #!/bin/bash
 
 #http://www.steves-internet-guide.com/mosquitto_pub-sub-clients/
+#apt install mosquitto-clients
 
 cHost="vpn2.oster.com.ua"
-cTopic="MyTopic"
+cTopic="aTopic"
 cMsg="m_pub.sh"
+
 
 Pub()
 {
@@ -16,6 +18,7 @@ Pub()
     Msg="$cMsg $Cnt"
     echo $Msg
     mosquitto_pub -h $cHost -t $cTopic -m "$Msg" -d
+
     sleep 3
   done
 }

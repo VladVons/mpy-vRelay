@@ -35,9 +35,6 @@ async def Run():
             if (not DSleep):
                 from Inc.Util.UTime import SetTime
                 SetTime(Conf.get('TZone', 0))
-
-            if (Conf.Mqtt_Host):
-                Plugin.LoadMod('App/Mqtt')
     else:
         #import App.Captive as NetCaptive
         #Captive.Main()
