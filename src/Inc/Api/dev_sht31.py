@@ -14,6 +14,11 @@ from Inc.Log import Log
 
 
 class TApi(TApiBase):
+    Param = {
+        'scl': 5,
+        'sda': 4
+    }
+
     async def Exec(self, aScl: int, aSda: int) -> dict:
         i2c = machine.I2C(scl = machine.Pin(aScl), sda = machine.Pin(aSda))
         try:
@@ -25,6 +30,4 @@ class TApi(TApiBase):
         return {'temperature': R[0], 'humidity': R[1]}
 
     async def Query(self, aData: dict) -> dict:
-        aScl = int(aData.get('scl', '5'))
-        aSda = int(aData.get('sda', '4'))
-        return await self.Exec(aScl, aSda)
+        return await self.ExecDef(aData, ['scl', 'sda'])

@@ -5,8 +5,6 @@ License:     GNU, see LICENSE for more details
 Description: micropython ESP8266
 '''
 
-
-
 class TApiBase():
     Param = {}
 

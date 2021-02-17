@@ -27,8 +27,6 @@ async def Reset(aSec: int = 0):
 
 class TWLanApp(TWLan):
     async def TryConnect(self, aCnt: int = 3) -> bool:
-        await self.EnableAP(False)
-
         for Cnt in range(aCnt):
             await asyncio.sleep((Cnt + 1) * 2)
 

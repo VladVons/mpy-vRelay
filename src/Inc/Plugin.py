@@ -42,6 +42,9 @@ class TPlugin():
                     if (aPath in Item):
                         del sys.modules[Item]
 
+    def Get(self, aPath: str):
+        return self.Data.get(aPath)
+
     async def Post(self, aOwner, aMsg):
         for Obj in self.Data.values():
             if (Obj != aOwner) and (hasattr(Obj, '_DoPost')):

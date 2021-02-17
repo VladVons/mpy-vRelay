@@ -5,6 +5,7 @@ License:     GNU, see LICENSE for more details
 Description: micropython ESP8266
              DS1820 temperature sensor
 '''
+
 import binascii
 
 from Inc.Dev.ds18b20 import DS1820

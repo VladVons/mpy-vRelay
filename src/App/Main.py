@@ -29,6 +29,7 @@ async def Run():
 
     WLan = TWLanApp()
     if (Conf.STA_ESSID):
+        await WLan.EnableAP(False)
         if (await WLan.TryConnect()):
             print()
 
@@ -36,11 +37,11 @@ async def Run():
                 from Inc.Util.UTime import SetTime
                 SetTime(Conf.get('TZone', 0))
     else:
-        #import App.Captive as NetCaptive
+        #import App.Captive as Captive
         #Captive.Main()
         Plugin.LoadMod('App/Captive')
 
-    Plugin.LoadDir('App')
+    Plugin.LoadList(['App/HttpSrv', 'App/Menu', 'App/Mqtt', 'App/WDog'])
     Plugin.LoadDir('Plugin/App')
 
     try:

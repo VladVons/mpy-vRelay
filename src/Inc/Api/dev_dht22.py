@@ -29,5 +29,4 @@ class TApi(TApiBase):
         return {'temperature': R[0], 'humidity': R[1]}
 
     async def Query(self, aData: dict) -> dict:
-        Pin = self.Get(aData, 'pin')
-        return await self.Exec(Pin)
+        return await self.ExecDef(aData, ['pin'])

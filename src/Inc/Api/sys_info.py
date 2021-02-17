@@ -16,7 +16,7 @@ from Inc.WLan import GetMac
 from Inc.Util.UTime import GetDate, GetTime
 from Inc.Api import TApiBase
 
-__version__ = '1.1.01, 2021.01.30'
+__version__ = '1.1.02, 2021.02.17'
 __author__  = 'Vladimir Vons, vladvons@gmail.com'
 
 

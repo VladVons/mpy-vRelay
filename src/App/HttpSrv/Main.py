@@ -5,7 +5,6 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-
 import json
 #
 from Inc.Util import UStr, UFS
@@ -34,7 +33,6 @@ class THttpApiApp(THttpApi):
                 Dir = self.DirApiUser
             else:
                 Dir = self.DirApiCore
-            #Lib = __import__((self.DirApi + '/' + Name).replace('/', '.'), None, None, ['TApi'])
             Lib = __import__(Dir + '/' + Name)
             R = await Lib.TApi().Query(Query)
             R = json.dumps(R) + '\r\n'
