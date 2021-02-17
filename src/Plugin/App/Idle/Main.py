@@ -87,7 +87,8 @@ class TIdle():
             self.CntLoop += 1
             await asyncio.sleep(2)
 
-            if (self.CntLoop % 3 == 0):
+            #if (self.CntLoop % 3 == 0):
                 #await Plugin.Post(self, 'from Idle')
-                Obj = Plugin.Get('App/Mqtt')
-                Obj.Publish('aTopic1', self.CntLoop)
+                #Obj = Plugin.Get('App/Mqtt')
+                #if (Obj):
+                #    Obj.Publish('aTopic1', self.CntLoop)
