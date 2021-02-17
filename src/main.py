@@ -5,9 +5,7 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-import time
-import gc
-import esp
+import time, gc, esp
 
 
 def Main():

@@ -9,16 +9,15 @@ import os
 
 
 def FileLoad(aName: str, aMode: str = 'r') -> str:
-    with open(aName, aMode) as F:
-        R = F.read()
-    return R 
+    try:
+        with open(aName, aMode) as F:
+            return F.read()
+    except: pass
 
 def FileStat(aName: str) -> tuple:
     try:
-        R = os.stat(aName)
-    except:
-        R = None
-    return R
+        return os.stat(aName)
+    except: pass
 
 def FileExists(aName: str) -> bool:
     return FileStat(aName) is not None

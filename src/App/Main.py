@@ -12,7 +12,6 @@ import uasyncio as asyncio
 #
 from Inc.Conf import Conf
 from Inc.Log  import Log
-from Inc.Task import Tasks
 from Inc.Plugin import TPlugin
 from Inc.Util import UHrd
 from .Utils   import TWLanApp
@@ -40,21 +39,23 @@ async def Run():
                 SetTime(Conf.get('TZone', 0))
 
             if (Conf.Mqtt_Host):
-                Plugin.LoadMod('App/Mqtt', True)
+                Plugin.LoadMod('App/Mqtt')
     else:
         #import App.Captive as NetCaptive
         #Captive.Main()
-        Plugin.LoadMod('App/Captive', True)
+        Plugin.LoadMod('App/Captive')
 
     Plugin.LoadList(['App/HttpSrv', 'App/Menu', 'App/WDog'])
     Plugin.LoadDir('Plugin/App')
 
     try:
-        Tasks.Run()
+        Loop = asyncio.get_event_loop()
+        Loop.run_forever()
     except KeyboardInterrupt:
         print('Ctrl-C')
     finally:
-        await Tasks.Stop()
+        #await Tasks.Stop()
+        pass
 
 
 def Main():

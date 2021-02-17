@@ -2,8 +2,6 @@ from .Options import *
 
 
 def Main():
-    from Inc.Conf import Conf
-    from Inc.Task import Tasks
-    from .Main import TTaskIdle
+    from .Main import TIdle
 
-    Tasks.Add(TTaskIdle(), Conf.get('TIdle', 2), 'idle')
+    asyncio.create_task(TIdle().Run())

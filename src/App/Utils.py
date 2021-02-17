@@ -17,11 +17,11 @@ from Inc.Util import UHrd
 
 
 async def Reset(aSec: int = 0):
-    from Inc.Task import Tasks
+    #from Inc.Task import Tasks
 
     Log.Print(1, 'i', 'Reset', aSec)
     await UHrd.LedFlash(2, 3, 0.2)
-    await Tasks.Stop()
+    #await Tasks.Stop()
     UHrd.Reset(aSec)
 
 

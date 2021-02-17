@@ -7,24 +7,13 @@ Description:.
 https://ansonvandoren.com/posts/esp8266-captive-web-portal-part-1/
 '''
 
-
+import uasyncio as asyncio
 import usocket as socket
-#
-from Inc.Task import TTask
 
 
-class TTaskCaptive(TTask): 
-    def __init__(self, aIP: str):
-        self.IP = aIP
-
-        Sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        Sock.setblocking(False)
-        Sock.bind(('', 53))
-        self.Sock = Sock
-
-    def GetAnswer(self, aData: bytearray) -> bytes:
-        #print("In datagram ...", self.IP)
-
+class TCaptive():
+    @staticmethod
+    def _GetAnswer(aIP: str, aData: bytearray) -> bytes:
         # ** create the answer header **
         # copy the ID from incoming request
         R = aData[:2]
@@ -47,14 +36,19 @@ class TTaskCaptive(TTask):
         # set response length to 4 bytes (to hold one IPv4 address)
         R += b"\x00\x04"
         # now actually send the IP address as 4 bytes (without the "."s)
-        R += bytes(map(int, self.IP.split(".")))
+        R += bytes(map(int, aIP.split(".")))
         return R
 
-    async def DoLoop(self):
-        try:
-            Data, Addr = self.Sock.recvfrom(1024)
-            Data = self.GetAnswer(Data)
-            self.Sock.sendto(Data, Addr)
-            # here is the gateway to listen HTTP on /
-        except: # timeout
-            pass
+    async def Run(self, aIP: str):
+        Sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        Sock.setblocking(False)
+        Sock.bind(('', 53))
+
+        while True:
+            try:
+                Data, Addr = Sock.recvfrom(1024)
+                Data = self._GetAnswer(aIP, Data)
+                Sock.sendto(Data, Addr)
+                # here is the gateway to listen HTTP on /
+            except: # timeout
+                await asyncio.sleep(0.1)

@@ -6,4 +6,4 @@ async def Run():
     wdt = WDT()
     while True:
         wdt.feed()
-        await asyncio.sleep(0.1)
+        await asyncio.sleep(0.5)
