@@ -45,7 +45,8 @@ class TPlugin():
     async def Post(self, aOwner, aMsg):
         for Obj in self.Data.values():
             if (Obj != aOwner) and (hasattr(Obj, '_DoPost')):
-                if (await Obj._DoPost(aOwner, aMsg)):
-                    break
+                R = await Obj._DoPost(aOwner, aMsg)
+                if (R):
+                    return R
 
 Plugin = TPlugin()

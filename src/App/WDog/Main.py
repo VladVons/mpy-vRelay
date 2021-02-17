@@ -9,5 +9,6 @@ class TWDog():
             wdt.feed()
             await asyncio.sleep(0.5)
 
-    async def _DoPost(self, aOwner, aMsg):
-        print('Im TWDog', aOwner, aMsg)
+    #async def _DoPost(self, aOwner, aMsg):
+    #    print('Im TWDog', aOwner, aMsg)
+
