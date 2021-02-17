@@ -35,7 +35,7 @@ class TPlugin():
                 self.Data[aPath] = Mod.Main()
 
                 gc.collect()
-                Log.Print(1, 'i', 'Load()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - gc.mem_free(), gc.mem_free()))
+                Log.Print(1, 'i', 'LoadMod()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - gc.mem_free(), gc.mem_free()))
             else:
                 del Mod
                 for Item in sys.modules:
