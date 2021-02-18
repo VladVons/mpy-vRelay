@@ -10,8 +10,7 @@ K - Key
 V - Value
 '''
 
-import os
-import sys
+import os, sys
 #
 from .Util import UFS
 from .Log  import Log

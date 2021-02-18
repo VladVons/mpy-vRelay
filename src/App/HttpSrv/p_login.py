@@ -1,4 +1,6 @@
 from Inc.Conf import Conf
+from Inc.ApiParse import QueryToDict
+
 
 async def DoUrl(aParent, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter, aHead: dict):
     LenData = int(aHead.get('content-length', '0'))
@@ -6,7 +8,7 @@ async def DoUrl(aParent, aReader: asyncio.StreamReader, aWriter: asyncio.StreamW
         R = 'about to reboot'
 
         Data = await aReader.read(LenData)
-        Query = aParent.ParseQuery(Data.decode('utf-8'))
+        Query = QueryToDict(Data.decode('utf-8'))
         Conf['STA_ESSID'] = Query.get('_STA_ESSID')
         Conf['STA_Paswd'] = Query.get('_STA_Paswd')
         Conf.Save()

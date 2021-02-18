@@ -5,7 +5,7 @@
 
 cHost="vpn2.oster.com.ua"
 cTopic="aTopic"
-cMsg="m_pub.sh"
+cMsg="sys_print.py?text=hello world"
 
 
 Pub()

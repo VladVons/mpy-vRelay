@@ -2,6 +2,7 @@ import json
 #
 from Inc.Http.MulUpload import TMulUpload
 from Inc.Util import UStr, UFS
+from Inc.ApiParse import QueryToDict
 
 
 async def DoUrl(aParent, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter, aHead: dict):
@@ -10,7 +11,7 @@ async def DoUrl(aParent, aReader: asyncio.StreamReader, aWriter: asyncio.StreamW
         Ref = aHead.get('referer')
         if (Ref):
             Url, QueryR = UStr.SplitPad(2, Ref, '?')
-            QueryR = aParent.ParseQuery(QueryR)
+            QueryR = QueryToDict(QueryR)
             Dir = QueryR.get('path', '')
             UFS.MkDir(Dir)
         else:

@@ -65,14 +65,6 @@ class THttpApi():
         return 'p' + aPath.replace('/', '_')
 
     @staticmethod
-    def ParseQuery(aQuery: str) -> dict:
-        R = {}
-        for i in aQuery.split('&'):
-            Key, Value = UStr.SplitPad(2, i, '=')
-            R[Key] = Value
-        return R
-
-    @staticmethod
     async def FileToStream(aWriter: asyncio.StreamWriter, aName: str, aMode: str = 'r'):
         with open(aName, aMode) as F:
             while True:

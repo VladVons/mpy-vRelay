@@ -14,7 +14,7 @@ class TApiBase():
         if (Val is None):
             Val = Def
         else:
-            Type = type(Def).__name__   
+            Type = type(Def).__name__
             if (Type == 'int'):
                 Val = int(Val)
             elif (Type == 'float'):
@@ -22,7 +22,6 @@ class TApiBase():
             elif (Type == 'bool'):
                 Val = bool(int(Val))
         return Val
-
 
     async def ExecDef(self, aData: dict, aParam: list):
         Diff = set(list(aData.keys())) - set(list(self.Param.keys()))
@@ -36,4 +35,4 @@ class TApiBase():
         return await self.Exec(*Arr)
 
     async def Exec(self):
-        pass
+        raise NotImplementedError()

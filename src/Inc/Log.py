@@ -6,9 +6,7 @@ Description:
 '''
 
 
-import time
-import os
-import sys
+import time, os, sys
 #
 from .Util.UTime import GetDate, GetTime
 

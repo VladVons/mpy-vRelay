@@ -179,8 +179,15 @@ EspRelease()
 }
 
 
+SizePy()
+{
+  find ./src -name '*.py' | xargs wc
+}
+
+
 clear
 case $1 in
+    SizePy)         "$1"        $2 ;;
     Install)        "$1"        $2 ;;
     Upgrade)        "$1"        $2 ;;
     EspFirmware|w)  EspFirmware $2 ;;

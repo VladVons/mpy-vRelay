@@ -9,11 +9,17 @@ import uasyncio as asyncio
 #
 from Inc.Mqtt import MQTTClient
 from Inc.Plugin import Plugin
+from Inc.ApiParse import QueryToDict, QueryUrl
+from Inc.Util.UStr import SplitPad
 
 
 class TMqtt():
     async def DoSubscribe(self, aTopic: str, aMsg):
-        print('DoSubscribe', aTopic, aMsg)
+        Path, Query = SplitPad(2, aMsg.decode('utf-8'), '?')
+        Query = QueryToDict(Query)
+        R = await QueryUrl(Path, Query)
+        print('DoSubscribe', aTopic, aMsg, R)
+
         await Plugin.Post(self, [aTopic, aMsg])
 
     def Publish(self, aTopic: str, aMsg: str):
