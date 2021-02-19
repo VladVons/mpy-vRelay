@@ -183,6 +183,7 @@ class MQTTClient:
 
         if res == b"":
             raise OSError(-1)
+
         if res == b"\xd0":  # PINGRESP
             sz = self.sock.read(1)[0]
             assert sz == 0

@@ -75,9 +75,9 @@ class TIdle():
     #async def DoPost(self, aOwner: TTask, aMsg):
     #    print('InIdle', aOwner.Alias, aMsg)
 
-    async def _DoPost(self, aOwner, aMsg):
-        print('Im Idle', aOwner, aMsg)
-        return 'from Idle'
+    #async def _DoPost(self, aOwner, aMsg):
+    #    print('Im Idle', aOwner, aMsg)
+    #    return 'from Idle'
 
     async def Run(self, aSleep: float = 2):
         while True:

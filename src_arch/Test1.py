@@ -11,68 +11,55 @@ import select
 import machine
 import uasyncio as asyncio
 #
-#from Inc.Conf import Conf
-from Inc.Log import Log
-from Inc.Util import UFS
-from Inc.KbdTerm import TKbdTerm
-
-#from App.Utils import TWLanApp
-#from Inc.Plugin import TPlugin
+from Inc.Conf import Conf
 
 
 def Test1():
     wdt = machine.WDT()
-    Cnt = 0
+
+    Loops = 0
     while True:
-        print('Cnt', Cnt)
+        Loops += 1
+        print('Loops', Loops)
         time.sleep(0.1)
-        Cnt += 1
-
-
-def Connect():
-    if (Conf.STA_ESSID):
-        WLan = TWLanApp()
-        if (WLan.TryConnect()):
-            print('Net OK')
-
 
 
 class TClass():
-    async def ATest1(self):
+    async def Test1(self):
+        from Inc.Util.UNet import CheckHost
         while True:
-            print('ATest1')
+            State = await CheckHost('8.8.8.8', 53, 2)
+            if (not State):
+                await self.Connect()
+
+            print('Test1', State)
+            await asyncio.sleep(5)
+
+    async def Prove(self):
+        Loops = 0
+        while True:
+            Loops += 1
+            print('Prove', Loops)
             await asyncio.sleep(1)
-
-    async def ATest2(self):
-        KbdTerm = TKbdTerm()
-        while True:
-            C = KbdTerm.GetChr()
-            if (C):
-                print('C', C)
-            await asyncio.sleep(0.1)
-
+ 
+    async def Connect(self):
+        from App.Utils import TWLanApp
+        if (Conf.STA_ESSID):
+            WLan = TWLanApp()
+            if (await WLan.TryConnect()):
+                print('Connect Ok')
+            else:
+                print('Connect Err')
 
     def Run(self):
+        asyncio.run(self.Connect())
+
         loop = asyncio.get_event_loop()
-        loop.create_task(self.ATest1())
-        loop.create_task(self.ATest2())
+        loop.create_task(self.Prove())
+        loop.create_task(self.Test1())
         loop.run_forever()
 
 #Test1()
-#Connect()
 
-#Class = TClass()
-#Class.Run()
-
-
-#Minute  Hour    DOM     Month   DOW
-#from Inc.Cron import IsNow
-#print(IsNow('38-40 * * * *'))
-
-Dict1 = {}
-Dict1['One'] = 1
-Dict1['Two'] = 2
-Val = 'xxx'
-for Key in Dict1.values():
-    print(Key, Val)
-
+Class = TClass()
+Class.Run()

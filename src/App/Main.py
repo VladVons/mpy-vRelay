@@ -42,7 +42,11 @@ async def Run():
         Plugin.LoadMod('App/Captive')
 
     #Plugin.LoadList(['-App/HttpSrv', '-App/Menu', 'App/Mqtt', '-App/WDog'])
-    Plugin.LoadList(['App/HttpSrv', 'App/Menu', 'App/Mqtt', 'App/WDog'])
+    Skip = Conf.get('PluginSkip', '')
+    for Item in 'HttpSrv,Menu,Mqtt,WDog'.split(','):
+        if (not Item in Skip):
+            Plugin.LoadMod('App/%s' % (Item))
+
     Plugin.LoadDir('Plugin/App')
 
     try:

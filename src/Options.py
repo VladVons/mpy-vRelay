@@ -24,3 +24,5 @@ PinSnd = 13
 # Watch host reboot
 #WatchHost = '10.10.10.10'
 WatchHost_Cnt = 60
+
+PluginSkip='WDog'

@@ -5,19 +5,10 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-#import socket
 import uasyncio as asyncio
 #
 from Inc.Util.UStr import SplitPad
 
-
-async def CheckHost(aHost: str, aPort: int = 80, aTimeOut: int = 1) -> bool:
-    try:
-        await asyncio.wait_for(asyncio.open_connection(aHost, aPort), timeout=aTimeOut)
-        R = True
-    except:
-        R = False
-    return R
 
 async def ReadHead(aReader: asyncio.StreamReader, aServ = True) -> dict:
     R = {}

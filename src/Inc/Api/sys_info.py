@@ -15,7 +15,7 @@ from Inc.Conf import Conf
 from Inc.WLan import GetMac
 from Inc.Util.UTime import GetDate, GetTime
 
-__version__ = '1.1.02, 2021.02.17'
+__version__ = '1.1.04, 2021.02.19'
 __author__  = 'Vladimir Vons, vladvons@gmail.com'
 
 
@@ -31,8 +31,7 @@ class TApi():
             'FirmWare': os.uname().version,
             'Python':   '%s.%s.%s' % (sys.version_info[0], sys.version_info[1], sys.version_info[2]),
             'Platform': sys.platform,
-            'Alias':    Conf.Alias,
-            'Descr':    Conf.Descr,
+            'Descr':    '%s, %s' % (Conf.Alias, Conf.Descr),
             'MemFree':  gc.mem_free(),
             'MemAlloc': gc.mem_alloc(),
             'MAC':      GetMac(NetSTA),

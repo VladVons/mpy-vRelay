@@ -22,7 +22,7 @@ Pub()
     echo $Msg
     mosquitto_pub -h $cHost -t $cTopic -m "$Msg" -d
 
-    sleep 5
+    sleep 10
   done
 }
 

@@ -41,7 +41,7 @@ class TWLanApp(TWLan):
         Net = network.WLAN(network.STA_IF)
         Host = Conf.get('WatchHost', Net.ifconfig()[2]) # or gateway
 
-        from Inc.Http.HttpLib import CheckHost
+        from Inc.Util.UNet import CheckHost
         if (not await CheckHost(Host, 80, 5)):
             Log.Print(1, 'i', 'CheckConnect')
             Net.disconnect()
