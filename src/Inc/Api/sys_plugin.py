@@ -1,16 +1,16 @@
 '''
 Author:      Vladimir Vons <VladVons@gmail.com>
-Created:     2021.02.06
+Created:     2021.02.19
 License:     GNU, see LICENSE for more details
-Description: 
+Description:.
 '''
 
-from Inc.Conf import Conf
+from Inc.Plugin import Plugin
 
 
 class TApi():
     async def Exec(self) -> dict:
-        return Conf.Keys()
+        return list(Plugin.Data.keys())
 
     async def Query(self, aData: dict) -> dict:
         return await self.Exec()

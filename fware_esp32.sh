@@ -65,8 +65,8 @@ InstallPkg()
 {
   Log "$0->$FUNCNAME($*)"
 
-  $cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('umqtt.simple')"
-  cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
+  #$cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('umqtt.simple')"
+  #cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
 
   #$cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('aiohttp')"
   #cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/

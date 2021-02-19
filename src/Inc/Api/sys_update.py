@@ -49,7 +49,6 @@ class TApi(TApiBase):
         R = await TApi.DownloadList(aUrl)
         return {'result': R, 'alias': Conf.get('Alias'), 'hint': 'Reset ?'}
 
-
     async def Query(self, aData: dict) -> dict:
         Url = aData.get('url')
         return await self.Exec(Url)

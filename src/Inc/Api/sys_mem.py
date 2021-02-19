@@ -6,11 +6,9 @@ Description:.
 '''
 
 import gc
-#
-from Inc.Api import TApiBase
 
 
-class TApi(TApiBase):
+class TApi():
     async def Exec(self) -> dict:
         gc.collect()
 

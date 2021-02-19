@@ -4,11 +4,11 @@
 #apt install mosquitto-clients
 
 cHost="vpn2.oster.com.ua"
-#cTopic="vRelay/sub/Url"
-#cMsg="sys_print.py?text=hello world"
-
-cTopic="vRelay/sub/Plugin.App.Therm"
+cTopic="vRelay/sub/Url"
 cMsg="sys_print.py?text=hello world"
+
+#cTopic="vRelay/sub/Plugin.App.Therm"
+#cMsg="sys_print.py?text=hello world"
 
 
 Pub()
