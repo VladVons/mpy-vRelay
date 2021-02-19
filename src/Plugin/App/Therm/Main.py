@@ -13,7 +13,7 @@ from Inc.Log  import Log
 from Inc.Hyster import THyster
 
 #from Inc.Api.dev_dht22 import TApi
-from Inc.Api.emu_rand import TApi
+from Inc.Api.emu_cycle import TApi
 
 
 class TTherm():

@@ -6,13 +6,13 @@ Description:.
 '''
 
 import machine
+import uasyncio as asyncio
 #
-from Inc.Conf import Conf
+from Inc.Plugin import Plugin
 from Inc.Util import UHrd
-from Inc.Task import TTask, Tasks
 
 
-class TTaskDoorCheck(TTask):
+class TDoorCheck():
     def __init__(self, aPinBtn: int, aPinLed: int, aPinSnd: int):
         self.PinSnd: int = aPinSnd
         self.PinLed: int = aPinLed
@@ -35,10 +35,11 @@ class TTaskDoorCheck(TTask):
                 self.CntDoor += 1
                 self.Beep()
 
-                mqtt = Tasks.Find('mqtt')
-                if (mqtt):
-                    print('send mqtt DoorBtn')
-                    mqtt.Publish('MyTopic1', 'CntDoor %s' % self.CntDoor)
+                Mqtt = Plugin.Get('App/Mqtt')
+                if (Mqtt):
+                    Mqtt.Publish('MyTopic1', 'CntDoor %s' % self.CntDoor)
 
-    async def DoLoop(self):
-        await self.tCheck()
+    async def Run(self, aSleep: int = 1):
+        while True:
+            await self.tCheck()
+            await asyncio.sleep(aSleep)

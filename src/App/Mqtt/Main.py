@@ -19,9 +19,10 @@ from App.Utils import TWLanApp
 
 class TMqtt():
     async def DoSubscribe(self, aTopic: str, aMsg):
+        aMsg = aMsg.decode('utf-8')
         tId, tType, tApi = SplitPad(3, aTopic.decode('utf-8'), '/')
         if (tApi == 'Url'):
-            Path, Query = SplitPad(2, aMsg.decode('utf-8'), '?')
+            Path, Query = SplitPad(2, aMsg, '?')
             Query = QueryToDict(Query)
             Obj = GetApi(Path, Query)
             R = await Obj.Query(Query)
@@ -29,7 +30,7 @@ class TMqtt():
         else:
             R = await Plugin.Post(self, [tApi.replace('.', '/'), aMsg])
 
-        #print('DoSubscribe', aTopic, aMsg, R)
+        Log.Print(2, 'i', 'DoSubscribe()', 'topic: %s, msg: %s, res: %s' % (aTopic, aMsg, R))
         await self.Mqtt.publish('%s/pub/%s' % (tId, tApi), json.dumps(R))
 
     async def Publish(self, aTopic: str, aMsg: str):

@@ -12,12 +12,6 @@ Mqtt_Host = 'vpn2.oster.com.ua'
 #Mqtt_User = 'test1'
 #Mqtt_Passw = 'test1'
 
-# Door
-TZone = 2
-PinBtn = 0
-PinLed = 2
-PinSnd = 13
-
 # Watch dog reboot
 #WatchDog = 10
 

@@ -17,7 +17,7 @@ class TApi(TApiBase):
 
     Cur = 0
 
-    async def Exec(self, aStart: int, aEnd: int, aStep: int) -> dict:
+    async def Exec(self, aStart: int, aEnd: int, aStep: int = 1) -> dict:
         self.Cur += aStep
         if (self.Cur > aEnd):
             self.Cur = aStart

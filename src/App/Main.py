@@ -43,7 +43,9 @@ async def Run():
 
     #Plugin.LoadList(['-App/HttpSrv', '-App/Menu', 'App/Mqtt', '-App/WDog'])
     Skip = Conf.get('PluginSkip', '')
-    for Item in 'HttpSrv,Menu,Mqtt,WDog'.split(','):
+    #Load = 'HttpSrv,Menu,Mqtt,WDog'
+    Load = 'HttpSrv,Menu,WDog,DoorCheck'
+    for Item in Load.split(','):
         if (not Item in Skip):
             Plugin.LoadMod('App/%s' % (Item))
 

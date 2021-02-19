@@ -36,6 +36,10 @@ class TPlugin():
         if (aForce) or (getattr(Mod, 'AutoLoad', False)):
             self.Data[aPath] = Mod.Main()
 
+            Items = getattr(Mod, 'Depends', [])
+            for Item in Items:
+                self.LoadMod(Item, True)
+
             gc.collect()
             Log.Print(1, 'i', 'LoadMod()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - gc.mem_free(), gc.mem_free()))
 
