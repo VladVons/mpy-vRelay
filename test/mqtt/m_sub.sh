@@ -4,6 +4,6 @@
 #apt install mosquitto-clients
 
 cHost="vpn2.oster.com.ua"
-cTopic="aTopic1/pub"
+cTopic="vRelay/pub/#"
 
 mosquitto_sub -h $cHost -t $cTopic -d -v 

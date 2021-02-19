@@ -26,21 +26,25 @@ class TPlugin():
             self.LoadMod(Module)
 
     def LoadMod(self, aPath: str, aForce: bool = True):
-        if (not self.Data.get(aPath)):
+        if (aPath.startswith('-')) or (self.Data.get(aPath)):
+            return
+
+        gc.collect()
+        MemStart = gc.mem_free()
+
+        Mod = __import__(aPath)
+        if (aForce) or (getattr(Mod, 'AutoLoad', False)):
+            self.Data[aPath] = Mod.Main()
+
             gc.collect()
-            MemStart = gc.mem_free()
+            Log.Print(1, 'i', 'LoadMod()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - gc.mem_free(), gc.mem_free()))
 
-            Mod = __import__(aPath)
-            if (aForce) or (getattr(Mod, 'AutoLoad', False)):
-                self.Data[aPath] = Mod.Main()
-
-                gc.collect()
-                Log.Print(1, 'i', 'LoadMod()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - gc.mem_free(), gc.mem_free()))
-            else:
-                del Mod
-                for Item in sys.modules:
-                    if (aPath in Item):
-                        del sys.modules[Item]
+            return Mod
+        else:
+            del Mod
+            for Item in sys.modules:
+                if (aPath in Item):
+                    del sys.modules[Item]
 
     def Get(self, aPath: str):
         return self.Data.get(aPath)

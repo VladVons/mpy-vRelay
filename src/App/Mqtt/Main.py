@@ -16,18 +16,19 @@ from Inc.Util.UStr import SplitPad
 
 class TMqtt():
     async def DoSubscribe(self, aTopic: str, aMsg):
-        R = await Plugin.Post(self, [aTopic, aMsg])
-        if (R):
-            aTopic = aTopic.decode('utf-8')
-            await self.Publish(aTopic + '/answ', json.dumps(R))
-        else:
+        tId, tType, tApi = SplitPad(3, aTopic.decode('utf-8'), '/')
+        if (tApi == 'Url'):
             Path, Query = SplitPad(2, aMsg.decode('utf-8'), '?')
             Query = QueryToDict(Query)
             R = await QueryUrl(Path, Query)
-        print('DoSubscribe', aTopic, aMsg, R)
+        else:
+            R = await Plugin.Post(self, [tApi.replace('.', '/'), aMsg])
+
+        #print('DoSubscribe', aTopic, aMsg, R)
+        await self.Publish('%s/pub/%s' % (tId, tApi), json.dumps(R))
 
     async def Publish(self, aTopic: str, aMsg: str):
-        print('Publish', aTopic, aMsg)
+        #print('Publish', aTopic, aMsg)
         await self.Mqtt.publish(aTopic, aMsg)
 
     async def Run(self, aHost: str, aPort: int = 1883, aUser: str = None, aPassword: str = None):
@@ -36,7 +37,7 @@ class TMqtt():
         while True:
             Mqtt.connect()
             #await Mqtt.subscribe('Topic')
-            await Mqtt.subscribe('Topic/#')
+            await Mqtt.subscribe('vRelay/sub/#')
             try:
                 while True:
                     await Mqtt.check_msg()
