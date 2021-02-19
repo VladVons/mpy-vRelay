@@ -11,7 +11,7 @@ import uasyncio as asyncio
 from Inc.Mqtt import MQTTClient
 from Inc.Log  import Log
 from Inc.Plugin import Plugin
-from Inc.ApiParse import QueryToDict, QueryUrl
+from Inc.ApiParse import QueryToDict, GetApi
 from Inc.Util.UStr import SplitPad
 from Inc.Util.UNet import CheckHost
 from App.Utils import TWLanApp
@@ -23,12 +23,14 @@ class TMqtt():
         if (tApi == 'Url'):
             Path, Query = SplitPad(2, aMsg.decode('utf-8'), '?')
             Query = QueryToDict(Query)
-            R = await QueryUrl(Path, Query)
+            Obj = GetApi(Path, Query)
+            R = await Obj.Query(Query)
+            R = json.dumps(R) + '\r\n'
         else:
             R = await Plugin.Post(self, [tApi.replace('.', '/'), aMsg])
 
         #print('DoSubscribe', aTopic, aMsg, R)
-        await self.Publish('%s/pub/%s' % (tId, tApi), json.dumps(R))
+        await self.Mqtt.publish('%s/pub/%s' % (tId, tApi), json.dumps(R))
 
     async def Publish(self, aTopic: str, aMsg: str):
         #print('Publish', aTopic, aMsg)
@@ -48,8 +50,12 @@ class TMqtt():
             await Mqtt.subscribe('vRelay/sub/#')
             try:
                 while True:
-                    await Mqtt.check_msg()
                     await asyncio.sleep(1)
+
+                    # simlify nesting. too many recursion
+                    #await Mqtt.check_msg()
+                    Mqtt.sock.setblocking(False)
+                    await Mqtt.wait_msg()
 
                     if (Loops % 10 == 0) and (not await CheckHost(aHost, aPort, 3)):
                         await TWLanApp().TryConnect()

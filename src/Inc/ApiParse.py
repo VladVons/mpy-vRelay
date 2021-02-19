@@ -17,7 +17,8 @@ def QueryToDict(aQuery: str) -> dict:
         R[Key] = Value
     return R
 
-async def QueryUrl(aPath: str, aQuery: dict) -> str:
+# simplify QueryUrl + GetApi to avoid `too many recursuin`
+def GetApi(aPath: str, aQuery: dict):
     DirCore = 'Inc/Api'
     DirUser = 'Plugin/Api'
 
@@ -28,5 +29,9 @@ async def QueryUrl(aPath: str, aQuery: dict) -> str:
         else:
             Dir = DirCore
         Lib = __import__(Dir + '/' + Name)
-        R = await Lib.TApi().Query(aQuery)
-        return json.dumps(R) + '\r\n'
+        return Lib.TApi()
+
+async def QueryUrl(aPath: str, aQuery: dict) -> str:
+    Obj = GetApi(aPath, aQuery)
+    R = await Obj.Query(aQuery)
+    return json.dumps(R) + '\r\n'

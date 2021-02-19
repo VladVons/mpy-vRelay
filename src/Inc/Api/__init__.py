@@ -24,9 +24,13 @@ class TApiBase():
         return Val
 
     async def ExecDef(self, aData: dict, aParam: list):
-        Diff = set(list(aData.keys())) - set(list(self.Param.keys()))
-        if (Diff):
-            raise Exception('Unknown %s' % Diff)
+        Debug = aData.get('debug')
+        if (Debug):
+            print('debug', Debug)
+        else:
+            Diff = set(list(aData.keys())) - set(list(self.Param.keys()))
+            if (Diff):
+                raise Exception('Unknown %s' % Diff)
 
         Arr = []
         for Param in aParam:

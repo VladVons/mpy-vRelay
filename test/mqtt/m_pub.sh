@@ -5,8 +5,8 @@
 
 cHost="vpn2.oster.com.ua"
 cTopic="vRelay/sub/Url"
-#cMsg="sys_print.py?text=hello world"
-cMsg="dev_ds18b20.py?pin=14"
+cMsg="sys_print.py?text=hello world"
+#cMsg="dev_ds18b20.py?pin=14"
 
 #cTopic="vRelay/sub/Plugin.App.Therm"
 #cMsg="sys_print.py?text=hello world"
@@ -19,7 +19,8 @@ Pub()
     echo
 
     ((Cnt++))
-    Msg="$cMsg $Cnt"
+    Msg="$cMsg&debug=$Cnt"
+    #Msg="$cMsg"
     echo $Msg
     mosquitto_pub -h $cHost -t $cTopic -m "$Msg" -d
 
