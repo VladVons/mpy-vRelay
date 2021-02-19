@@ -5,7 +5,8 @@
 
 cHost="vpn2.oster.com.ua"
 cTopic="vRelay/sub/Url"
-cMsg="sys_print.py?text=hello world"
+#cMsg="sys_print.py?text=hello world"
+cMsg="dev_ds18b20.py?pin=14"
 
 #cTopic="vRelay/sub/Plugin.App.Therm"
 #cMsg="sys_print.py?text=hello world"
