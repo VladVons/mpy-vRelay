@@ -148,6 +148,27 @@ EspSrcCopy2()
 }
 
 
+EspEFC()
+{
+  Log "$0->$FUNCNAME"
+
+  EspErase
+
+  sleep 3
+  EspFirmware
+
+  sleep 3
+  if [ $CustomFW == 0 ]; then
+    EspSrcCopy
+  else
+    EspSrcCopy2
+  fi
+
+  sleep 3
+  #ExecM "ampy --port $cDev --baud $cSpeed1 reset"
+  picocom $cDev -b${cSpeed1}
+}
+
 
 EspRelease()
 {
@@ -196,4 +217,5 @@ case $1 in
     EspFileList|l)  EspFileList $2 ;;
     EspSrcCopy|c)   EspSrcCopy  $2 ;;
     EspSrcCopy2|c2) EspSrcCopy2 $2 ;;
+    EspEFC|a)       EspEFC      $2 ;;
 esac
