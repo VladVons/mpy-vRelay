@@ -43,13 +43,14 @@ class TMqtt():
 
         Loops = 0
         while True:
-            if (Mqtt.sock):
-                Mqtt.disconnect()
-                await asyncio.sleep(1)
-
-            Mqtt.connect()
-            await Mqtt.subscribe('vRelay/sub/#')
             try:
+                if (Mqtt.sock):
+                    Mqtt.disconnect()
+                    await asyncio.sleep(1)
+
+                Mqtt.connect()
+                await Mqtt.subscribe('vRelay/sub/#')
+
                 while True:
                     await asyncio.sleep(1)
 
