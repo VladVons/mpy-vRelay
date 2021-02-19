@@ -46,10 +46,10 @@ class TPlugin():
         return self.Data.get(aPath)
 
     async def Post(self, aOwner, aMsg):
-        for Obj in self.Data.values():
+        R = {}
+        for Key, Obj in self.Data.items():
             if (Obj != aOwner) and (hasattr(Obj, '_DoPost')):
-                R = await Obj._DoPost(aOwner, aMsg)
-                if (R):
-                    return R
+                R[Key] = await Obj._DoPost(aOwner, aMsg)
+        return R
 
 Plugin = TPlugin()

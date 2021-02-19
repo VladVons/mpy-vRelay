@@ -4,7 +4,7 @@
 #apt install mosquitto-clients
 
 cHost="vpn2.oster.com.ua"
-cTopic="aTopic"
+cTopic="Topic/12"
 cMsg="sys_print.py?text=hello world"
 
 
@@ -19,7 +19,7 @@ Pub()
     echo $Msg
     mosquitto_pub -h $cHost -t $cTopic -m "$Msg" -d
 
-    sleep 3
+    sleep 5
   done
 }
 

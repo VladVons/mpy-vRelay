@@ -15,6 +15,7 @@ R_HIGH   = const(1)
 R_MEDIUM = const(2)
 R_LOW    = const(3)
 
+
 class SHT31():
     """
     This class implements an interface to the SHT31 temprature and humidity

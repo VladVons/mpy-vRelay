@@ -75,7 +75,11 @@ class TIdle():
     #async def DoPost(self, aOwner: TTask, aMsg):
     #    print('InIdle', aOwner.Alias, aMsg)
 
-    async def Run(self):
+    async def _DoPost(self, aOwner, aMsg):
+        print('Im Idle', aOwner, aMsg)
+        return 'from Idle'
+
+    async def Run(self, aSleep: float = 2):
         while True:
             await self.tWatchHost()
             await self.tWatchConnect()
@@ -85,7 +89,7 @@ class TIdle():
             self.tConfClear()
 
             self.CntLoop += 1
-            await asyncio.sleep(2)
+            await asyncio.sleep(aSleep)
 
             #if (self.CntLoop % 3 == 0):
                 #await Plugin.Post(self, 'from Idle')

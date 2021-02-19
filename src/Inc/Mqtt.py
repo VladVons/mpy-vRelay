@@ -116,9 +116,11 @@ class MQTTClient:
         pkt = bytearray(b"\x30\0\0\0")
         pkt[0] |= qos << 1 | retain
         sz = 2 + len(topic) + len(msg)
+
         if qos > 0:
             sz += 2
         assert sz < 2097152
+
         i = 1
         while sz > 0x7f:
             pkt[i] = (sz & 0x7f) | 0x80
@@ -128,12 +130,14 @@ class MQTTClient:
         #print(hex(len(pkt)), hexlify(pkt, ":"))
         self.sock.write(pkt, i + 1)
         self._send_str(topic)
+
         if qos > 0:
             self.pid += 1
             pid = self.pid
             struct.pack_into("!H", pkt, 0, pid)
             self.sock.write(pkt, 2)
         self.sock.write(msg)
+
         if qos == 1:
             while 1:
                 op = await self.wait_msg()

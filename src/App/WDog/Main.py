@@ -9,12 +9,8 @@ from machine import WDT
 
 
 class TWDog():
-    async def Run(self):
+    async def Run(self, aSleep: float = 0.5):
         wdt = WDT()
         while True:
             wdt.feed()
-            await asyncio.sleep(0.5)
-
-    #async def _DoPost(self, aOwner, aMsg):
-    #    print('Im TWDog', aOwner, aMsg)
-
+            await asyncio.sleep(aSleep)

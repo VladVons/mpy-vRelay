@@ -39,7 +39,7 @@ class TCaptive():
         R += bytes(map(int, aIP.split(".")))
         return R
 
-    async def Run(self, aIP: str):
+    async def Run(self, aIP: str, aSleep: float = 0.1):
         Sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         Sock.setblocking(False)
         Sock.bind(('', 53))
@@ -51,4 +51,4 @@ class TCaptive():
                 Sock.sendto(Data, Addr)
                 # here is the gateway to listen HTTP on /
             except: # timeout
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(aSleep)
