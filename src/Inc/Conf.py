@@ -39,12 +39,9 @@ class TConf(TConfD):
         self.Load(aFile)
 
     def Load(self, aFile: str):
-        try:
-            Obj = __import__(aFile)
-            for K in dir(Obj):
-                self[K] = getattr(Obj, K)
-        except Exception as E: 
-            Log.Print(1, 'x', 'Load()', E)
+        Obj = __import__(aFile)
+        for Key in dir(Obj):
+            self[Key] = getattr(Obj, Key, None)
 
     def Save(self):
         with open(self.File, 'w') as File:

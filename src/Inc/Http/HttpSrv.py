@@ -113,7 +113,7 @@ class THttpApi():
         Path = Head.get('path')
 
         Method = self.GetMethod(Path)
-        Obj = UObj.GetAttr(self, Method)
+        Obj = getattr(self, Method, None)
         try:
             if (Obj):
                 await Obj(aReader, aWriter, Head)
