@@ -11,7 +11,7 @@ import uasyncio as asyncio
 from Inc.Mqtt import MQTTClient
 from Inc.Log  import Log
 from Inc.Plugin import Plugin
-from Inc.ApiParse import QueryToDict, GetApi
+from Inc.ApiParse import QueryToDict, QueryUrl
 from Inc.Util.UStr import SplitPad
 from Inc.Util.UNet import CheckHost
 from App.Utils import TWLanApp
@@ -24,9 +24,7 @@ class TMqtt():
         if (tApi == 'Url'):
             Path, Query = SplitPad(2, aMsg, '?')
             Query = QueryToDict(Query)
-            Obj = GetApi(Path, Query)
-            R = await Obj.Query(Query)
-            R = json.dumps(R) + '\r\n'
+            R = await QueryUrl(Path, Query)
         else:
             R = await Plugin.Post(self, [tApi.replace('.', '/'), aMsg])
 
