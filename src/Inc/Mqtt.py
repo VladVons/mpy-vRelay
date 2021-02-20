@@ -116,11 +116,18 @@ class MQTTClient:
             raise MQTTException(resp[3])
         return resp[2] & 1
 
+    #def disconnect(self):
+    #    self.sock.write(b"\xe0\0")
+    #    self.sock.close()
+
+    # VladVons
     def disconnect(self):
         if (self.sock): # VladVons
-            self.sock.write(b"\xe0\0")
-            self.sock.close()
-            self.sock = None
+            try:
+                self.sock.write(b"\xe0\0")
+            finally:
+                self.sock.close()
+                self.sock = None
 
     def ping(self):
         self.sock.write(b"\xc0\0")
