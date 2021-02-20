@@ -47,8 +47,6 @@ class TMqtt():
                 await Mqtt.subscribe('vRelay/sub/#')
 
                 while True:
-                    await asyncio.sleep(1)
-
                     # simlify nesting. too many recursion
                     #await Mqtt.check_msg()
                     Mqtt.sock.setblocking(False)
@@ -59,6 +57,7 @@ class TMqtt():
                         break
 
                     Loops += 1
+                    await asyncio.sleep(1)
             except Exception as E:
                 Log.Print(1, 'x', 'TMqtt.Run()', E)
-                await asyncio.sleep(1)
+            await asyncio.sleep(1)
