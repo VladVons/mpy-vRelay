@@ -42,10 +42,7 @@ class TMqtt():
         Loops = 0
         while True:
             try:
-                if (Mqtt.sock):
-                    Mqtt.disconnect()
-                    await asyncio.sleep(1)
-
+                Mqtt.disconnect()
                 Mqtt.connect()
                 await Mqtt.subscribe('vRelay/sub/#')
 
@@ -64,3 +61,4 @@ class TMqtt():
                     Loops += 1
             except Exception as E:
                 Log.Print(1, 'x', 'TMqtt.Run()', E)
+                await asyncio.sleep(1)
