@@ -135,4 +135,3 @@ case $1 in
     GitFromServ|f)      GitFromServ "$2" "$3" ;;
     GitClone)           "$1"        "$2" "$3" ;;
 esac
-
