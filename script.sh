@@ -11,8 +11,8 @@ cDev="/dev/ttyUSB0"
 cSpeed1=115200
 cSpeed2=460800
 
-ESP32=0
-CustomFW=1
+ESP32=1
+CustomFW=0
 
 if [ $ESP32 == 1 ]; then
   if [ $CustomFW == 1 ]; then
@@ -203,6 +203,10 @@ EspRelease()
 SizePy()
 {
   find ./src -name '*.py' | xargs wc
+
+  echo 
+  echo "Files"
+  find ./src -name '*.py' | wc -l
 }
 
 

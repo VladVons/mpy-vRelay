@@ -12,6 +12,7 @@ from Inc.WLan import TWLan, GetMac
 from Inc.Log import Log
 from Inc.Conf import Conf
 from Inc.Util.UTime import SetTime
+from Inc.Util.UNet import CheckHost
 
 
 class TConnSTA(TWLan):
@@ -22,15 +23,18 @@ class TConnSTA(TWLan):
     def Mac(self):
         return GetMac(self.IF)
 
-    async def Run(self, aSleep: int = 5):
-        while True:
-            if (not self.IF.isconnected()):
-                await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
-                await asyncio.sleep(1)
+    async def IsOk(self):
+        Host = Conf.get('WatchHost', self.IF.ifconfig()[2]) # or gateway
+        return (self.IF.isconnected) and (await CheckHost(Host, 80, 3))
 
-            if (self.IF.isconnected()):
+    async def Run(self, aSleep: int = 15):
+        while True:
+            if (not await self.IsOk()):
+                await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
+                SetTime(Conf.get('TZone', 2))
+
+            if (await self.IsOk()):
                 self.Event.set()
-                SetTime(Conf.get('TZone', 0))
             else:
                 self.Event.clear()
 

@@ -5,4 +5,4 @@ def Main():
     from .Main import TConnSTA
 
     Obj = TConnSTA()
-    return (Obj, Obj.Run(5))
+    return (Obj, Obj.Run(60))

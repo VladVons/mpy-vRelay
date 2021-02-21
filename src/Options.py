@@ -2,7 +2,7 @@
 Alias = 'ds18b20'
 Descr = 'frozen'
 Plugins = 'App/HttpSrv App/Menu App/Mqtt App/ConnSTA -App/WDog'
-#
+TZone = 2
 #DSleep = 60
 #
 STA_ESSID = 'oster.com.ua'
@@ -13,9 +13,5 @@ Mqtt_Host = 'vpn2.oster.com.ua'
 #Mqtt_User = 'test1'
 #Mqtt_Passw = 'test1'
 
-# Watch dog reboot
-#WatchDog = 10
-
 # Watch host reboot
-#WatchHost = '10.10.10.10'
-WatchHost_Cnt = 60
+WatchHost = '8.8.8.8'
