@@ -20,13 +20,13 @@ def GetMac(aObj) -> str:
 
 
 class TWLan():
-    Cnt = 20
-    Delay = 0.25
+    Cnt = 10
+    Delay = 1
 
     async def _WaitForReady(self, aFunc):
         Cnt = self.Cnt
         while (not aFunc()) and (Cnt > 0):
-            #idle()
+            idle()
             stdout.write('.')
             await sleep(self.Delay)
             Cnt -= 1

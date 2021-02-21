@@ -96,11 +96,11 @@ class TMenu():
         print(Msg)
 
         while True:
-            await asyncio.sleep(0.2)
             Key = KbdTerm.GetChr()
             if (Key == aKey):
                 await self.DoRun()
                 print(Msg)
+            await asyncio.sleep(0.5)
 
     async def DoRun(self):
         pass

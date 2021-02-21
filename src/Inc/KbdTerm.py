@@ -9,22 +9,25 @@ import sys, select
 import uasyncio as asyncio
 
 
-'''
-def GetInputChr():
-    R = ''
-    while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
-        R = sys.stdin.read(1)
-    return R
-'''
 
 class TKbdTerm():
     def __init__(self):
-        self.Poller = select.poll()
-        self.Poller.register(sys.stdin, select.POLLIN)
+        #self.Poller = select.poll()
+        #self.Poller.register(sys.stdin, select.POLLIN)
+        pass
 
+    def GetChr(self):
+        R = ''
+        while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
+            R = sys.stdin.read(1)
+        return R
+
+    '''
+    #rst cause:4, boot mode:(3,6)
     def GetChr(self):
         for s, ev in self.Poller.poll(500):
             return s.read(1)
+    '''
 
     async def Input(self, aPrompt = ''):
         R = ''
@@ -41,4 +44,4 @@ class TKbdTerm():
                 else:
                     R += K
                 sys.stdout.write("%s%s   \r" % (aPrompt, R))
-            await asyncio.sleep(0.2)
+            await asyncio.sleep(0.5)
