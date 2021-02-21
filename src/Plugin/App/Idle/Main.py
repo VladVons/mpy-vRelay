@@ -14,7 +14,6 @@ import uasyncio as asyncio
 from Inc.Conf import Conf
 from Inc.Plugin import Plugin
 from Inc.Log  import Log
-from App.Utils import TWLanApp
 
 
 class TIdle():
@@ -55,17 +54,17 @@ class TIdle():
         Net = WLAN(STA_IF)
         print('ifconfig', Net.ifconfig()[0])
 
-    async def tWatchConnect(self):
-        Net = WLAN(STA_IF)
-        if (not Net.isconnected):
-            WLan = TWLanApp()
-            await WLan.TryConnect()
+    #async def tWatchConnect(self):
+    #    Net = WLAN(STA_IF)
+    #    if (not Net.isconnected):
+    #        WLan = TWLanApp()
+    #        await WLan.TryConnect()
 
-    async def tWatchHost(self):
-        Cnt = Conf.get('WatchHost_Cnt', 0)
-        if (Cnt > 0) and (self.CntLoop % Cnt == 0):
-            WLan = TWLanApp()
-            await WLan.CheckConnect()
+    #async def tWatchHost(self):
+    #    Cnt = Conf.get('WatchHost_Cnt', 0)
+    #    if (Cnt > 0) and (self.CntLoop % Cnt == 0):
+    #        WLan = TWLanApp()
+    #        await WLan.CheckConnect()
 
     #async def DoExit(self):
         #WDog.Stop()
@@ -81,8 +80,8 @@ class TIdle():
 
     async def Run(self, aSleep: float = 2):
         while True:
-            await self.tWatchHost()
-            await self.tWatchConnect()
+            #await self.tWatchHost()
+            #await self.tWatchConnect()
             #self.tDSleep()
             #self.tMemFree()
             self.tLedBeat()

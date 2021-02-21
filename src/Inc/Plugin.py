@@ -6,6 +6,7 @@ Description:
 '''
 
 import os, sys, gc
+import uasyncio as asyncio
 #
 from Inc.Log  import Log
 
@@ -21,12 +22,12 @@ class TPlugin():
                 DirName = Info[0]
                 self.LoadMod(aDir + '/' + DirName, False)
 
-    def LoadList(self, aModules: list):
-        for Module in aModules:
+    def LoadList(self, aModules: str):
+        for Module in aModules.split(' '):
             self.LoadMod(Module)
 
     def LoadMod(self, aPath: str, aForce: bool = True):
-        if (aPath.startswith('-')) or (self.Data.get(aPath)):
+        if (aPath == '') or (aPath.startswith('-')) or (self.Data.get(aPath)):
             return
 
         gc.collect()
@@ -34,11 +35,13 @@ class TPlugin():
 
         Mod = __import__(aPath)
         if (aForce) or (getattr(Mod, 'AutoLoad', False)):
-            self.Data[aPath] = Mod.Main()
-
-            Items = getattr(Mod, 'Depends', [])
-            for Item in Items:
+            Depends = getattr(Mod, 'Depends', '')
+            for Item in Depends.split(' '):
                 self.LoadMod(Item, True)
+
+            Class, Func = Mod.Main()
+            self.Data[aPath] = Class
+            asyncio.create_task(Func)
 
             gc.collect()
             Log.Print(1, 'i', 'LoadMod()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - gc.mem_free(), gc.mem_free()))
@@ -53,11 +56,21 @@ class TPlugin():
     def Get(self, aPath: str):
         return self.Data.get(aPath)
 
-    async def Post(self, aOwner, aMsg):
+    async def Post(self, aOwner, aMsg, aFunc = '_DoPost'):
         R = {}
         for Key, Obj in self.Data.items():
-            if (Obj != aOwner) and (hasattr(Obj, '_DoPost')):
-                R[Key] = await Obj._DoPost(aOwner, aMsg)
+            if (Obj != aOwner) and (hasattr(Obj, aFunc)):
+                Func = getattr(Obj, aFunc)
+                R[Key] = await Func(aOwner, aMsg)
         return R
+
+    async def Stop(self):
+        return await self.Post(None, 'Stop')
+
+    def Run(self):
+        Loop = asyncio.get_event_loop()
+        Loop.run_forever()
+
+
 
 Plugin = TPlugin()

@@ -15,6 +15,20 @@ class THyster():
         self.On = False
 
     def Check(self, aKeep: float, aCur: float):
+        if (self.H > 0):
+            if (aCur < aKeep):
+                self.On = True
+            elif (aCur >= aKeep + self.H):
+                self.On = False
+        else:
+            if (aCur > aKeep):
+                self.On = True
+            elif (aCur <= aKeep + self.H):
+                self.On = False
+        return self.On
+
+'''
+    def CheckMiddle(self, aKeep: float, aCur: float):
         Hyst = abs(self.H)
 
         if (aCur <= aKeep - Hyst):
@@ -22,3 +36,4 @@ class THyster():
         elif (aCur >= aKeep + Hyst):
             self.On = self.H < 0
         return self.On
+'''

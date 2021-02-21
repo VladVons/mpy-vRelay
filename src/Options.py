@@ -1,6 +1,7 @@
 #Alias = 'dht22-1'
 Alias = 'ds18b20'
 Descr = 'frozen'
+Plugins = 'App/HttpSrv App/Menu App/Mqtt App/ConnSTA -App/WDog'
 #
 #DSleep = 60
 #
@@ -18,5 +19,3 @@ Mqtt_Host = 'vpn2.oster.com.ua'
 # Watch host reboot
 #WatchHost = '10.10.10.10'
 WatchHost_Cnt = 60
-
-PluginSkip='WDog'

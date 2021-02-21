@@ -13,8 +13,6 @@ import uasyncio as asyncio
 from Inc.Conf import Conf
 from Inc.Log  import Log
 from Inc.Plugin import Plugin
-from Inc.Util import UHrd
-from .Utils   import TWLanApp
 
 #from Inc.DB.Dbl import TDbl
 
@@ -25,40 +23,14 @@ async def Run():
     DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
     print('DSleep', DSleep)
 
-    #await UHrd.LedFlash(Conf.get('PinLed', 2), 3, 0.5)
-
-    WLan = TWLanApp()
-    if (Conf.STA_ESSID):
-        await WLan.EnableAP(False)
-        if (await WLan.TryConnect()):
-            print()
-
-            if (not DSleep):
-                from Inc.Util.UTime import SetTime
-                SetTime(Conf.get('TZone', 0))
-    else:
-        #import App.Captive as Captive
-        #Captive.Main()
-        Plugin.LoadMod('App/Captive')
-
-    #Plugin.LoadList(['-App/HttpSrv', '-App/Menu', 'App/Mqtt', '-App/WDog'])
-    Skip = Conf.get('PluginSkip', '')
-    Load = 'HttpSrv,Menu,Mqtt,WDog'
-    #Load = 'HttpSrv,Menu,WDog,DoorCheck'
-    for Item in Load.split(','):
-        if (not Item in Skip):
-            Plugin.LoadMod('App/%s' % (Item))
-
+    Plugin.LoadList(Conf.Plugins)
     Plugin.LoadDir('Plugin/App')
-
     try:
-        Loop = asyncio.get_event_loop()
-        Loop.run_forever()
+        Plugin.Run()
     except KeyboardInterrupt:
         print('Ctrl-C')
     finally:
-        #await Tasks.Stop()
-        pass
+        await Plugin.Stop()
 
 
 def Main():

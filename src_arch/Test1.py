@@ -1,6 +1,4 @@
-#!/usr/bin/micropython
-#!/usr/bin/python3
-
+#!/usr/bin/env micropython
 
 import os
 import sys
@@ -11,7 +9,7 @@ import select
 import machine
 import uasyncio as asyncio
 #
-from Inc.Conf import Conf
+#from Inc.Conf import Conf
 
 
 def Test1():
@@ -24,7 +22,27 @@ def Test1():
         time.sleep(0.1)
 
 
-class TClass():
+class TClass1():
+    def __init__(self):
+        self.Event = asyncio.Event()
+        print(dir(self.Event))
+
+    async def Test3(self):
+        while True:
+            self.Event.clear()
+            #self.Event.set()
+            await self.Event.wait()
+            print('Test3')
+            await asyncio.sleep(2)
+
+
+    async def Test2(self):
+        from Inc.Hyster import THyster
+        Hyster = THyster(-1)
+        while True:
+            Value = input('Value: ')
+            print(Hyster.Check(10, float(Value)))
+
     async def Test1(self):
         from Inc.Util.UNet import CheckHost
         while True:
@@ -52,14 +70,17 @@ class TClass():
                 print('Connect Err')
 
     def Run(self):
-        asyncio.run(self.Connect())
+        #asyncio.run(self.Connect())
 
         loop = asyncio.get_event_loop()
         loop.create_task(self.Prove())
-        loop.create_task(self.Test1())
+        loop.create_task(self.Test3())
+
+        #print('sleep 5')
+        #time.sleep(5)
+
         loop.run_forever()
 
 #Test1()
-
-Class = TClass()
-Class.Run()
+Class1 = TClass1()
+Class1.Run()

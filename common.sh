@@ -36,7 +36,8 @@ Make_MicroPython()
   make -C mpy-cross
 
   cd $cDirMPY/micropython/ports/unix
-  make
+  make VARIANT=standard
+  #make VARIANT=dev
 
   #sudo cp micropython /usr/bin/
 }

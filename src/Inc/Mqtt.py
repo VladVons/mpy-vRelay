@@ -2,6 +2,8 @@
 Author:      https://github.com/micropython/micropython-lib/tree/master/umqtt.simple
 async fork of umqtt.simple (21 Jun 2017)
 
+alternative: https://github.com/peterhinch/micropython-mqtt
+
 slight changes applied to original code with VladVons comment
 mostly async/await keywords
 2021.02.17, VladVons

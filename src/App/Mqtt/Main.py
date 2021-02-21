@@ -10,11 +10,10 @@ import uasyncio as asyncio
 #
 from Inc.Mqtt import MQTTClient
 from Inc.Log  import Log
+from Inc.Conf import Conf
 from Inc.Plugin import Plugin
 from Inc.ApiParse import QueryToDict, QueryUrl
 from Inc.Util.UStr import SplitPad
-from Inc.Util.UNet import CheckHost
-from App.Utils import TWLanApp
 
 
 class TMqtt():
@@ -35,16 +34,23 @@ class TMqtt():
         #print('Publish', aTopic, aMsg)
         await self.Mqtt.publish(aTopic, aMsg)
 
-    async def Run(self, aHost: str, aPort: int = 1883, aUser: str = None, aPassword: str = None):
-        self.Mqtt = Mqtt = MQTTClient('ID-1', aHost, aPort, aUser, aPassword)
+    async def Run(self, aSleep: float = 1.0):
+        Name = 'vRelay'
+        ConnMod = 'App/ConnSTA'
+        ConnSTA = Plugin.Get(ConnMod)
+
+        self.Mqtt = Mqtt = MQTTClient('%s-%s' % (Name, ConnSTA.Mac()) , Conf.Mqtt_Host, Conf.get('Mqtt_Port', 1883), Conf.Mqtt_User, Conf.Mqtt_Passw)
         Mqtt.set_callback(self.DoSubscribe)
 
-        Loops = 0
         while True:
             try:
+                print('---1a')
+                await ConnSTA.Event.wait()
+                print('---1b')
+
                 Mqtt.disconnect()
                 Mqtt.connect()
-                await Mqtt.subscribe('vRelay/sub/#')
+                await Mqtt.subscribe('%s/sub/#' % (Name))
 
                 while True:
                     # simlify nesting. too many recursion
@@ -52,12 +58,8 @@ class TMqtt():
                     Mqtt.sock.setblocking(False)
                     await Mqtt.wait_msg()
 
-                    if (Loops % 10 == 0) and (not await CheckHost(aHost, aPort, 3)):
-                        await TWLanApp().TryConnect()
-                        break
-
-                    Loops += 1
-                    await asyncio.sleep(1)
+                    await asyncio.sleep(aSleep)
             except Exception as E:
                 Log.Print(1, 'x', 'TMqtt.Run()', E)
-            await asyncio.sleep(1)
+
+            await asyncio.sleep(aSleep)
