@@ -17,6 +17,10 @@ class TMenu():
         Str = await KbdTerm.Input('%s ?  Y/n:' % aMsg)
         return (Str) and (Str.lower() == 'y')
 
+    def _ShowTree(self, aData: dict):
+        for Var in SortLD(GetTree(aData), 'Key'):
+            print('%15s = %s' % (Var['Key'], Var['Val']))
+
     async def WaitMsg(self, aMsg: str = '') -> str:
         return await KbdTerm.Input('%s (Press ENTER) ' % aMsg)
 
@@ -26,9 +30,7 @@ class TMenu():
         else:
             Data = await aFunc()
 
-        for Var in SortLD(GetTree(Data), 'Key'):
-            print('%15s = %s' % (Var['Key'], Var['Val']))
-
+        self._ShowTree(Data)
         await self.WaitMsg()
 
     async def Parse(self, aPath: str, aItems: list):
@@ -104,7 +106,7 @@ class TMenu():
                 await asyncio.sleep(0.5)
 
     async def DoRun(self):
-        pass
+        raise NotImplementedError()
 
 
 KbdTerm = TKbdTerm()

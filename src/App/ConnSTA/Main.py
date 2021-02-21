@@ -27,15 +27,17 @@ class TConnSTA(TWLan):
         Host = Conf.get('WatchHost', self.IF.ifconfig()[2]) # or gateway
         return (self.IF.isconnected) and (await CheckHost(Host, 80, 3))
 
+    async def Connector(self):
+        if (not await self.IsOk()):
+            await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
+            SetTime(Conf.get('TZone', 2))
+
+        if (await self.IsOk()):
+            self.Event.set()
+        else:
+            self.Event.clear()
+
     async def Run(self, aSleep: int = 15):
         while True:
-            if (not await self.IsOk()):
-                await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
-                SetTime(Conf.get('TZone', 2))
-
-            if (await self.IsOk()):
-                self.Event.set()
-            else:
-                self.Event.clear()
-
+            await self.Connector()
             await asyncio.sleep(aSleep)

@@ -21,7 +21,7 @@ class TMenuApp(TMenu):
     async def MSetup(self, aPath: str, aParam: list):
         Vars = Conf.Keys()
         self._ShowTree(Vars)
-        if (not await self.AskYN('Cntinue')):
+        if (not await self.AskYN('Continue')):
             return
 
         R = {}
@@ -53,6 +53,7 @@ class TMenuApp(TMenu):
             ['dev_sht31',       Func, [5, 4]],
             ['---',             None, None],
             ['sys_conf',        Func, []],
+            ['sys_date',        Func, []],
             ['sys_info',        Func, []],
             ['sys_mem',         Func, []],
             ['sys_plugin',      Func, []],
@@ -61,11 +62,11 @@ class TMenuApp(TMenu):
         await self.Parse(aPath, Items)
 
     async def MMisc(self, aPath: str, aParam: list):
-        from App.Utils import TWLanApp
-        WLanApp = TWLanApp()
+        from App.ConnSTA.Main import TConnSTA
+        ConnSTA = TConnSTA()
 
         Items = [
-            ['connect',         self._ExecObj, [WLanApp.TryConnect, []]]
+            ['connect',         self._ExecObj, [ConnSTA.Connector, []]]
         ]
         await self.Parse(aPath, Items)
 
