@@ -44,9 +44,7 @@ class TMqtt():
 
         while True:
             try:
-                print('---1a')
                 await ConnSTA.Event.wait()
-                print('---1b')
 
                 Mqtt.disconnect()
                 Mqtt.connect()

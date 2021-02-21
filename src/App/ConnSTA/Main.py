@@ -26,6 +26,7 @@ class TConnSTA(TWLan):
         while True:
             if (not self.IF.isconnected()):
                 await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
+                await asyncio.sleep(1)
 
             if (self.IF.isconnected()):
                 self.Event.set()
