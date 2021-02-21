@@ -31,6 +31,8 @@ class TKbdTerm():
 
 
     async def Input(self, aPrompt = ''):
+        sys.stdout.write("%s%s   \r" % (aPrompt, ''))
+
         R = ''
         while True:
             K = self.GetChr()
