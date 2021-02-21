@@ -8,7 +8,7 @@ import time
 from gmqtt import Client as MQTTClient
 
 import sys
-sys.path.append('../src')
+sys.path.append('../../src')
 from Inc.Log import Log, TEchoFile
 Log.AddEcho(TEchoFile('a_sub.py.log'))
 Log.Print(1, 'start', 0)
@@ -66,6 +66,6 @@ loop.add_signal_handler(signal.SIGTERM, ask_exit)
 
 Mqtt = TMqtt()
 token = os.environ.get('FLESPI_TOKEN')
-TaskMain = Mqtt.Main('vpn2.oster.com.ua', token, 'MyTopic')
+TaskMain = Mqtt.Main('vpn2.oster.com.ua', token, 'vRelay/pub/#')
 
 loop.run_until_complete(TaskMain)

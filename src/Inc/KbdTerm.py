@@ -11,10 +11,17 @@ import uasyncio as asyncio
 
 
 class TKbdTerm():
+    '''
     def __init__(self):
-        #self.Poller = select.poll()
-        #self.Poller.register(sys.stdin, select.POLLIN)
+        self.Poller = select.poll()
+        self.Poller.register(sys.stdin, select.POLLIN)
         pass
+
+    #rst cause:4, boot mode:(3,6)
+    def GetChr(self):
+        for s, ev in self.Poller.poll(500):
+            return s.read(1)
+    '''
 
     def GetChr(self):
         R = ''
@@ -22,12 +29,6 @@ class TKbdTerm():
             R = sys.stdin.read(1)
         return R
 
-    '''
-    #rst cause:4, boot mode:(3,6)
-    def GetChr(self):
-        for s, ev in self.Poller.poll(500):
-            return s.read(1)
-    '''
 
     async def Input(self, aPrompt = ''):
         R = ''

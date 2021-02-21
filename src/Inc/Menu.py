@@ -100,7 +100,8 @@ class TMenu():
             if (Key == aKey):
                 await self.DoRun()
                 print(Msg)
-            await asyncio.sleep(0.5)
+            else:
+                await asyncio.sleep(0.5)
 
     async def DoRun(self):
         pass

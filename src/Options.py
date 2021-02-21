@@ -13,5 +13,4 @@ Mqtt_Host = 'vpn2.oster.com.ua'
 #Mqtt_User = 'test1'
 #Mqtt_Passw = 'test1'
 
-# Watch host reboot
-WatchHost = '8.8.8.8'
+WatchHost = 'google.com'

@@ -6,7 +6,6 @@ Description:.
 '''
 
 import time
-from machine import RTC
 
 '''
 def TimeInRange(aStart, aEnd, aX):
@@ -17,6 +16,7 @@ def TimeInRange(aStart, aEnd, aX):
 '''
 
 def SetTime(aTZone):
+    from machine import RTC
     from ntptime import settime
 
     try:
