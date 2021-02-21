@@ -1,7 +1,7 @@
 #Alias = 'dht22-1'
 Alias = 'ds18b20'
 Descr = 'frozen'
-Plugins = '-App/HttpSrv App/Menu App/Mqtt App/ConnSTA -App/WDog'
+Plugins = 'App/HttpSrv App/Menu App/Mqtt App/ConnSTA -App/WDog'
 #
 #DSleep = 60
 #
