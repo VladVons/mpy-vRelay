@@ -17,7 +17,7 @@ class TPlugin():
 
     @staticmethod
     def DelMod(aPath, aMod):
-        del Mod
+        del aMod
         for Item in sys.modules:
             if (aPath in Item):
                 del sys.modules[Item]
