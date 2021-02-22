@@ -80,8 +80,8 @@ InstallPkg()
 #Install
 #Make_EspOpenSdk
 #
-#Get_MicroPython
-#Make_MicroPython
+Get_MicroPython
+Make_MicroPython
 #
-#InstallPkg
+InstallPkg
 Make_MicroFirmware

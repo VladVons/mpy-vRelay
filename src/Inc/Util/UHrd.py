@@ -11,7 +11,7 @@ import uasyncio as asyncio
 from Inc.Log  import Log
 
 
-def Reset(aSec: int):
+def Reset(aSec: int = 0):
     if (aSec > 0):
         O = machine.RTC()
         O.irq(trigger = O.ALARM0, wake = machine.DEEPSLEEP)
