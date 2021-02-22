@@ -22,7 +22,8 @@ Pub()
     Msg="$cMsg&debug=$Cnt"
     #Msg="$cMsg"
     echo $Msg
-    mosquitto_pub -h $cHost -t $cTopic -m "$Msg" -d
+    #mosquitto_pub -h $cHost -t $cTopic -m "$Msg" -d
+    mosquitto_pub -h $cHost -t $cTopic -m "$Msg"
 
     sleep 10
   done

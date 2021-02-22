@@ -2,7 +2,10 @@ from .Options import *
 
 
 def Main():
-    from Inc.Captive import TCaptive
+    from Inc.Conf import Conf
 
-    Obj = TCaptive()
-    return (Obj, Obj.Run('192.168.4.1'))
+    if (not Conf.STA_ESSID):
+        from Inc.Captive import TCaptive
+
+        Obj = TCaptive()
+        return (Obj, Obj.Run())

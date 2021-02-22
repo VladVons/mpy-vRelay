@@ -9,6 +9,9 @@ https://ansonvandoren.com/posts/esp8266-captive-web-portal-part-1/
 
 import uasyncio as asyncio
 import usocket as socket
+import network
+#
+from .WLan import TWLan, GetMac
 
 
 class TCaptive():
@@ -39,7 +42,11 @@ class TCaptive():
         R += bytes(map(int, aIP.split(".")))
         return R
 
-    async def Run(self, aIP: str, aSleep: float = 0.1):
+    async def Run(self, aSleep: float = 0.1):
+        AP = await TWLan().EnableAP(True)
+        AP.config(essid = 'vRelay-' + GetMac(AP), authmode = network.AUTH_OPEN)
+        IP = AP.ifconfig()[0]
+
         Sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         Sock.setblocking(False)
         Sock.bind(('', 53))
@@ -47,8 +54,9 @@ class TCaptive():
         while True:
             try:
                 Data, Addr = Sock.recvfrom(1024)
-                Data = self._GetAnswer(aIP, Data)
+                Data = self._GetAnswer(IP, Data)
                 Sock.sendto(Data, Addr)
                 # here is the gateway to listen HTTP on /
-            except: # timeout
-                await asyncio.sleep(aSleep)
+            except: pass # timeout
+
+            await asyncio.sleep(aSleep)

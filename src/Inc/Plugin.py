@@ -15,6 +15,13 @@ class TPlugin():
     def __init__(self):
         self.Data = {}
 
+    @staticmethod
+    def DelMod(aPath, aMod):
+        del Mod
+        for Item in sys.modules:
+            if (aPath in Item):
+                del sys.modules[Item]
+
     def LoadDir(self, aDir: str):
         Files = os.ilistdir(aDir)
         for Info in Files:
@@ -39,19 +46,20 @@ class TPlugin():
             for Item in Depends.split(' '):
                 self.LoadMod(Item, True)
 
-            Class, Func = Mod.Main()
-            self.Data[aPath] = Class
-            asyncio.create_task(Func)
+            Arr = Mod.Main()
+            if (Arr):
+                # Class, Func = Arr
+                self.Data[aPath] = Arr[0]
+                asyncio.create_task(Arr[1])
 
-            gc.collect()
-            Log.Print(1, 'i', 'LoadMod()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - gc.mem_free(), gc.mem_free()))
+                gc.collect()
+                Log.Print(1, 'i', 'LoadMod()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - gc.mem_free(), gc.mem_free()))
 
-            return Mod
+                return Mod
+            else:
+                self.DelMod(aPath, Mod)
         else:
-            del Mod
-            for Item in sys.modules:
-                if (aPath in Item):
-                    del sys.modules[Item]
+            self.DelMod(aPath, Mod)
 
     def Get(self, aPath: str):
         return self.Data.get(aPath)
@@ -67,7 +75,8 @@ class TPlugin():
     async def Stop(self):
         return await self.Post(None, 'Stop')
 
-    def Run(self):
+    @staticmethod
+    def Run():
         Loop = asyncio.get_event_loop()
         Loop.run_forever()
 

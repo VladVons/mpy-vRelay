@@ -31,7 +31,6 @@ class TMqtt():
         await self.Mqtt.publish('%s/pub/%s' % (tId, tApi), json.dumps(R))
 
     async def Publish(self, aTopic: str, aMsg: str):
-        #print('Publish', aTopic, aMsg)
         await self.Mqtt.publish(aTopic, aMsg)
 
     async def Run(self, aSleep: float = 1.0):

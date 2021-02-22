@@ -24,8 +24,7 @@ class TApiBase():
         return Val
 
     async def ExecDef(self, aData: dict, aParam: list):
-        Debug = aData.get('debug')
-        if (Debug):
+        if (aData.get('debug')):
             print('debug', aData)
         else:
             Diff = set(list(aData.keys())) - set(list(self.Param.keys()))

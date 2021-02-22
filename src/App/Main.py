@@ -18,10 +18,10 @@ from Inc.Plugin import Plugin
 async def Run():
     Log.Print(1, 'i', 'Run', os.uname())
 
-    DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
-    print('DSleep', DSleep)
+    #DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
+    #print('DSleep', DSleep)
 
-    Plugin.LoadList(Conf.Plugins)
+    Plugin.LoadList(Conf.get('Plugins', 'App/HttpSrv'))
     Plugin.LoadDir('Plugin/App')
     try:
         Plugin.Run()
