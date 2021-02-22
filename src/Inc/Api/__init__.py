@@ -26,7 +26,7 @@ class TApiBase():
     async def ExecDef(self, aData: dict, aParam: list):
         Debug = aData.get('debug')
         if (Debug):
-            print('debug', Debug)
+            print('debug', aData)
         else:
             Diff = set(list(aData.keys())) - set(list(self.Param.keys()))
             if (Diff):

@@ -51,7 +51,7 @@ class TMenuApp(TMenu):
             ['dev_dht22',       Func, [14]],
             ['dev_ds18b20',     Func, [14]],
             ['dev_sht31',       Func, [5, 4]],
-            ['---',             None, None],
+            ['= = =',           None, None],
             ['sys_conf',        Func, []],
             ['sys_date',        Func, []],
             ['sys_info',        Func, []],

@@ -12,9 +12,10 @@ from Inc.Util import UFS, UStr
 
 def QueryToDict(aQuery: str) -> dict:
     R = {}
-    for i in aQuery.split('&'):
-        Key, Value = UStr.SplitPad(2, i, '=')
-        R[Key] = Value
+    for Item in aQuery.split('&'):
+        if (Item):
+            Key, Value = UStr.SplitPad(2, Item, '=')
+            R[Key] = Value
     return R
 
 # simplify QueryUrl + GetApi to avoid `too many recursuin`
