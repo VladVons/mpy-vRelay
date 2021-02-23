@@ -5,6 +5,7 @@ License:     GNU, see LICENSE for more details
 Description:.
 
 https://github.com/tmcadam/sim7000-tools/blob/master/sim7000.py
+https://simcom.ee/documents/SIM7000E/SIM7000%20Series_AT%20Command%20Manual_V1.03.pdf
 '''
 
 
@@ -24,7 +25,7 @@ class TSim7000():
     async def SetPower(aOn: bool, aPin: int = 4):
         Obj = Pin(aPin, Pin.OUT)
         Obj.value(aOn)
-        await asyncio.sleep(1.5)
+        await asyncio.sleep(2)
 
     async def AT(self, aCmd, aSleep = 0.1):
         Log.Print(1, 'i', 'AT', aCmd)
@@ -39,7 +40,7 @@ class TSim7000():
             Log.Print(1, 'i', 'Reader', Line)
 
     async def Run(self, aSleep: int = 5):
-        self.SetPower(True)
+        await self.SetPower(True)
 
         asyncio.create_task(self.Reader())
 
