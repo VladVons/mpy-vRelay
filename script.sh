@@ -101,6 +101,16 @@ EspFirmware()
 }
 
 
+Esp32Firmware()
+{
+  # ESP -> File
+  esptool.py --baud $cSpeed2 --port $cDev read_flash 0x0 0x400000 fw-backup-4M1.bin
+
+  # File -> ESP
+  #esptool.py --baud $cSpeed2 --port $cDev write_flash 0x0 fw-backup-4M.bin
+}
+
+
 EspFileList()
 {
   ExecM "ampy --port $cDev --baud $cSpeed1 ls"
@@ -175,24 +185,32 @@ EspRelease()
   Log "$0->$FUNCNAME"
   # https://github.com/bbcmicrobit/micropython/issues/555#issuecomment-419491671
 
-  SkipCompile="boot.py,main.py,Options.py,__pycache__"
+  SkipFile="boot.py,main.py,Options.py,__pycache__"
+  SkipDir="Plugin"
   Compiler="$cDirMPY/micropython/mpy-cross/mpy-cross"
 
   DirOut="../release"
   cd ./src
   mkdir -p $DirOut
 
-  find * -type f |\
+  find ./ -type f |\
   while read File; do
     echo "$File ..."
 
     FExt="${File##*.}"
-    FName=$(basename -- "$File")
-    if [ "$FExt" == "py" ] && [[ "$SkipCompile" != *"$FName"* ]]; then
-        mkdir -p $(dirname $DirOut/$File)
+    if [ "$FExt" == "py" ]; then 
+        FName=$(basename -- "$File")
+        DName=$(dirname -- "$File")
 
-        FileObj=$(echo $File | sed "s|.py|.mpy|g")
-        $Compiler $File -o $DirOut/$FileObj
+        if [[ "$SkipFile" != *"$FName"* ]]; then
+           #[[ "$SkipDir" != *"$DName"* ]]; then
+            mkdir -p $(dirname $DirOut/$File)
+
+            FileObj=$(echo $File | sed "s|.py|.mpy|g")
+            $Compiler $File -o $DirOut/$FileObj
+        else
+            cp --parents $File $DirOut
+        fi
     else
         cp --parents $File $DirOut
     fi
@@ -215,6 +233,7 @@ case $1 in
     SizePy)         "$1"        $2 ;;
     Install)        "$1"        $2 ;;
     Upgrade)        "$1"        $2 ;;
+    Esp32Firmware)  "$1"        $2 ;;
     EspFirmware|w)  EspFirmware $2 ;;
     EspErase|e)     EspErase    $2 ;;
     EspRelease|r)   EspRelease  $2 ;;

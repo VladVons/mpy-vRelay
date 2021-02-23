@@ -6,4 +6,5 @@
 wget-log.*
 __pycache__
 release
+temp
 .idea

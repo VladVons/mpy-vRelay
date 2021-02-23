@@ -39,3 +39,10 @@ def MkDir(aName: str) -> bool:
         if (not FileStat(Path)):
             os.mkdir(Path[:-1])
     return IsDir(aName)
+
+'''
+def MountSD(aDir: str = '/sd'):
+    import machine
+    SD = machine.SDCard()
+    os.mount(SD, aDir)
+'''
