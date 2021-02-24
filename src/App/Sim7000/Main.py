@@ -8,7 +8,6 @@ https://github.com/tmcadam/sim7000-tools/blob/master/sim7000.py
 https://simcom.ee/documents/SIM7000E/SIM7000%20Series_AT%20Command%20Manual_V1.03.pdf
 '''
 
-
 import uasyncio as asyncio
 from machine import UART, Pin
 #
@@ -27,29 +26,49 @@ class TSim7000():
         Obj.value(aOn)
         await asyncio.sleep(2)
 
-    async def AT(self, aCmd, aSleep = 0.1):
-        Log.Print(1, 'i', 'AT', aCmd)
+    async def AT(self, aCmd, aSleep = 0.2):
+        #Log.Print(1, 'i', 'AT', aCmd)
 
         self.SW.write(('AT' + aCmd + '\r\n').encode('utf-8'))
         await self.SW.drain()
         await asyncio.sleep(aSleep)
 
+    async def Handler(self, aCmd, aRes):
+        Log.Print(1, 'i', 'Handle', aCmd, aRes)
+        if (aCmd == 'AT+CGNSINF'):
+            pass
+
     async def Reader(self):
+        Cmd = ''
         while True:
-            Line = await self.SR.readline()
-            Log.Print(1, 'i', 'Reader', Line)
+            try:
+                Line = await self.SR.readline()
+                Line = Line.decode('utf-8').strip()
+            except:
+                continue
+
+            #Log.Print(1, 'i', 'Reader----', Line)
+            if (Line.startswith('AT')):
+                Cmd = Line
+            elif (Line == 'OK') or (Line == ''):
+                Cmd = ''
+            elif (Cmd):
+                await self.Handler(Cmd, Line)
 
     async def Run(self, aSleep: int = 5):
         await self.SetPower(True)
 
         asyncio.create_task(self.Reader())
 
-        await self.AT('')
-        await self.AT("+CGMM") # Module name
-        await self.AT("+CGMR") # Firmware version
-        await self.AT('+CGNSPWR=1', 2) # Power on
+        #await self.AT('')
+        #await self.AT("+CGMM") # Module name
+        #await self.AT("+CGMR") # Firmware version
+        #await self.AT('+CGNSPWR=1', 2) # Power on
 
         while True:
+            await self.AT('')
+            await self.AT("+CGMM") # Module name
+            await self.AT('+CGNSPWR=1') # Power on and wait 2s
             await self.AT('+CGNSINF')
             #await self.AT('+CGNSPWR=0', 3) # Power off
             await asyncio.sleep(aSleep)
