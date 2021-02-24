@@ -36,6 +36,8 @@ class TSim7000():
     async def Handler(self, aCmd, aRes):
         Log.Print(1, 'i', 'Handle', aCmd, aRes)
         if (aCmd == 'AT+CGNSINF'):
+            #+CGNSINF: 1,1,20210224133650.000,49.550612,25.592956,334.900,0.00,323.3,1,,2.8,2.9,1.0,,11,3,,,38,,
+            #Date, Lat, Lon, Alt, Speed = aRes.split(',')[2:7]
             pass
 
     async def Reader(self):
