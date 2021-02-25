@@ -39,8 +39,9 @@ class TSim7000():
         await asyncio.sleep(aSleep)
 
     '''
-    # ToDo. unstable. Perhapse ReadWrite as follow
+    # ToDo. unstable. Perhapse Read/Write as follow
     #with UART(PORT, BAUD, timeout=1) as ser:
+
     async def Send(self, aCmd: str, aSleep = 0.1):
         self.Event.clear() # stop Reader()
         await self.AT(aCmd, aSleep)
@@ -91,7 +92,7 @@ class TSim7000():
         asyncio.create_task(self.Reader())
 
         while True:
-            await self.AT('') # ToDo. readline hangs without it
+            await self.AT('') # ToDo. readline hangs without it !
 
             await self.AT("+CGMI") # manufacturer
             #await self.AT("+CGMM") # Module name
