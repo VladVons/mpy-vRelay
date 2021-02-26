@@ -12,8 +12,8 @@ from Inc.Plugin import Plugin
 from Inc.Log  import Log
 from Inc.Hyster import THyster
 
-#from Inc.Api.dev_dht22 import TApi
-from Inc.Api.emu_cycle import TApi
+#from IncP.Api.dev_dht22 import TApi
+from IncP.Api.emu_cycle import TApi
 
 
 class TTherm():

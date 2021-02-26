@@ -4,8 +4,10 @@ Created:     2020.04.03
 License:     GNU, see LICENSE for more details
 Description:.
 '''
-
-import uasyncio as asyncio
+try:
+  import asyncio
+except:
+  import uasyncio as asyncio
 #
 from Inc.Util.UStr import SplitPad
 

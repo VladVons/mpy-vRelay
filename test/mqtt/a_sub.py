@@ -36,7 +36,8 @@ class TMqtt():
 
     def on_message(self, client, topic, payload, qos, properties):
         #print('on_message()', topic, payload.decode(), properties)
-        Log.Print(1, topic, round(time.time() - self.Last, 1))
+        Log.Print(1, 'on_message()',
+            'topic %s, payload %s, qos %s, time %s' % (topic, payload, qos, round(time.time() - self.Last, 1)))
         self.Last = time.time()
 
     async def Main(self, aHost, aToken, aTopic):
@@ -64,8 +65,11 @@ loop.add_signal_handler(signal.SIGTERM, ask_exit)
 
 #loop.create_task(TaskPulse())
 
+Host = 'vpn2.oster.com.ua'
+Topic = 'vRelay/#'
+
 Mqtt = TMqtt()
 token = os.environ.get('FLESPI_TOKEN')
-TaskMain = Mqtt.Main('vpn2.oster.com.ua', token, 'vRelay/pub/#')
+TaskMain = Mqtt.Main(Host, token, Topic)
 
 loop.run_until_complete(TaskMain)

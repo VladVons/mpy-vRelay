@@ -12,7 +12,7 @@ mostly async/await keywords
 
 import usocket as socket
 import ustruct as struct
-from ubinascii import hexlify
+#from ubinascii import hexlify
 
 class MQTTException(Exception):
     pass
@@ -70,7 +70,7 @@ class MQTTClient:
         self.sock.connect(addr)
 
         if self.ssl:
-            import ussl
+            import ussl # IncP
             self.sock = ussl.wrap_socket(self.sock, **self.ssl_params)
 
         premsg = bytearray(b"\x10\0\0\0\0\0")

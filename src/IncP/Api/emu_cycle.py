@@ -5,7 +5,7 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-from Inc.Api import TApiBase
+from IncP.Api import TApiBase
 
 
 class TApi(TApiBase):

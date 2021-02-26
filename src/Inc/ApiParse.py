@@ -20,7 +20,7 @@ def QueryToDict(aQuery: str) -> dict:
 
 # simplify QueryUrl + GetApi to avoid `too many recursuin`
 def QueryUrl(aPath: str, aQuery: dict):
-    DirCore = 'Inc/Api'
+    DirCore = 'IncP/Api'
     DirUser = 'Plugin/Api'
 
     Name, Ext = UStr.SplitPad(2, aPath.split('/')[-1], '.')

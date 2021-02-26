@@ -8,11 +8,11 @@ Description:.
 import uasyncio as asyncio
 from network import WLAN, STA_IF
 #
-from Inc.WLan import TWLan, GetMac
 from Inc.Log import Log
 from Inc.Conf import Conf
-from Inc.Util.UTime import SetTime
 from Inc.Util.UNet import CheckHost
+from IncP.WLan import TWLan, GetMac
+from IncP.Util.UTime import SetTime
 
 
 class TConnSTA(TWLan):

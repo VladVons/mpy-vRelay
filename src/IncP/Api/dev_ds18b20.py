@@ -8,9 +8,9 @@ Description: micropython ESP8266
 
 import binascii
 
-from Inc.Dev.ds18b20 import DS1820
-from Inc.Api import TApiBase
 from Inc.Log import Log
+from IncP.Dev.ds18b20 import DS1820
+from IncP.Api import TApiBase
 
 
 class TApi(TApiBase):

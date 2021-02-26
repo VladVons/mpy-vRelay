@@ -11,7 +11,7 @@ from machine   import idle
 from ubinascii import hexlify
 from uasyncio  import sleep
 #
-from .Log import Log
+from Inc.Log import Log
 
 
 def GetMac(aObj) -> str:

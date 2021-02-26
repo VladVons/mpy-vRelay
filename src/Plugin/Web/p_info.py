@@ -8,7 +8,7 @@ Description:.http://IP/info
 
 import json
 #
-from Inc.Api.sys_info import TApi
+from IncP.Api.sys_info import TApi
 
 
 class THttpApiEx():

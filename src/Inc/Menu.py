@@ -5,7 +5,10 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
-import uasyncio as asyncio
+try:
+  import asyncio
+except:
+  import uasyncio as asyncio
 #
 from Inc.Util.UObj import GetTree
 from Inc.Util.UArr import SortLD

@@ -5,9 +5,12 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-import sys, select
-import uasyncio as asyncio
+try:
+  import asyncio
+except:
+  import uasyncio as asyncio
 
+import sys, select
 
 
 class TKbdTerm():

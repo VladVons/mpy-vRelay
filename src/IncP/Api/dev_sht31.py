@@ -8,9 +8,9 @@ Description: micropython ESP8266
 
 import machine
 #
-from Inc.Dev.sht31 import SHT31
-from Inc.Api import TApiBase
 from Inc.Log import Log
+from IncP.Api import TApiBase
+from IncP.Dev.sht31 import SHT31
 
 
 class TApi(TApiBase):

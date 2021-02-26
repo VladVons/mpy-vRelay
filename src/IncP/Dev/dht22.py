@@ -6,10 +6,9 @@ Description: micropython ESP8266
              DHT22 temperature-humidity sensor
 '''
 
-import machine
-import dht
-import time
+import machine, dht, time
 import uasyncio as asyncio
+
 
 Lock = asyncio.Lock()
 

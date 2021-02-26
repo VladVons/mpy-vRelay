@@ -15,18 +15,6 @@ def TimeInRange(aStart, aEnd, aX):
         return (aStart <= aX) or (aX <= aEnd)
 '''
 
-def SetTime(aTZone):
-    from machine import RTC
-    from ntptime import settime
-
-    try:
-        settime()
-        Time = time.time() + (aTZone * 3600)
-        (year, month, day, hour, minute, second, weekday, yearday) = time.localtime(Time)
-        rtc  = RTC()
-        rtc.datetime((year, month, day, 0, hour, minute, second, 0))
-    except: pass
-
 def GetDate():
     lt = time.localtime(time.time())
     R = '%d-%02d-%02d' % (lt[0], lt[1], lt[2])

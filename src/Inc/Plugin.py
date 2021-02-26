@@ -4,9 +4,12 @@ Created:     2021.01.30
 License:     GNU, see LICENSE for more details
 Description:
 '''
+try:
+  import asyncio
+except:
+  import uasyncio as asyncio
 
 import os, sys, gc
-import uasyncio as asyncio
 #
 from Inc.Log  import Log
 
@@ -16,11 +19,19 @@ class TPlugin():
         self.Data = {}
 
     @staticmethod
-    def DelMod(aPath, aMod):
+    def _DelMod(aPath, aMod):
         del aMod
         for Item in sys.modules:
             if (aPath in Item):
                 del sys.modules[Item]
+    @staticmethod
+    def _Mem():
+        return gc.mem_free()
+
+    @staticmethod
+    def Run():
+        Loop = asyncio.get_event_loop()
+        Loop.run_forever()
 
     def LoadDir(self, aDir: str):
         Files = os.ilistdir(aDir)
@@ -38,7 +49,7 @@ class TPlugin():
             return
 
         gc.collect()
-        MemStart = gc.mem_free()
+        MemStart = self._Mem()
 
         Mod = __import__(aPath)
         if (aForce) or (getattr(Mod, 'AutoLoad', False)):
@@ -53,13 +64,13 @@ class TPlugin():
                 asyncio.create_task(Arr[1])
 
                 gc.collect()
-                Log.Print(1, 'i', 'LoadMod()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - gc.mem_free(), gc.mem_free()))
+                Log.Print(1, 'i', 'LoadMod()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - self._Mem(), self._Mem()))
 
                 return Mod
             else:
-                self.DelMod(aPath, Mod)
+                self._DelMod(aPath, Mod)
         else:
-            self.DelMod(aPath, Mod)
+            self._DelMod(aPath, Mod)
 
     def Get(self, aPath: str):
         return self.Data.get(aPath)
@@ -74,12 +85,6 @@ class TPlugin():
 
     async def Stop(self):
         return await self.Post(None, 'Stop')
-
-    @staticmethod
-    def Run():
-        Loop = asyncio.get_event_loop()
-        Loop.run_forever()
-
 
 
 Plugin = TPlugin()

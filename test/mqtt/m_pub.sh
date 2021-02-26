@@ -16,16 +16,15 @@ Pub()
 {
   Cnt=0
   while true; do
-    echo
-
     ((Cnt++))
     Msg="$cMsg&debug=$Cnt"
     #Msg="$cMsg"
     echo $Msg
     #mosquitto_pub -h $cHost -t $cTopic -m "$Msg" -d
     mosquitto_pub -h $cHost -t $cTopic -m "$Msg"
+    echo
 
-    sleep 10
+    sleep 3
   done
 }
 

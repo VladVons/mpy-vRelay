@@ -6,7 +6,8 @@ Description:.
 '''
 
 import random
-from Inc.Api import TApiBase
+#
+from IncP.Api import TApiBase
 
 
 class TApi(TApiBase):

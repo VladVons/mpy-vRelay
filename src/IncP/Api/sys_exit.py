@@ -8,7 +8,7 @@ Description:.
 import sys
 import uasyncio as asyncio
 #
-from Inc.Api import TApiBase
+from IncP.Api import TApiBase
 
 
 class TApi(TApiBase):

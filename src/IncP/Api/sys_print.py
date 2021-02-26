@@ -5,8 +5,8 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-from Inc.Api import TApiBase
 from Inc.Http.HttpUrl import UrlPercent
+from IncP.Api import TApiBase
 
 
 class TApi(TApiBase):

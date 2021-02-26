@@ -5,9 +5,8 @@ License:     GNU, see LICENSE for more details
 Description: micropython ESP8266
              DS18X20 temperature sensor
 '''
-import time
-import machine
-import onewire
+
+import time, machine, onewire
 import uasyncio as asyncio
 #
 from   ds18x20 import DS18X20

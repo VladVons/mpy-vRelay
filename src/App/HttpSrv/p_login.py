@@ -1,6 +1,6 @@
 from Inc.Conf import Conf
 from Inc.ApiParse import QueryToDict
-from Inc.Util.UHrd import Reset
+from IncP.Util.UHrd import Reset
 
 
 async def DoUrl(aParent, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter, aHead: dict):

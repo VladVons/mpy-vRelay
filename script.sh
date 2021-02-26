@@ -144,7 +144,7 @@ EspSrcCopy2()
   local aDir=${1:-"src"};
   Log "$FUNCNAME($*)"
 
-  Skip="App Inc Test.py"
+  Skip="App Inc IncP Test.py"
   echo "Copy files in ESP"
 
   cd $aDir

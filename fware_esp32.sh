@@ -71,7 +71,7 @@ InstallPkg()
   #$cDirMPY/micropython/ports/unix/micropython -c "import upip; upip.install('aiohttp')"
   #cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
 
-  rm -R $cDirMPY/micropython/ports/esp32/modules/{Inc,App}
+  rm -R $cDirMPY/micropython/ports/esp32/modules/{Inc,IncP,App}
   cp -R $cDirCur/src/{Inc,App} $cDirMPY/micropython/ports/esp32/modules/
 }
 

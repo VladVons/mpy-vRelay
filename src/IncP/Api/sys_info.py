@@ -5,15 +5,11 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-import gc
-import os
-import sys
-import time
-import network
+import gc, os, sys, time, network
 #
 from Inc.Conf import Conf
-from Inc.WLan import GetMac
 from Inc.Util.UTime import GetDate, GetTime
+from IncP.WLan import GetMac
 
 __version__ = '1.1.05, 2021.02.22'
 __author__  = 'Vladimir Vons, vladvons@gmail.com'

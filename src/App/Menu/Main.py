@@ -11,7 +11,7 @@ from Inc.Conf import Conf
 
 class TMenuApp(TMenu):
     async def _ExecApi(self, aPath: str, aParam: list):
-        Path = 'Inc.Api.' + aPath.split('/')[-1]
+        Path = 'IncP.Api.' + aPath.split('/')[-1]
         Lib  = __import__(Path , None, None, ['TApi'])
         await self.Exec(Lib.TApi().Exec, aParam)
 
