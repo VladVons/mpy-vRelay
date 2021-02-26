@@ -1,6 +1,3 @@
-from .Options import *
-
-
 def Main():
     from .Main import TIdle
 

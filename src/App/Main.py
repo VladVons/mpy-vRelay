@@ -6,7 +6,7 @@ Description:.
 '''
 
 
-import os
+import os, gc
 import machine
 import uasyncio as asyncio
 #
@@ -21,8 +21,12 @@ async def Run():
     #DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
     #print('DSleep', DSleep)
 
-    Plugin.LoadList(Conf.get('Plugins', 'App/HttpSrv'))
+    Plugin.LoadList(Conf.get('Plugins', 'App.HttpSrv'))
     Plugin.LoadDir('Plugin/App')
+
+    gc.collect()
+    Log.Print(1, 'i', 'Run()', 'MemFree %d' % (gc.mem_free()))
+
     try:
         Plugin.Run()
     except KeyboardInterrupt:

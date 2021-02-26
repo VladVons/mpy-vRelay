@@ -1,2 +1,1 @@
-AutoLoad = True
-Depends='App/ConnSTA'
+Depends='App.ConnSTA'

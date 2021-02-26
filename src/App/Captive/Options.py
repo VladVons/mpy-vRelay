@@ -1,2 +1,1 @@
-AutoLoad = False
-Depends='App/HttpSrv'
+Depends='App.HttpSrv'

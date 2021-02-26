@@ -19,16 +19,6 @@ class TPlugin():
         self.Data = {}
 
     @staticmethod
-    def _DelMod(aPath, aMod):
-        del aMod
-        for Item in sys.modules:
-            if (aPath in Item):
-                del sys.modules[Item]
-    @staticmethod
-    def _Mem():
-        return gc.mem_free()
-
-    @staticmethod
     def Run():
         Loop = asyncio.get_event_loop()
         Loop.run_forever()
@@ -38,39 +28,30 @@ class TPlugin():
         for Info in Files:
             if (Info[1] & 0x4000): # is dir
                 DirName = Info[0]
-                self.LoadMod(aDir + '/' + DirName, False)
+                self.LoadMod(aDir + '.' + DirName)
 
     def LoadList(self, aModules: str):
         for Module in aModules.split(' '):
             self.LoadMod(Module)
 
-    def LoadMod(self, aPath: str, aForce: bool = True):
+    def LoadMod(self, aPath: str):
         if (aPath == '') or (aPath.startswith('-')) or (self.Data.get(aPath)):
             return
 
+        __import__(aPath)
+        Mod = sys.modules.get(aPath)
+        Depends = getattr(Mod, 'Depends', '')
+        for Item in Depends.split(' '):
+            self.LoadMod(Item)
+
+        Arr = Mod.Main()
+        if (Arr):
+            # Class, Func = Arr
+            self.Data[aPath] = Arr[0]
+            asyncio.create_task(Arr[1])
+
+            Log.Print(1, 'i', 'LoadMod()', 'Path %s' % (aPath))
         gc.collect()
-        MemStart = self._Mem()
-
-        Mod = __import__(aPath)
-        if (aForce) or (getattr(Mod, 'AutoLoad', False)):
-            Depends = getattr(Mod, 'Depends', '')
-            for Item in Depends.split(' '):
-                self.LoadMod(Item, True)
-
-            Arr = Mod.Main()
-            if (Arr):
-                # Class, Func = Arr
-                self.Data[aPath] = Arr[0]
-                asyncio.create_task(Arr[1])
-
-                gc.collect()
-                Log.Print(1, 'i', 'LoadMod()', 'Path %s, MemHeap %d, MemFree %d' % (aPath, MemStart - self._Mem(), self._Mem()))
-
-                return Mod
-            else:
-                self._DelMod(aPath, Mod)
-        else:
-            self._DelMod(aPath, Mod)
 
     def Get(self, aPath: str):
         return self.Data.get(aPath)

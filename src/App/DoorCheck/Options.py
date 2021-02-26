@@ -1,5 +1,4 @@
-AutoLoad = False
-Depends = 'App/Mqtt'
+Depends = 'App.Mqtt'
 #
 cPinBtn = 0
 cPinLed = 2
