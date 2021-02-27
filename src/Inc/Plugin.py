@@ -44,7 +44,7 @@ class TPlugin():
             # Class, Func = Arr
             self.Data[aPath] = [Arr[0], asyncio.create_task(Arr[1])]
 
-            Log.Print(1, 'i', 'LoadMod()', 'Path: %s' % (aPath))
+            Log.Print(1, 'i', 'LoadMod()', aPath)
         gc.collect()
 
     def Get(self, aPath: str):
