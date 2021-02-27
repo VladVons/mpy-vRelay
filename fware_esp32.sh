@@ -72,7 +72,7 @@ InstallPkg()
   #cp -R ~/.micropython/lib/umqtt $cDirMPY/micropython/ports/esp8266/modules/
 
   rm -R $cDirMPY/micropython/ports/esp32/modules/{Inc,IncP,App}
-  cp -R $cDirCur/src/{Inc,App} $cDirMPY/micropython/ports/esp32/modules/
+  cp -R $cDirCur/src/{Inc,IncP,App} $cDirMPY/micropython/ports/esp32/modules/
 }
 
 

@@ -83,7 +83,7 @@ InstallPkg()
   #https://github.com/micropython/micropython/issues/2700
   #micropython/ports/esp8266/boards/esp8266.ld -> irom0_0_seg :  org = 0x40209000, len = 0xa7000
   rm -R $cDirMPY/micropython/ports/esp8266/modules/{Inc,IncP,App}
-  cp -R $cDirCur/src/{Inc,App} $cDirMPY/micropython/ports/esp8266/modules/
+  cp -R $cDirCur/src/{Inc,IncP,App} $cDirMPY/micropython/ports/esp8266/modules/
 }
 
 
