@@ -36,7 +36,7 @@ class TMqtt():
     async def Run(self, aSleep: float = 1.0):
         Name = 'vRelay'
         ConnMod = 'App.ConnSTA'
-        ConnSTA = Plugin.Get(ConnMod)
+        ConnSTA = Plugin.Get(ConnMod)[0]
 
         self.Mqtt = Mqtt = MQTTClient('%s-%s' % (Name, ConnSTA.Mac()) , Conf.Mqtt_Host, Conf.get('Mqtt_Port', 1883), Conf.Mqtt_User, Conf.Mqtt_Passw)
         Mqtt.set_callback(self.DoSubscribe)

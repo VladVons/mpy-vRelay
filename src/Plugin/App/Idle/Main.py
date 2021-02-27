@@ -110,5 +110,5 @@ class TIdle():
                 await Plugin.Post(self, 'from Idle')
                 Obj = Plugin.Get('App.Mqtt')
                 if (Obj):
-                    Obj.Publish('aTopic1', self.CntLoop)
+                    Obj[0].Publish('aTopic1', self.CntLoop)
             '''

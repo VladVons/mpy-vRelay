@@ -18,11 +18,6 @@ class TPlugin():
     def __init__(self):
         self.Data = {}
 
-    @staticmethod
-    def Run():
-        Loop = asyncio.get_event_loop()
-        Loop.run_forever()
-
     def LoadDir(self, aDir: str):
         Files = os.ilistdir(aDir)
         for Info in Files:
@@ -47,10 +42,9 @@ class TPlugin():
         Arr = Mod.Main()
         if (Arr):
             # Class, Func = Arr
-            self.Data[aPath] = Arr[0]
-            asyncio.create_task(Arr[1])
+            self.Data[aPath] = [Arr[0], asyncio.create_task(Arr[1])]
 
-            Log.Print(1, 'i', 'LoadMod()', 'Path %s' % (aPath))
+            Log.Print(1, 'i', 'LoadMod()', 'Path: %s' % (aPath))
         gc.collect()
 
     def Get(self, aPath: str):
@@ -66,6 +60,10 @@ class TPlugin():
 
     async def Stop(self):
         return await self.Post(None, 'Stop')
+
+    async def Run(self):
+        Tasks = [Val[1] for Val in self.Data.values()]
+        await asyncio.gather(*Tasks)
 
 
 Plugin = TPlugin()

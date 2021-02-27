@@ -37,7 +37,7 @@ class TDoorCheck():
 
                 Mqtt = Plugin.Get('App.Mqtt')
                 if (Mqtt):
-                    Mqtt.Publish('MyTopic1', 'CntDoor %s' % self.CntDoor)
+                    Mqtt[0].Publish('MyTopic1', 'CntDoor %s' % self.CntDoor)
 
     async def Run(self, aSleep: int = 1):
         while True:

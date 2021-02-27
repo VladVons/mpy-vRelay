@@ -28,7 +28,7 @@ async def Run():
     Log.Print(1, 'i', 'Run()', 'MemFree %d' % (gc.mem_free()))
 
     try:
-        Plugin.Run()
+        await Plugin.Run()
     except KeyboardInterrupt:
         print('Ctrl-C')
     finally:
