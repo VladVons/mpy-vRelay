@@ -47,11 +47,14 @@ class TLog():
             self.Cnt += 1
             R = '%s,%s,%03d,%d,%s,%s%s' % (GetDate(), GetTime(), self.Cnt, aLevel, aType, ' ' * aLevel, list(aParam))
             if (aType == 'x') and (len(aParam) > 1):
-                sys.print_exception(aParam[1])
+                self.DoExcept(aParam[1])
 
-            for Echo in self.Echoes: 
+            for Echo in self.Echoes:
                 Echo.Write(R)
         return R
+
+    def DoExcept(self, aE):
+        sys.print_exception(aE)
 
 
 Log = TLog()
