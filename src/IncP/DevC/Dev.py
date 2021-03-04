@@ -9,7 +9,7 @@ Description:
 import time
 
 
-class TDevSens():
+class TDev():
     def __init__(self, aValD: float, aSecD: int = 60):
         self.ValD = aValD
         self.SecD = aSecD
@@ -23,6 +23,10 @@ class TDevSens():
                 self.Time = time.time()
                 self.Val = Val
                 return True
+
+    def Info(self):
+        return [self.Val, self.__class__.__name__, self.Time]
+
 
     '''
     def Read(self):

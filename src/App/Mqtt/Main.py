@@ -23,7 +23,8 @@ class TMqtt():
     async def _DoPost(self, aOwner, aMsg):
         Data = {
             'TMqtt': aMsg, 
-            'id': hexlify(machine.unique_id()).decode('utf-8')
+            'Id': hexlify(machine.unique_id()).decode('utf-8'),
+            'Alias': Conf.Alias
         }
         await self.Publish('%s/pub/%s' % (Name, 'test'), json.dumps(Data))
 
