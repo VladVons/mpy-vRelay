@@ -5,7 +5,8 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-import json
+import json, machine
+from ubinascii import hexlify
 import uasyncio as asyncio
 #
 from Inc.Mqtt import MQTTClient
@@ -15,8 +16,22 @@ from Inc.Plugin import Plugin
 from Inc.ApiParse import QueryToDict, QueryUrl
 from Inc.Util.UStr import SplitPad
 
+Name = 'vRelay'
+
 
 class TMqtt():
+    async def _DoPost(self, aOwner, aMsg):
+        Data = {
+            'TMqtt': aMsg, 
+            'id': hexlify(machine.unique_id()).decode('utf-8')
+        }
+        await self.Publish('%s/pub/%s' % (Name, 'test'), json.dumps(Data))
+
+    async def Publish(self, aTopic: str, aMsg: str):
+        if (self.Mqtt.is_connected()):
+            print('Publish', aTopic, aMsg)
+            await self.Mqtt.publish(aTopic, aMsg)
+
     async def DoSubscribe(self, aTopic: str, aMsg):
         aMsg = aMsg.decode('utf-8')
         tId, tType, tApi = SplitPad(3, aTopic.decode('utf-8'), '/')
@@ -30,11 +45,7 @@ class TMqtt():
         Log.Print(2, 'i', 'DoSubscribe()', 'topic: %s, msg: %s, res: %s' % (aTopic, aMsg, R))
         await self.Mqtt.publish('%s/pub/%s' % (tId, tApi), json.dumps(R))
 
-    async def Publish(self, aTopic: str, aMsg: str):
-        await self.Mqtt.publish(aTopic, aMsg)
-
     async def Run(self, aSleep: float = 1.0):
-        Name = 'vRelay'
         ConnMod = 'App.ConnSTA'
         ConnSTA = Plugin.Get(ConnMod)[0]
 

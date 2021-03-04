@@ -122,15 +122,6 @@ class MQTTClient:
     #    self.sock.write(b"\xe0\0")
     #    self.sock.close()
 
-    # VladVons
-    def disconnect(self):
-        if (self.sock): # VladVons
-            try:
-                self.sock.write(b"\xe0\0")
-            finally:
-                self.sock.close()
-                self.sock = None
-
     def ping(self):
         self.sock.write(b"\xc0\0")
 
@@ -239,3 +230,16 @@ class MQTTClient:
     async def check_msg(self):
         self.sock.setblocking(False)
         return await self.wait_msg()
+
+    # VladVons +++
+    def disconnect(self):
+        if (self.sock): # VladVons
+            try:
+                self.sock.write(b"\xe0\0")
+            finally:
+                self.sock.close()
+                self.sock = None
+
+    def is_connected(self):
+        return (self.sock is not None)
+    # VladVons ---

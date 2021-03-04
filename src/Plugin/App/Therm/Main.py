@@ -2,8 +2,9 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2021.02.19
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 '''
+
 
 import uasyncio as asyncio
 #
@@ -11,31 +12,32 @@ from Inc.Conf import Conf
 from Inc.Plugin import Plugin
 from Inc.Log  import Log
 from Inc.Hyster import THyster
+from Inc.DevSens import TDevSens
+#
+from IncP.Dev.dht22 import DHT22
+from IncP.Dev.emu_cycle import TCycle
 
-#from IncP.Api.dev_dht22 import TApi
-from IncP.Api.emu_cycle import TApi
+
+class TDevDT(TDevSens):
+    def __init__(self, aPin):
+        super().__init__(0.5, 10)
+        #self.Dev = DHT22(aPin)
+        self.Dev = TCycle(20, 30)
+
+    async def Read(self):
+        R = await self.Dev.Get()
+        return R[0]
 
 
 class TTherm():
     def __init__(self):
+        self.DevT = TDevDT(14)
         self.Hyst = THyster()
-        self.Val = None
 
-    async def Read(self):
-        R = await TApi().Exec(0, 15)
-        Val = R['value']
-        State = self.Hyst.Check(10, Val)
-        #Val = await TApi().Exec(14)
-        #Val = {'temperature': await TApi().Exec(20, 30)['value']}
-        #if (Val['temperature'] is not None):
-        #    self.Val = Val
-        #    State = self.Hyst.Check(10, Val['temperature'])
-
-    async def _DoPost(self, aOwner, aMsg):
-        print('Im TTherm', aOwner, aMsg)
-        return 'from TTherm'
-
-    async def Run(self, aSleep: float = 5):
+    async def Run(self, aSleep: float = 10):
         while True:
-            await self.Read()
+            if (await self.DevT.Check() == True):
+                State = self.Hyst.CheckP(25, self.DevT.Val)
+                await Plugin.Post(self, [self.DevT.Val, State])
+
             await asyncio.sleep(aSleep)

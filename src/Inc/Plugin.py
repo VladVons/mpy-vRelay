@@ -4,6 +4,8 @@ Created:     2021.01.30
 License:     GNU, see LICENSE for more details
 Description:
 '''
+
+
 try:
   import asyncio
 except:
@@ -51,9 +53,9 @@ class TPlugin():
 
     async def Post(self, aOwner, aMsg, aFunc = '_DoPost'):
         R = {}
-        for Key, Obj in self.Data.items():
-            if (Obj != aOwner) and (hasattr(Obj, aFunc)):
-                Func = getattr(Obj, aFunc)
+        for Key, (Class, Task) in self.Data.items():
+            if (Class != aOwner) and (hasattr(Class, aFunc)):
+                Func = getattr(Class, aFunc)
                 R[Key] = await Func(aOwner, aMsg)
         return R
 

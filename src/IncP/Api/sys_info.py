@@ -5,7 +5,8 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-import gc, os, sys, time, network
+import gc, os, sys, time, network, machine
+from ubinascii import hexlify
 #
 from Inc.Conf import Conf
 from Inc.Util.UTime import GetDate, GetTime
@@ -30,6 +31,7 @@ class TApi():
             'Descr':    '%s, %s' % (Conf.Alias, Conf.Descr),
             'MemFree':  gc.mem_free(),
             'MemAlloc': gc.mem_alloc(),
+            #'ID':       hexlify(machine.unique_id()).decode('utf-8'),
             'MAC':      GetMac(NetSTA),
             'IP STA':   NetSTA.ifconfig(),
             'IP AP':    NetAP.ifconfig(),

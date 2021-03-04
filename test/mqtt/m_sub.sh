@@ -8,4 +8,4 @@ cHost="vpn2.oster.com.ua"
 cTopic="vRelay/#"
 
 #mosquitto_sub -h $cHost -t $cTopic -d -v 
-mosquitto_sub -h $cHost -t $cTopic 
+mosquitto_sub -h $cHost -t $cTopic
