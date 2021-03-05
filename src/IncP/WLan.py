@@ -55,7 +55,7 @@ class TWLan():
         return R
 
     async def EnableAP(self, aMode: bool, aPassw = None):
-        Log.Print(1, 'i', 'EnableAP() %s' % aMode)
+        Log.Print(1, 'i', 'EnableAP() %s, %s ' % (aMode, aPassw))
 
         R = WLAN(AP_IF)
         R.active(False)

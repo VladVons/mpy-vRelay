@@ -31,7 +31,7 @@ class TApi(TApiBase):
             for Item in Data:
                 R.append({'id':binascii.hexlify(Item['id']), 'value':Item['value']})
         except Exception as E:
-            Log.Print(1, 'x', 'sen_ds18b20', E)
+            Log.Print(1, 'x', 'Sen_ds18b20', E)
         return R
 
     async def Query(self, aData: dict) -> dict:

@@ -11,7 +11,7 @@ https://forum.micropython.org/viewtopic.php?f=15&t=4877&p=28043#p28043
 
 from Inc.Log import Log
 from IncP.Api import TApiBase
-from IncP.Dev.sen_dht22 import DHT22
+from IncP.Dev.Sen_dht22 import DHT22
 
 
 class TApi(TApiBase):

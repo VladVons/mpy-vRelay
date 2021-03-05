@@ -22,7 +22,7 @@ Name = 'vRelay'
 class TMqtt():
     async def _DoPost(self, aOwner, aMsg):
         Data = {
-            'TMqtt': aMsg, 
+            'TMqtt': aMsg,
             'Id': hexlify(machine.unique_id()).decode('utf-8'),
             'Alias': Conf.Alias
         }
@@ -32,6 +32,7 @@ class TMqtt():
         if (self.Mqtt.is_connected()):
             print('Publish', aTopic, aMsg)
             await self.Mqtt.publish(aTopic, aMsg)
+            return True
 
     async def DoSubscribe(self, aTopic: str, aMsg):
         aMsg = aMsg.decode('utf-8')
