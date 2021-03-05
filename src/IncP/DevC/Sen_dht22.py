@@ -6,26 +6,23 @@ Description:
 '''
 
 
-from .Dev import TDev
-from IncP.Dev.dht22 import DHT22
+from .Sen import TSen
+from IncP.Dev.Sen_dht22 import DHT22
 
 
-class TDevDT(TDev):
+class TSen_dht22_t(TSen):
     def __init__(self, aPin):
-        super().__init__(0.5, 10)
         self.Dev = DHT22(aPin)
 
     async def Read(self):
         R = await self.Dev.Get()
         return R[0]
 
-'''
-class TDevDH(TDev):
+
+class TSen_dht22_h(TSen):
     def __init__(self, aPin):
-        super().__init__(0.5, 10)
         self.Dev = DHT22(aPin)
 
     async def Read(self):
         R = await self.Dev.Get()
         return R[1]
-'''

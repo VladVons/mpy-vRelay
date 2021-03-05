@@ -48,16 +48,16 @@ class TMenuApp(TMenu):
     async def MApi(self, aPath: str, aParam: list):
         Func = self._ExecApi
         Items = [
-            ['dev_dht22',       Func, [14]],
-            ['dev_ds18b20',     Func, [14]],
-            ['dev_sht31',       Func, [5, 4]],
+            ['Sen_dht22',       Func, [14]],
+            ['Sen_ds18b20',     Func, [14]],
+            ['Sen_sht31',       Func, [5, 4]],
             ['= = =',           None, None],
-            ['sys_conf',        Func, []],
-            ['sys_date',        Func, []],
-            ['sys_info',        Func, []],
-            ['sys_mem',         Func, []],
-            ['sys_plugin',      Func, []],
-            ['sys_reset',       Func, []]
+            ['Sys_conf',        Func, []],
+            ['Sys_date',        Func, []],
+            ['Sys_info',        Func, []],
+            ['Sys_mem',         Func, []],
+            ['Sys_plugin',      Func, []],
+            ['Sys_reset',       Func, []]
         ]
         await self.Parse(aPath, Items)
 

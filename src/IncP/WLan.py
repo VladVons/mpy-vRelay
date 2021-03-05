@@ -5,7 +5,7 @@ License:     GNU, see LICENSE for more details
 Description: 
 '''
 
-from network   import WLAN, STA_IF, AP_IF, AUTH_OPEN
+from network   import WLAN, STA_IF, AP_IF, AUTH_WPA_WPA2_PSK
 from sys       import stdout, platform
 from machine   import idle
 from ubinascii import hexlify
@@ -41,21 +41,28 @@ class TWLan():
             sleep_type(0)
 
         R = WLAN(STA_IF)
+        R.active(False)
+        await sleep(1)
         R.active(True)
+
         if (aAddr):
             R.ifconfig(aAddr)
+
         R.connect(aESSID, aPassw)
         await self._WaitForReady(R.isconnected)
 
         Log.Print(1, 'i', 'Net', R.ifconfig())
         return R
 
-    async def EnableAP(self, aMode: bool):
+    async def EnableAP(self, aMode: bool, aPassw = None):
         Log.Print(1, 'i', 'EnableAP() %s' % aMode)
 
         R = WLAN(AP_IF)
+        R.active(False)
+        await sleep(1)
         R.active(aMode)
+
         if (aMode):
-            R.config(essid = 'vRelay-' + GetMac(R)[-4:], authmode = AUTH_OPEN)
+            R.config(essid='vRelay-' + GetMac(R)[-4:], authmode=AUTH_WPA_WPA2_PSK, password=aPassw)
             await self._WaitForReady(R.active)
         return R

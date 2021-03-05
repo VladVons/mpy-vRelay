@@ -9,12 +9,11 @@ Description:
 import time
 
 
-class TDev():
-    def __init__(self, aValD: float, aSecD: int = 60):
-        self.ValD = aValD
-        self.SecD = aSecD
-        self.Val = 0
-        self.Time = 0
+class TSen():
+    ValD = 1.0
+    SecD = 60
+    Val  = 0
+    Time = 0
 
     async def Check(self):
         Val = await self.Read()
@@ -27,8 +26,7 @@ class TDev():
     def Info(self):
         return [self.Val, self.__class__.__name__, self.Time]
 
-
-    '''
-    def Read(self):
+'''
+    async def Read(self):
         pass
-    '''
+'''

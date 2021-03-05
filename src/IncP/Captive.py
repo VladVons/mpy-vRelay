@@ -42,9 +42,8 @@ class TCaptive():
         R += bytes(map(int, aIP.split(".")))
         return R
 
-    async def Run(self, aSleep: float = 0.1):
-        AP = await TWLan().EnableAP(True)
-        AP.config(essid = 'vRelay-' + GetMac(AP), authmode = network.AUTH_OPEN)
+    async def Run(self, aPassw: str, aSleep: float = 0.1):
+        AP = await TWLan().EnableAP(True, aPassw)
         IP = AP.ifconfig()[0]
 
         Sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

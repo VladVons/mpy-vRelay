@@ -6,13 +6,12 @@ Description:
 '''
 
 
-from .Dev import TDev
-from IncP.Dev.emu_cycle import TCycle
+from .Sen import TSen
+from IncP.Dev.Emu_cycle import TCycle
 
 
-class TDevCycle(TDev):
+class TEmu_cycle(TSen):
     def __init__(self, aStart: int, aEnd: int):
-        super().__init__(0.5, 10)
         self.Dev = TCycle(aStart, aEnd)
 
     async def Read(self):

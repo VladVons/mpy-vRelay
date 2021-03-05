@@ -19,7 +19,7 @@ class DS1820():
         W1  = onewire.OneWire(Pin)
         self.Obj = DS18X20(W1)
 
-    async def Get(self, aIDs: list) -> list:
+    async def Get(self, aIDs: list = []) -> list:
         R = []
         if (not aIDs): 
             #Roms = W1.scan() # hangs if no devices

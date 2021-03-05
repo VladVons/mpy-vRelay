@@ -8,4 +8,5 @@ def Main():
         from IncP.Captive import TCaptive
 
         Obj = TCaptive()
-        return (Obj, Obj.Run())
+        Task = Obj.Run(Conf.get('AP_Paswd', '12345678'))
+        return (Obj, Task)

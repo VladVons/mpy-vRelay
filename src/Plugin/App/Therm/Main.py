@@ -18,12 +18,15 @@ class TTherm():
     def __init__(self):
         self.Hyst = THyster()
 
-        if (Conf.Alias == 'dht22-t'):
-            from IncP.DevC.Dht22 import TDevDT
-            self.DevT = TDevDT(14)
+        if (Conf.Alias == 'Sen_dht22'):
+            from IncP.DevC.Sen_dht22 import TSen_dht22_t
+            self.DevT = TSen_dht22_t(14)
+        elif (Conf.Alias == 'Sen_ds18b20'):
+            from IncP.DevC.Sen_ds18b20 import TSen_ds18b20
+            self.DevT = TSen_ds18b20(14)
         else:
-            from IncP.DevC.EmuCycle import TDevCycle
-            self.DevT = TDevCycle(20, 30)
+            from IncP.DevC.Emu_cycle import TEmu_cycle
+            self.DevT = TEmu_cycle(20, 30)
 
     async def Run(self, aSleep: float = 10):
         while True:
