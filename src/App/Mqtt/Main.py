@@ -31,8 +31,11 @@ class TMqtt():
             print('Send', aData)
 
             Topic, Data = aData
-            await self.Mqtt.publish(Topic, json.dumps(Data))
-            return True
+            try:
+                await self.Mqtt.publish(Topic, json.dumps(Data))
+                return True
+            except Exception as E:
+                Log.Print(1, 'x', 'Send()', E)
 
     async def DoSubscribe(self, aTopic: str, aMsg):
         aMsg = aMsg.decode('utf-8')
