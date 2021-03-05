@@ -5,8 +5,7 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-import json, machine
-from ubinascii import hexlify
+import json
 import uasyncio as asyncio
 #
 from Inc.Mqtt import MQTTClient
@@ -15,18 +14,15 @@ from Inc.Conf import Conf
 from Inc.Plugin import Plugin
 from Inc.ApiParse import QueryToDict, QueryUrl
 from Inc.Util.UStr import SplitPad
+from IncP.Info import Info
 
-Name = 'vRelay'
+cName = 'vRelay'
 
 
 class TMqtt():
     async def _DoPost(self, aOwner, aMsg):
-        Data = {
-            'TMqtt': aMsg,
-            'Id': hexlify(machine.unique_id()).decode('utf-8'),
-            'Alias': Conf.Alias
-        }
-        await self.Publish('%s/pub/%s' % (Name, 'test'), json.dumps(Data))
+        Data = Info(self, aOwner, aMsg)
+        await self.Publish('%s/pub/%s' % (cName, 'post'), json.dumps(Data))
 
     async def Publish(self, aTopic: str, aMsg: str):
         if (self.Mqtt.is_connected()):
@@ -45,13 +41,13 @@ class TMqtt():
             R = await Plugin.Post(self, [tApi.replace('.', '/'), aMsg])
 
         Log.Print(2, 'i', 'DoSubscribe()', 'topic: %s, msg: %s, res: %s' % (aTopic, aMsg, R))
-        await self.Mqtt.publish('%s/pub/%s' % (tId, tApi), json.dumps(R))
+        await self.Publish('%s/pub/%s' % (tId, tApi), json.dumps(R))
 
     async def Run(self, aSleep: float = 1.0):
         ConnMod = 'App.ConnSTA'
         ConnSTA = Plugin.Get(ConnMod)[0]
 
-        self.Mqtt = Mqtt = MQTTClient('%s-%s' % (Name, ConnSTA.Mac()) , Conf.Mqtt_Host, Conf.get('Mqtt_Port', 1883), Conf.Mqtt_User, Conf.Mqtt_Passw)
+        self.Mqtt = Mqtt = MQTTClient('%s-%s' % (cName, ConnSTA.Mac()) , Conf.Mqtt_Host, Conf.get('Mqtt_Port', 1883), Conf.Mqtt_User, Conf.Mqtt_Passw)
         Mqtt.set_callback(self.DoSubscribe)
 
         Once = True
@@ -61,11 +57,11 @@ class TMqtt():
 
                 Mqtt.disconnect()
                 Mqtt.connect()
-                await Mqtt.subscribe('%s/sub/#' % (Name))
+                await Mqtt.subscribe('%s/sub/#' % (cName))
 
                 if (Once):
                     Once = False
-                    await self._DoPost(self, 'start'):
+                    await self._DoPost(self, 'start')
 
                 while True:
                     # simlify nesting. too many recursion

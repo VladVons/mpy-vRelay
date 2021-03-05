@@ -24,7 +24,7 @@ class TSen():
                 return True
 
     def Info(self):
-        return [self.Val, self.__class__.__name__, self.Time]
+        return {'Val': self.Val, 'Owner': self.__class__.__name__}
 
 '''
     async def Read(self):

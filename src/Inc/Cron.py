@@ -39,9 +39,15 @@ def _Parse(aValue: str, aTarget: int) -> bool:
 def IsNow(aPattern: str) -> bool:
     lt = time.localtime(time.time())
     Minute, Hour, DOM, Month, DOW = aPattern.split(' ')
+
     R = _Parse(Minute, lt[4]) and \
         _Parse(Hour, lt[3]) and \
         _Parse(DOM, lt[2]) and \
         _Parse(Month, lt[1]) and \
         _Parse(DOW, lt[6])
     return R
+
+def IsNowList(aPattern: list) -> str:
+    for Item in aPattern:
+        if (self.IsNow(Item)):
+            return Item

@@ -32,6 +32,6 @@ class TTherm():
         while True:
             if (await self.DevT.Check() == True):
                 State = self.Hyst.CheckP(25, self.DevT.Val)
-                await Plugin.Post(self, [self.DevT.Info(), State])
+                await Plugin.Post(self, self.DevT.Info())
 
             await asyncio.sleep(aSleep)
