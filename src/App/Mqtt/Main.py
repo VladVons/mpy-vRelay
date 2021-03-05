@@ -30,7 +30,7 @@ class TMqtt():
 
     async def Publish(self, aTopic: str, aMsg: str):
         if (self.Mqtt.is_connected()):
-            print('Publish', aTopic, aMsg)
+            Log.Print(1, 'i', 'Publish()', 'Topic %s, Msg %s'  % (aTopic, aMsg))
             await self.Mqtt.publish(aTopic, aMsg)
             return True
 
@@ -54,6 +54,7 @@ class TMqtt():
         self.Mqtt = Mqtt = MQTTClient('%s-%s' % (Name, ConnSTA.Mac()) , Conf.Mqtt_Host, Conf.get('Mqtt_Port', 1883), Conf.Mqtt_User, Conf.Mqtt_Passw)
         Mqtt.set_callback(self.DoSubscribe)
 
+        Once = True
         while True:
             try:
                 await ConnSTA.Event.wait()
@@ -61,6 +62,10 @@ class TMqtt():
                 Mqtt.disconnect()
                 Mqtt.connect()
                 await Mqtt.subscribe('%s/sub/#' % (Name))
+
+                if (Once):
+                    Once = False
+                    await self._DoPost(self, 'start'):
 
                 while True:
                     # simlify nesting. too many recursion
