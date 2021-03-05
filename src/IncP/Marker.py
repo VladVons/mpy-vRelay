@@ -11,13 +11,12 @@ from ubinascii import hexlify
 from Inc.Conf import Conf
 from Inc.Util.UTime import GetDate, GetTime
 
-
-def Info(aSender, aOwner, aMsg):
+def Marker(aSender, aOwner, aData):
     return {
         'Sender': aSender.__class__.__name__,
         'Owner':  aOwner.__class__.__name__ ,
-        'Msg':    aMsg,
         'Id':     hexlify(machine.unique_id()).decode('utf-8'),
         'Alias':  Conf.Alias,
         'Date':   '%s, %s'% (GetDate(), GetTime()),
-    }
+        'Data':   aData
+        }

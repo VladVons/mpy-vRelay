@@ -16,6 +16,7 @@ IsNow('*/3 6,3-5 * * 2')
 
 import time
 
+
 def _Parse(aValue: str, aTarget: int) -> bool:
     for Value in aValue.split(','):
         # *
@@ -40,14 +41,21 @@ def IsNow(aPattern: str) -> bool:
     lt = time.localtime(time.time())
     Minute, Hour, DOM, Month, DOW = aPattern.split(' ')
 
-    R = _Parse(Minute, lt[4]) and \
-        _Parse(Hour, lt[3]) and \
-        _Parse(DOM, lt[2]) and \
-        _Parse(Month, lt[1]) and \
-        _Parse(DOW, lt[6])
+    R = Parse(Minute, lt[4]) and \
+        Parse(Hour, lt[3]) and \
+        Parse(DOM, lt[2]) and \
+        Parse(Month, lt[1]) and \
+        Parse(DOW, lt[6])
     return R
 
-def IsNowList(aPattern: list) -> str:
-    for Item in aPattern:
-        if (self.IsNow(Item)):
-            return Item
+
+class TCron():
+    Data = []
+
+    def Set(self, aPattern: list):
+        Data = aPattern
+
+    def IsNow(self) -> str:
+        for Item in self.Data:
+            if (IsNow(Item)):
+                return Item

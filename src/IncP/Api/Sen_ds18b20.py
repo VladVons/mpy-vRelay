@@ -9,7 +9,7 @@ Description: micropython ESP8266
 import binascii
 
 from Inc.Log import Log
-from IncP.Dev.ds18b20 import DS1820
+from IncP.Dev.Sen_ds18b20 import DS1820
 from IncP.Api import TApiBase
 
 

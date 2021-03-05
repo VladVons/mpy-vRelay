@@ -12,22 +12,26 @@ from Inc.Mqtt import MQTTClient
 from Inc.Log  import Log
 from Inc.Conf import Conf
 from Inc.Plugin import Plugin
+from Inc.Sender import TSender
 from Inc.ApiParse import QueryToDict, QueryUrl
 from Inc.Util.UStr import SplitPad
-from IncP.Info import Info
+from IncP.Marker import Marker
+
 
 cName = 'vRelay'
 
 
 class TMqtt():
     async def _DoPost(self, aOwner, aMsg):
-        Data = Info(self, aOwner, aMsg)
-        await self.Publish('%s/pub/%s' % (cName, 'post'), json.dumps(Data))
+        Data = Marker(self, aOwner, aMsg)
+        await self.Sender.Send(('%s/pub/%s' % (cName, 'post'), Data))
 
-    async def Publish(self, aTopic: str, aMsg: str):
+    async def Send(self, aData):
         if (self.Mqtt.is_connected()):
-            Log.Print(1, 'i', 'Publish()', 'Topic %s, Msg %s'  % (aTopic, aMsg))
-            await self.Mqtt.publish(aTopic, aMsg)
+            print('Send', aData)
+
+            Topic, Data = aData
+            await self.Mqtt.publish(Topic, json.dumps(Data))
             return True
 
     async def DoSubscribe(self, aTopic: str, aMsg):
@@ -38,10 +42,10 @@ class TMqtt():
             Query = QueryToDict(Query)
             R = await QueryUrl(Path, Query)
         else:
-            R = await Plugin.Post(self, [tApi.replace('.', '/'), aMsg])
+            R = await Plugin.Post(self, (tApi.replace('.', '/'), aMsg))
 
-        Log.Print(2, 'i', 'DoSubscribe()', 'topic: %s, msg: %s, res: %s' % (aTopic, aMsg, R))
-        await self.Publish('%s/pub/%s' % (tId, tApi), json.dumps(R))
+        #Log.Print(1, 'i', 'DoSubscribe()', 'topic: %s, msg: %s, res: %s' % (aTopic, aMsg, R))
+        await self.Sender.Send(('%s/pub/%s' % (tId, tApi), R))
 
     async def Run(self, aSleep: float = 1.0):
         ConnMod = 'App.ConnSTA'
@@ -50,7 +54,9 @@ class TMqtt():
         self.Mqtt = Mqtt = MQTTClient('%s-%s' % (cName, ConnSTA.Mac()) , Conf.Mqtt_Host, Conf.get('Mqtt_Port', 1883), Conf.Mqtt_User, Conf.Mqtt_Passw)
         Mqtt.set_callback(self.DoSubscribe)
 
-        Once = True
+        self.Sender = TSender(self.Send)
+        await self._DoPost(self, 'start')
+
         while True:
             try:
                 await ConnSTA.Event.wait()
@@ -58,11 +64,6 @@ class TMqtt():
                 Mqtt.disconnect()
                 Mqtt.connect()
                 await Mqtt.subscribe('%s/sub/#' % (cName))
-
-                if (Once):
-                    Once = False
-                    await self._DoPost(self, 'start')
-
                 while True:
                     # simlify nesting. too many recursion
                     #await Mqtt.check_msg()

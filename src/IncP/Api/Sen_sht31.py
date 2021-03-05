@@ -10,7 +10,7 @@ import machine
 #
 from Inc.Log import Log
 from IncP.Api import TApiBase
-from IncP.Dev.sht31 import SHT31
+from IncP.Dev.Sen_sht31 import SHT31
 
 
 class TApi(TApiBase):
