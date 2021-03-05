@@ -28,11 +28,10 @@ class TMqtt():
 
     async def Send(self, aData):
         if (self.Mqtt.is_connected()):
-            print('Send', aData)
-
             Topic, Data = aData
             try:
                 await self.Mqtt.publish(Topic, json.dumps(Data))
+                print('Send', aData)
                 return True
             except Exception as E:
                 Log.Print(1, 'x', 'Send()', E)
@@ -65,7 +64,9 @@ class TMqtt():
                 await ConnSTA.Event.wait()
 
                 Mqtt.disconnect()
+                await asyncio.sleep(1)
                 Mqtt.connect()
+
                 await Mqtt.subscribe('%s/sub/#' % (cName))
                 while True:
                     # simlify nesting. too many recursion

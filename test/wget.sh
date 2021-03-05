@@ -32,7 +32,7 @@ Loop()
         #HostHive $Host
     done
 
-    sleep 2
+    sleep 3
   done
 }
 
@@ -87,12 +87,12 @@ HostMpy()
 
     #$wget "$aHost/sys_sleep.py?delay=1&async=1&echo=1"
 
-    #$wget "$aHost/dev_ds18b20.py"
+    $wget "$aHost/Sen_ds18b20.py"
     #$wget "$aHost/dev_ds18b20.py?pin=14"
     #$wget "$aHost/dev_ds18b20.py?pin=14&id=28ff176193160491"
 
     #$wget "$aHost/dev_dht11.py"
-    $wget "$aHost/dev_dht22.py"
+    #$wget "$aHost/dev_dht22.py"
 
     #$wget "$aHost/dev_sht21.py"
     #$wget "$aHost/dev_sht31.py"
@@ -110,7 +110,7 @@ HostMpy()
 
 #Hosts="http://dht4.lan"
 #Hosts="http://192.168.11.105"
-Hosts="http://10.10.10.32"
+Hosts="http://10.10.10.105"
 #
 Loop $Hosts
 #$wget "$Hosts/sys_sleep.py?delay=1&async=1&echo=1"
