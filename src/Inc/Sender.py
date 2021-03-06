@@ -10,8 +10,8 @@ from ucollections import deque
 
 
 class TSender():
-    def __init__(self, aOnSend, aLen: int = 10):
-        self.Buf = deque((), aLen)
+    def __init__(self, aOnSend, aSize: int = 10):
+        self.Buf = deque((), aSize)
         self.OnSend = aOnSend
 
     async def Send(self, aData):
@@ -21,6 +21,7 @@ class TSender():
                 await asyncio.sleep(0.5)
 
                 Data = self.Buf.popleft()
-                await self.OnSend(Data)
+                if (not await self.OnSend(Data)):
+                    break
         else:
             self.Buf.append(aData)

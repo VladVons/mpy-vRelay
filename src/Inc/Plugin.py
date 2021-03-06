@@ -25,7 +25,7 @@ class TPlugin():
         for Info in Files:
             if (Info[1] & 0x4000): # is dir
                 DirName = Info[0]
-                self.LoadMod(aDir + '.' + DirName)
+                self.LoadMod(aDir.replace('/', '.') + '.' + DirName)
 
     def LoadList(self, aModules: str):
         for Module in aModules.split(' '):
@@ -51,16 +51,28 @@ class TPlugin():
     def Get(self, aPath: str):
         return self.Data.get(aPath)
 
-    async def Post(self, aOwner, aMsg, aFunc = '_DoPost'):
+    async def _Post(self, aTasks, aOwner, aMsg, aFunc) -> dict:
         R = {}
-        for Key, (Class, Task) in self.Data.items():
+        for Key, (Class, Task) in aTasks:
             if (Class != aOwner) and (hasattr(Class, aFunc)):
                 Func = getattr(Class, aFunc)
                 R[Key] = await Func(aOwner, aMsg)
         return R
 
+    async def Post(self, aOwner, aMsg):
+        return await self._Post(self.Data.items(), aOwner, aMsg, '_DoPost')
+
+    async def Cancel(self, aPath: str):
+        Obj = self.Data.get(aPath)
+        if (Obj):
+            await self._Post([(aPath, Obj)], None, None, '_DoStop')
+            await asyncio.sleep(1)
+            Obj[1].cancel()
+            del self.Data[aPath]
+            return True
+
     async def Stop(self):
-        return await self.Post(None, 'Stop')
+        await self._Post(self.Data.items(), None, None, '_DoStop')
 
     async def Run(self):
         Tasks = [Val[1] for Val in self.Data.values()]
