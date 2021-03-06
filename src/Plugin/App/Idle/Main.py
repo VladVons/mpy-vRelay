@@ -21,7 +21,7 @@ class TIdle():
 
     async def Run(self, aSleep: float = 2):
         while True:
-            print('Idle', self.CntLoop)
+            #print('Idle', self.CntLoop)
             self.tLedBeat()
 
             self.CntLoop += 1

@@ -228,10 +228,10 @@ SizePy()
 }
 
 
+clear
 echo "Platform: ESP32=$ESP32, CustomFW=$CustomFW, Dev=$cDev"
 echo
 
-clear
 case $1 in
     SizePy)         "$1"        $2 ;;
     Install)        "$1"        $2 ;;
