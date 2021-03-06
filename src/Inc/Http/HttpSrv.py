@@ -112,7 +112,7 @@ class THttpApi():
 
     async def CallBack(self, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter):
         Head = await ReadHead(aReader, True)
-        Log.Print(2, 'i', 'CallBack()', 'path: %s, query: %s' % (Head.get('path'), Head.get('query')))
+        #Log.Print(2, 'i', 'CallBack()', 'path: %s, query: %s' % (Head.get('path'), Head.get('query')))
         Path = Head.get('path')
 
         Method = self.GetMethod(Path)
