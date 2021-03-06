@@ -1,6 +1,6 @@
 #Alias = 'Sen_dht22'
-Alias = 'Sen_ds18b20'
-#Alias = 'Emu_cycle'
+#Alias = 'Sen_ds18b20'
+Alias = 'Emu_cycle'
 Descr = 'frozen'
 #
 Plugins = 'App.HttpSrv App.Menu App.Mqtt App.ConnSTA App.Captive -App.Sim7000 -App.WDog'

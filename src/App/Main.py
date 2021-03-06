@@ -33,7 +33,6 @@ async def Run():
         print('Ctrl-C')
     finally:
         await Plugin.Stop()
-    Log.Print(1, 'i', 'End')
 
 def Main():
     asyncio.run(Run())

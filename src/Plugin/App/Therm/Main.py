@@ -32,18 +32,24 @@ class TTherm():
             self.DevT.SecD = 5
 
     async def _DoPost(self, aOwner, aMsg):
-        self.Cron.Set([])
+        #self.Cron.Set(aMsg.get('Val'))
+        pass
 
     async def _DoStop(self, aOwner, aMsg):
         print('TTherm._DoStop')
 
     async def Check(self):
         if (await self.DevT.Check() == True):
-            CronOk = self.Cron.IsNow()
-            HystOk = self.Hyst.CheckP(25, self.DevT.Val)
-            await Plugin.Post(self, self.DevT.Info())
+            Val = self.Cron.GetVal()
+            if (Val is not None):
+                HystOk = self.Hyst.CheckP(Val, self.DevT.Val)
+                print('---11', Val, HystOk)
+                await Plugin.Post(self, self.DevT.Info())
 
     async def Run(self, aSleep: float = 10):
+        Arr = [('*/2 8-13 * * *', 22), ('* 14-23 * * *', 24)]
+        self.Cron.Set(Arr)
+
         while True:
             await self.Check()
 
