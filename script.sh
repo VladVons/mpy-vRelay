@@ -11,8 +11,8 @@ cDev="/dev/ttyUSB0"
 cSpeed1=115200
 cSpeed2=460800
 
-ESP32=1
-CustomFW=0
+ESP32=0
+CustomFW=1
 
 if [ $ESP32 == 1 ]; then
   if [ $CustomFW == 1 ]; then
@@ -215,6 +215,10 @@ EspRelease()
         cp --parents $File $DirOut
     fi
   done
+
+  cd $DirOut 
+  echo "size *.mpy"
+  du -ch -- **/*.mpy | tail -n 1
 }
 
 
