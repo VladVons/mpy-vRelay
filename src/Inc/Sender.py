@@ -17,11 +17,10 @@ class TSender():
     async def Send(self, aData):
         if (await self.OnSend(aData)):
             # send unsend data
-            for i in range(len(self.Buf)):
-                await asyncio.sleep(0.5)
-
+            while (len(self.Buf) > 0):
                 Data = self.Buf.popleft()
                 if (not await self.OnSend(Data)):
                     break
+                await asyncio.sleep(0.1)
         else:
             self.Buf.append(aData)

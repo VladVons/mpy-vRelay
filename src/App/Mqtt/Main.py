@@ -39,11 +39,12 @@ class TMqtt():
     async def DoSubscribe(self, aTopic: str, aMsg):
         aMsg = aMsg.decode('utf-8')
         tId, tType, tApi = SplitPad(3, aTopic.decode('utf-8'), '/')
-        if (tApi == 'Url'):
+        if (tApi == 'Url'): # topic: vRelay/sub/Url
             Path, Query = SplitPad(2, aMsg, '?')
             Query = QueryToDict(Query)
             R = await QueryUrl(Path, Query)
         else:
+            print('---20', tApi, aMsg)
             R = await Plugin.Post(self, (tApi.replace('.', '/'), aMsg))
 
         #Log.Print(1, 'i', 'DoSubscribe()', 'topic: %s, msg: %s, res: %s' % (aTopic, aMsg, R))

@@ -43,7 +43,7 @@ class TTherm():
             Val = self.Cron.GetVal()
             if (Val is not None):
                 HystOk = self.Hyst.CheckP(Val, self.DevT.Val)
-                print('---11', Val, HystOk)
+                #print('---ToDo. 11', Val, HystOk)
                 await Plugin.Post(self, self.DevT.Info())
 
     async def Run(self, aSleep: float = 10):

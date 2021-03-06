@@ -42,10 +42,10 @@ def IsNow(aPattern: str) -> bool:
     Minute, Hour, DOM, Month, DOW = aPattern.split(' ')
 
     R = _Parse(Minute, lt[4]) and \
-        _Parse(Hour, lt[3]) and \
-        _Parse(DOM, lt[2]) and \
-        _Parse(Month, lt[1]) and \
-        _Parse(DOW, lt[6])
+        _Parse(Hour,   lt[3]) and \
+        _Parse(DOM,    lt[2]) and \
+        _Parse(Month,  lt[1]) and \
+        _Parse(DOW,    lt[6])
     return R
 
 
