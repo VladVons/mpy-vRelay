@@ -125,9 +125,11 @@ class THttpApi():
                 await Lib.THttpApiEx(self).Query(aReader, aWriter, Head)
             else:
                 await self.DoUrl(aReader, aWriter, Head)
-            await aWriter.aclose()
         except Exception as E:
             Data = Log.Print(1, 'x', 'CallBack()', E)
+            await self.Answer(aWriter, 404, 'html', Data)
+        finally:
+            await aWriter.aclose()
 
     async def Run(self, aPort = 80):
         await asyncio.start_server(self.CallBack, "0.0.0.0", aPort)

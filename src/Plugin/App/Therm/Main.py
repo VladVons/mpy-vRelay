@@ -34,6 +34,9 @@ class TTherm():
     async def _DoPost(self, aOwner, aMsg):
         self.Cron.Set([])
 
+    async def _DoStop(self, aOwner, aMsg):
+        print('TTherm._DoStop')
+
     async def Check(self):
         if (await self.DevT.Check() == True):
             CronOk = self.Cron.IsNow()
