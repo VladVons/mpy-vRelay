@@ -40,11 +40,13 @@ class TTherm():
 
     async def Check(self):
         if (await self.DevT.Check() == True):
-            Val = self.Cron.GetVal()
-            if (Val is not None):
-                HystOk = self.Hyst.CheckP(Val, self.DevT.Val)
-                #print('---ToDo. 11', Val, HystOk)
-                await Plugin.Post(self, self.DevT.Info())
+            await Plugin.Post(self, self.DevT.Info())
+
+            #Val = self.Cron.GetVal()
+            #if (Val is not None):
+            #    HystOk = self.Hyst.CheckP(Val, self.DevT.Val)
+            #    #print('---ToDo. 11', Val, HystOk)
+            #    await Plugin.Post(self, self.DevT.Info())
 
     async def Run(self, aSleep: float = 10):
         Arr = [('*/2 8-13 * * *', 22), ('* 14-23 * * *', 24)]

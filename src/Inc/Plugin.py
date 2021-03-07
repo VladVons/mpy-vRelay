@@ -72,7 +72,8 @@ class TPlugin():
             return True
 
     async def Stop(self):
-        await self._Post(self.Data.items(), None, None, '_DoStop')
+        for Key in self.Data.keys():
+            self.Cancel(Key)
 
     async def Run(self):
         Tasks = [Val[1] for Val in self.Data.values()]
