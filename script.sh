@@ -12,7 +12,7 @@ cSpeed1=115200
 cSpeed2=460800
 
 ESP32=0
-CustomFW=1
+CustomFW=1 
 
 
 if [ $ESP32 == 1 ]; then
