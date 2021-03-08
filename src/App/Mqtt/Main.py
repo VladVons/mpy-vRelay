@@ -58,7 +58,7 @@ class TMqtt():
         Mqtt.set_callback(self.DoSubscribe)
 
         self.Sender = TSender(self.Send)
-        await self._DoPost(self, 'start')
+        await self._DoPost(self, {'Val': 1, 'Owner': self.__class__.__name__})
 
         while True:
             try:
