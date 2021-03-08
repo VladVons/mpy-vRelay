@@ -22,16 +22,21 @@ cName = 'vRelay'
 
 
 class TMqtt():
+    def __init__(self):
+        self.Mqtt = None
+        self.Sender = TSender(self.Send)
+
     async def _DoPost(self, aOwner, aMsg):
         Data = Marker(self, aOwner, aMsg)
+        # call self,Send() via safe buffered sender
         await self.Sender.Send(('%s/pub/%s' % (cName, 'post'), Data))
 
     async def Send(self, aData):
-        if (self.Mqtt.is_connected()):
+        if (self.Mqtt) and (self.Mqtt.is_connected()):
             Topic, Data = aData
             try:
                 await self.Mqtt.publish(Topic, json.dumps(Data))
-                print('Send', aData)
+                print('TMqtt.Send', aData)
                 return True
             except Exception as E:
                 Log.Print(1, 'x', 'Send()', E)
@@ -51,14 +56,10 @@ class TMqtt():
         await self.Sender.Send(('%s/pub/%s' % (tId, tApi), R))
 
     async def Run(self, aSleep: float = 1.0):
-        ConnMod = 'App.ConnSTA'
-        ConnSTA = Plugin.Get(ConnMod)[0]
+        ConnSTA = Plugin.Get('App.ConnSTA')[0]
 
         self.Mqtt = Mqtt = MQTTClient('%s-%s' % (cName, ConnSTA.Mac()) , Conf.Mqtt_Host, Conf.get('Mqtt_Port', 1883), Conf.Mqtt_User, Conf.Mqtt_Passw)
         Mqtt.set_callback(self.DoSubscribe)
-
-        self.Sender = TSender(self.Send)
-        await self._DoPost(self, {'Val': 1, 'Owner': self.__class__.__name__})
 
         while True:
             try:
