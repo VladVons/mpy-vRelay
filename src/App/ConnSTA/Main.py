@@ -41,7 +41,7 @@ class TConnSTA(TWLan):
             SetTime(Conf.get('TZone', 2))
         else:
             self.Event.clear()
-        await self.Post(int(IsOk))
+            await self.Post(int(IsOk))
 
     async def Run(self, aSleep: int = 60):
         await self.Post(-1)
