@@ -73,7 +73,7 @@ class TPlugin():
 
     async def Stop(self):
         for Key in self.Data.keys():
-            self.Cancel(Key)
+            await self.Cancel(Key)
 
     async def Run(self):
         Tasks = [Val[1] for Val in self.Data.values()]

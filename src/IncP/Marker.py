@@ -17,6 +17,6 @@ def Marker(aSender, aOwner, aData):
         'Owner':  aOwner.__class__.__name__ ,
         'Id':     hexlify(machine.unique_id()).decode('utf-8'),
         'Alias':  Conf.Alias,
-        'Date':   '%s, %s'% (GetDate(), GetTime()),
+        'Date':   '%s %s'% (GetDate(), GetTime()),
         'Data':   aData
         }
