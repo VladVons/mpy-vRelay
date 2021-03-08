@@ -7,6 +7,8 @@ Description:.
 
 import uasyncio as asyncio
 from ucollections import deque
+#
+from Inc.Log  import Log
 
 
 class TSender():
@@ -23,4 +25,5 @@ class TSender():
                     break
                 await asyncio.sleep(0.1)
         else:
+            Log.Print(1, 'i', 'UnSend', aData)
             self.Buf.append(aData)

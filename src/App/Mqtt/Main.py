@@ -28,6 +28,7 @@ class TMqtt():
 
     async def _DoPost(self, aOwner, aMsg):
         Data = Marker(self, aOwner, aMsg)
+
         # call self,Send() via safe buffered sender
         await self.Sender.Send(('%s/pub/%s' % (cName, 'post'), Data))
 
