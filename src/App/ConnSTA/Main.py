@@ -35,13 +35,13 @@ class TConnSTA(TWLan):
         if (not await self.IsOk()):
             await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
 
-        IsOk = await self.IsOk()
-        if (IsOk):
+        Ok = await self.IsOk()
+        if (Ok):
             self.Event.set()
             SetTime(Conf.get('TZone', 2))
         else:
             self.Event.clear()
-            await self.Post(int(IsOk))
+            await self.Post(int(Ok))
 
     async def Run(self, aSleep: int = 60):
         await self.Post(-1)
