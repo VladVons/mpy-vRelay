@@ -34,7 +34,10 @@ class TConnSTA(TWLan):
 
     async def Connector(self):
         if (not await self.IsOk()):
-            await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
+            try:
+                await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
+           except Exception as E:
+                Log.Print(1, 'x', 'Connector()', E)
 
         Ok = await self.IsOk()
         if (self.Last != Ok):

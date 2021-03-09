@@ -25,11 +25,16 @@ Install()
 
 Make_EspOpenSdk()
 {
+  clear
+  PATH=$PATH:$cDirMPY/esp-idf/tools:
   cd $cDirMPY/micropython/ports/esp32
+  make
+  exit 
+
   HashMPY=`make | grep "Supported git hash (v4.0) (experimental):"`
   HashMPY=${HashMPY:42}
   echo "HashMPY $HashMPY"
-
+  exit
   cd $cDirMPY
 
   # need ~4G
@@ -39,7 +44,7 @@ Make_EspOpenSdk()
   git checkout $HashMPY
   git submodule update --init --recursive
 
-  ./install.sh 
+  ./install.sh
   source ./export.sh
 }
 
@@ -48,8 +53,8 @@ Make_MicroFirmware()
   export ESPIDF=$cDirMPY/esp-idf
   export BOARD=GENERIC
 
-  #export PATH=$PATH:$cDirMPY/esp-idf/tools:
-  #source $cDirMPY/esp-idf/export.sh
+  export PATH=$PATH:$cDirMPY/esp-idf/tools:
+  source $cDirMPY/esp-idf/export.sh
 
   cd $cDirMPY/micropython/ports/esp32
   #make clean
@@ -78,10 +83,10 @@ InstallPkg()
 
 
 #Install
-#Make_EspOpenSdk
-#
 Get_MicroPython
 Make_MicroPython
 #
-InstallPkg
-Make_MicroFirmware
+Make_EspOpenSdk
+#
+#InstallPkg
+#Make_MicroFirmware
