@@ -13,7 +13,7 @@ from Inc.Util.UTime import GetDate, GetTime
 
 def Marker(aSender, aOwner, aData):
     return {
-        'Sender': aSender.__class__.__name__,
+        #'Sender': aSender.__class__.__name__,
         'Owner':  aOwner.__class__.__name__ ,
         'Id':     hexlify(machine.unique_id()).decode('utf-8'),
         'Alias':  Conf.Alias,
