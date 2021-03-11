@@ -32,3 +32,6 @@ class DS1820():
                 R.append({'id':ID, 'value':Value})
 
         return R
+
+    def Inf(self):
+        return (-55, 125)

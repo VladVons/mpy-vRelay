@@ -17,4 +17,3 @@ class TSen_ds18b20(TSen):
     async def Read(self):
         R = await self.Dev.Get()
         return R[0]['value']
-

@@ -85,3 +85,6 @@ class SHT31():
         else:
             temp = -49 + (315 * (t / 65535))
         return temp, 100 * (h / 65535)
+
+    def Inf(self):
+        return ((-40, 125), (0, 100))

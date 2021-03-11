@@ -22,4 +22,7 @@ class DHT22():
             await asyncio.sleep_ms(100)
             self.Obj.measure()
             await asyncio.sleep_ms(250)
-        return [self.Obj.temperature(), self.Obj.humidity()]
+        return (self.Obj.temperature(), self.Obj.humidity())
+
+    def Inf(self):
+        return ((-40, 80), (0, 100))
