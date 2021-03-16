@@ -32,7 +32,7 @@ async def Run():
     except KeyboardInterrupt:
         print('Ctrl-C')
     finally:
-        await Plugin.Stop()
+        await Plugin.StopAll()
 
 def Main():
     asyncio.run(Run())

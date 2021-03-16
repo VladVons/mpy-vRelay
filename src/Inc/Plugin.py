@@ -43,7 +43,7 @@ class TPlugin():
 
         Arr = Mod.Main()
         if (Arr):
-            # Class, Func = Arr
+            #Class, Func, ?Topic = Arr
             self.Data[aPath] = [Arr[0], asyncio.create_task(Arr[1])]
         Log.Print(1, 'i', 'LoadMod()', aPath)
         gc.collect()
@@ -57,12 +57,14 @@ class TPlugin():
             if (Class != aOwner) and (hasattr(Class, aFunc)):
                 Func = getattr(Class, aFunc)
                 R[Key] = await Func(aOwner, aMsg)
+                if (R[Key] == aOwner):
+                    break
         return R
 
-    async def Post(self, aOwner, aMsg):
-        return await self._Post(self.Data.items(), aOwner, aMsg, '_DoPost')
+    async def Post(self, aOwner, aMsg, aFunc = '_DoPost'):
+        return await self._Post(self.Data.items(), aOwner, aMsg, aFunc)
 
-    async def Cancel(self, aPath: str):
+    async def Stop(self, aPath: str):
         Obj = self.Data.get(aPath)
         if (Obj):
             await self._Post([(aPath, Obj)], None, None, '_DoStop')
@@ -71,9 +73,9 @@ class TPlugin():
             del self.Data[aPath]
             return True
 
-    async def Stop(self):
+    async def StopAll(self):
         for Key in self.Data.keys():
-            await self.Cancel(Key)
+            await self.Stop(Key)
 
     async def Run(self):
         Tasks = [Val[1] for Val in self.Data.values()]
