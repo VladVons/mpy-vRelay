@@ -110,7 +110,7 @@ GitSyncToServ()
   git commit -a -m "$aComment"
 
   #git push -u origin master 
-  git push -u origin master $cUrl
+  git push $cUrl -u origin master
 }
 
 
