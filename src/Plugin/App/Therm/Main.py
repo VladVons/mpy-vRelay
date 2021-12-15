@@ -21,8 +21,8 @@ class TTherm():
         self.Cron = TCron()
 
         if (Conf.Alias == 'Sen_dht22'):
-            from IncP.DevC.Sen_dht22 import TSen_dht22_t
-            self.DevT = TSen_dht22_t(14)
+            from IncP.DevC.Sen_dht22 import TSen_dht22_h
+            self.DevT = TSen_dht22_h(14)
         elif (Conf.Alias == 'Sen_ds18b20'):
             from IncP.DevC.Sen_ds18b20 import TSen_ds18b20
             self.DevT = TSen_ds18b20(14)
@@ -39,8 +39,11 @@ class TTherm():
         print('TTherm._DoStop')
 
     async def Check(self):
-        if (await self.DevT.Check() == True):
-            await Plugin.Post(self, self.DevT.Info())
+        await self.DevT.Check()
+        await Plugin.Post(self, self.DevT.Info())
+
+        #if (await self.DevT.Check() == True):
+        #    await Plugin.Post(self, self.DevT.Info())
 
             #Val = self.Cron.GetVal()
             #if (Val is not None):
@@ -48,7 +51,7 @@ class TTherm():
             #    #print('---ToDo. 11', Val, HystOk)
             #    await Plugin.Post(self, self.DevT.Info())
 
-    async def Run(self, aSleep: float = 10):
+    async def Run(self, aSleep: float = 5):
         Arr = [('*/2 8-13 * * *', 22), ('* 14-23 * * *', 24)]
         self.Cron.Set(Arr)
 
