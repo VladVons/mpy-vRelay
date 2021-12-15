@@ -109,8 +109,8 @@ GitSyncToServ()
   git add -u -v
   git commit -a -m "$aComment"
 
-  #git push -u origin master 
-  ExecM "git push $cUrl -u origin master"
+  git push -u origin master 
+  #ExecM "git push $cUrl -u origin master"
 }
 
 
