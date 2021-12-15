@@ -12,6 +12,8 @@ cUrl="https://$cUser@github.com/$cUser/mpy-vRelay.git"
 
 Clean()
 {
+  Log "$0->$FUNCNAME($*)"
+
   echo "delete objects"
   find . -name '*.pyc' -exec rm -v -f -R {} \;
   find . -name '*.log' -exec rm -v -f -R {} \;
@@ -103,7 +105,9 @@ GitSyncToServ()
 
   git add -u -v
   git commit -a -m "$aComment"
-  git push -u origin master
+
+  #git push -u origin master
+  git push -u origin master $cUrl --all
 }
 
 
