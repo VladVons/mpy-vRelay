@@ -7,7 +7,7 @@ source ./common.sh
 
 cUser="VladVons"
 cMail="vladvons@gmail.com"
-cUrl="https://github.com/$cUser/mpy-vRelay.git"
+cUrl="https://$cUser@github.com/$cUser/mpy-vRelay.git"
 
 
 Clean()
@@ -39,7 +39,7 @@ GitAuth()
   # clear password
   #git config --global --unset credential.helper
 
-  # save password 
+  # save password
   git config --global credential.helper 'cache --timeout=36000'
 
   # token
