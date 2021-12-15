@@ -5,7 +5,7 @@
 source ./common.sh
 
 
-cUser="VladVons"
+cUser="vladvons"
 cMail="vladvons@gmail.com"
 cUrl="https://$cUser@github.com/$cUser/mpy-vRelay.git"
 
