@@ -5,9 +5,10 @@
 source ./common.sh
 
 
-cUser="vladvons"
+cUser="VladVons"
 cMail="vladvons@gmail.com"
-cUrl="https://$cUser@github.com/$cUser/mpy-vRelay.git"
+cToken="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"
+cUrl="https://$cToken@github.com/$cUser/mpy-vRelay.git"
 
 
 Clean()
@@ -47,6 +48,8 @@ GitAuth()
   # token
   git config --global credential.helper libsecret
   git config --global credential.helper store
+
+  #git config -l
 }
 
 
@@ -105,7 +108,7 @@ GitSyncToServ()
 
   git add -u -v
   git commit -a -m "$aComment"
-  git push -u origin master
+  git push -u origin master $cUrl
 }
 
 
