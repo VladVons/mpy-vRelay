@@ -7,7 +7,7 @@ source ./common.sh
 
 cUser="VladVons"
 cMail="vladvons@gmail.com"
-cToken="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"
+cToken="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"
 cUrl="https://$cUser:$cToken@github.com/$cUser/mpy-vRelay.git"
 
 
