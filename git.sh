@@ -29,6 +29,7 @@ GitAuth()
 {
   Log "$0->$FUNCNAME($*)"
 
+  echo "It is not GIT password but SUDO"
   sudo chown -R $USER .
 
   # sign with eMail
