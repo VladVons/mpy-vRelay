@@ -5,9 +5,9 @@
 source ./common.sh
 
 
-User="VladVons"
-Mail="vladvons@gmail.com"
-Url="https://github.com/$User/mpy-vRelay.git"
+cUser="VladVons"
+cMail="vladvons@gmail.com"
+cUrl="https://github.com/$cUser/mpy-vRelay.git"
 
 
 Clean()
@@ -32,11 +32,18 @@ GitAuth()
   sudo chown -R $USER .
 
   # sign with eMail
-  git config --global user.email $Mail
-  git config --global user.name $User
+  git config --global user.email $cMail
+  git config --global user.name $cUser
 
-  # no password 
+  # clear password
+  #git config --global --unset credential.helper
+
+  # save password 
   git config --global credential.helper 'cache --timeout=36000'
+
+  # token
+  git config --global credential.helper libsecret
+  git config --global credential.helper store
 }
 
 

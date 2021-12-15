@@ -27,7 +27,8 @@ class TConnSTA(TWLan):
 
     async def IsOk(self):
         Host = Conf.get('WatchHost', self.IF.ifconfig()[2]) # or gateway
-        return (self.IF.isconnected) and (await CheckHost(Host, 80, 3))
+        Res = (self.IF.isconnected) and (await CheckHost(Host, 80, 3))
+        return bool(Res) # (None and False) = None
 
     async def Post(self, aVal):
         await Plugin.Post(self, {'Val': aVal, 'Owner': self.__class__.__name__})
