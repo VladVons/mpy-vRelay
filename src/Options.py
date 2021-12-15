@@ -4,9 +4,9 @@ Alias = 'Sen_dht22'
 #Alias = 'Emu_cycle-7000'
 Descr = 'frozen'
 #
-Plugins = 'App.HttpSrv App.Menu App.Mqtt App.ConnSTA App.Captive -App.Sim7000 -App.WDog'
+Plugins = 'App.HttpSrv  -App.Menu App.Mqtt App.ConnSTA App.Captive -App.Sim7000 -App.WDog'
 TZone = 2
-#DSleep = 60
+#DSleep = 62
 #
 STA_ESSID = 'oster.com.ua'
 STA_Paswd = '19710000'

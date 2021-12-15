@@ -34,15 +34,17 @@ GitAuth()
   echo "It is not GIT password but SUDO "
   sudo chown -R $USER .
 
+  # clear password
+  git config --global --unset user.email
+  git config --global --unset user.name
+  git config --global --unset credential.helper
+
   # sign with eMail
   git config --global user.email "$cMail"
   git config --global user.name "$cUser"
 
-  # clear password
-  #git config --global --unset credential.helper
-
   # save password
-  git config --global credential.helper "cache --timeout=36000"
+  #git config --global credential.helper cache
 
   # token
   #git config --global credential.helper libsecret
