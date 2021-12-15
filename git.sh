@@ -35,9 +35,9 @@ GitAuth()
   sudo chown -R $USER .
 
   # clear password
-  git config --global --unset user.email
-  git config --global --unset user.name
-  git config --global --unset credential.helper
+  #git config --global --unset user.email
+  #git config --global --unset user.name
+  #git config --global --unset credential.helper
 
   # sign with eMail
   git config --global user.email "$cMail"
