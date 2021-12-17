@@ -118,7 +118,7 @@ EspFileList()
 }
 
 
-EspSrcCopy()
+EspSrcCopy1()
 {
   local aDir=${1:-"src"};
   Log "$FUNCNAME($*)"
@@ -159,23 +159,31 @@ EspSrcCopy2()
 }
 
 
+EspSrcCopy()
+{
+  local aDir=${1:-"src"};
+
+  if [ $CustomFW == 0 ]; then
+    EspSrcCopy1 $aDir
+  else
+    EspSrcCopy2 $aDir
+  fi
+}
+
+
 EspEFC()
 {
   Log "$0->$FUNCNAME"
 
   EspErase
 
-  sleep 3
+  sleep 2
   EspFirmware
 
-  sleep 3
-  if [ $CustomFW == 0 ]; then
-    EspSrcCopy
-  else
-    EspSrcCopy2
-  fi
+  sleep 2
+  EspSrcCopy
 
-  sleep 3
+  sleep 2
   #ExecM "ampy --port $cDev --baud $cSpeed1 reset"
   picocom $cDev -b${cSpeed1}
 }
@@ -247,6 +255,5 @@ case $1 in
     EspRelease|r)   EspRelease  $2 ;;
     EspFileList|l)  EspFileList $2 ;;
     EspSrcCopy|c)   EspSrcCopy  $2 ;;
-    EspSrcCopy2|c2) EspSrcCopy2 $2 ;;
     EspEFC|a)       EspEFC      $2 ;;
 esac

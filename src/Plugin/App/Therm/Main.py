@@ -7,6 +7,7 @@ Description:
 
 
 import uasyncio as asyncio
+import time
 #
 from Inc.Conf import Conf
 from Inc.Plugin import Plugin
@@ -21,8 +22,8 @@ class TTherm():
         self.Cron = TCron()
 
         if (Conf.Alias == 'Sen_dht22'):
-            from IncP.DevC.Sen_dht22 import TSen_dht22_h
-            self.DevT = TSen_dht22_h(14)
+            from IncP.DevC.Sen_dht22 import TSen_dht22_t
+            self.DevT = TSen_dht22_t(14)
         elif (Conf.Alias == 'Sen_ds18b20'):
             from IncP.DevC.Sen_ds18b20 import TSen_ds18b20
             self.DevT = TSen_ds18b20(14)
@@ -39,11 +40,9 @@ class TTherm():
         print('TTherm._DoStop')
 
     async def Check(self):
-        await self.DevT.Check()
-        await Plugin.Post(self, self.DevT.Info())
-
-        #if (await self.DevT.Check() == True):
-        #    await Plugin.Post(self, self.DevT.Info())
+        if (await self.DevT.Check() == True):
+            Info = dict(self.DevT.Info(), **{'Uptime': int(time.ticks_ms() / 1000)})
+            await Plugin.Post(self, Info)
 
             #Val = self.Cron.GetVal()
             #if (Val is not None):
