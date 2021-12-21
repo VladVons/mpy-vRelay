@@ -1,6 +1,6 @@
 from Inc.Conf import TConf
 
-ConfTherm = TConf('ConfTherm')
+ConfTherm = TConf('Conf/Therm')
 
 def Main():
     from .Main import TTherm

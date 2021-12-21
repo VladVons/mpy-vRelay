@@ -1,3 +1,3 @@
 from Inc.Conf import TConf
 
-ConfApp = TConf('ConfApp')
+ConfApp = TConf('Conf/App')
