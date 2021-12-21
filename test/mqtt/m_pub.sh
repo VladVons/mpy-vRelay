@@ -37,15 +37,21 @@ Pub2()
 {
   local Topic="vRelay/pub/post"
 
+  Id="a0b0c0d0"
+  Alias="dht-emu-alias"
+  Owner="TSen_dht22_Emu"
+  Val=18
+
   Cnt=0
   while true; do
     ((Cnt++))
     Date=$(date "+%Y-%m-%d %H:%M:%S")
 
-    Id="6bdfc000"
-    Val="18.4"
-    Template='{"Date": "%s", "Owner": "TTherm", "Data": {"Owner": "TSen_dht22_t", "Uptime": %s, "Val": %s}, "Id": "%s", "Alias": "Sen_dht22"}'
-    Data=$(printf "$Template" "$Date" "$Cnt" "$Val" "$Id")
+    #Val=$(($Val+1))
+    Val=$(echo $Val + 0.1 | bc)
+
+    Template='{"Date": "%s", "Owner": "TTherm", "Data": {"Owner": "%s", "Uptime": %s, "Val": %s}, "Id": "%s", "Alias": "%s"}'
+    Data=$(printf "$Template" "$Date" "$Owner" "$Cnt" "$Val" "$Id" "$Alias")
     echo $Data
 
     mosquitto_pub -h $cHost -t $Topic -m "$Data"

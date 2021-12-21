@@ -7,8 +7,8 @@ Description:
 
 import json, os, uio
 #
+from App import ConfApp
 from Inc.Log import Log
-from Inc.Conf import Conf
 from Inc.Http.HttpUrl import UrlLoad
 from IncP.Api import TApiBase
 
@@ -45,7 +45,7 @@ class TApi(TApiBase):
 
     async def Exec(self, aUrl: str) -> dict:
         R = await TApi.DownloadList(aUrl)
-        return {'result': R, 'alias': Conf.get('Alias'), 'hint': 'Reset ?'}
+        return {'result': R, 'alias': ConfApp.get('Alias'), 'hint': 'Reset ?'}
 
     async def Query(self, aData: dict) -> dict:
         Url = aData.get('url')

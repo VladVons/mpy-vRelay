@@ -5,12 +5,12 @@ License:     GNU, see LICENSE for more details
 Description: 
 '''
 
-from Inc.Conf import Conf
+from App import ConfApp
 
 
 class TApi():
     async def Exec(self) -> dict:
-        return Conf.Keys()
+        return ConfApp.Keys()
 
     async def Query(self, aData: dict) -> dict:
         return await self.Exec()

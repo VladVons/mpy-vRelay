@@ -8,7 +8,7 @@ Description:.
 import machine
 from ubinascii import hexlify
 #
-from Inc.Conf import Conf
+from App import ConfApp
 from Inc.Util.UTime import GetDate, GetTime
 
 def Marker(aSender, aOwner, aData):
@@ -16,7 +16,7 @@ def Marker(aSender, aOwner, aData):
         #'Sender': aSender.__class__.__name__,
         'Owner':  aOwner.__class__.__name__ ,
         'Id':     hexlify(machine.unique_id()).decode('utf-8'),
-        'Alias':  Conf.Alias,
+        'Alias':  ConfApp.Alias,
         'Date':   '%s %s'% (GetDate(), GetTime()),
         'Data':   aData
         }

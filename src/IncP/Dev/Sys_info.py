@@ -9,11 +9,11 @@ Description:.
 import gc, os, sys, time, network, machine
 from ubinascii import hexlify
 #
-from Inc.Conf import Conf
+from App import ConfApp
 from Inc.Util.UTime import GetDate, GetTime
 from IncP.WLan import GetMac
 
-__version__ = '1.1.06, 2021.03.08'
+__version__ = '1.1.07, 2021.12.22'
 __author__  = 'Vladimir Vons, vladvons@gmail.com'
 
 
@@ -29,7 +29,7 @@ class TInfo():
             'FirmWare': os.uname().version,
             'Python':   '%s.%s.%s' % (sys.version_info[0], sys.version_info[1], sys.version_info[2]),
             'Platform': sys.platform,
-            'Descr':    '%s, %s' % (Conf.Alias, Conf.Descr),
+            'Descr':    '%s, %s' % (ConfApp.Alias, ConfApp.Descr),
             'MemFree':  gc.mem_free(),
             'MemAlloc': gc.mem_alloc(),
             #'ID':       hexlify(machine.unique_id()).decode('utf-8'),

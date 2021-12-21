@@ -1,4 +1,4 @@
-from Inc.Conf import Conf
+from App import ConfApp
 from Inc.ApiParse import QueryToDict
 from IncP.Util.UHrd import Reset
 
@@ -10,9 +10,9 @@ async def DoUrl(aParent, aReader: asyncio.StreamReader, aWriter: asyncio.StreamW
 
         Data = await aReader.read(LenData)
         Query = QueryToDict(Data.decode('utf-8'))
-        Conf['STA_ESSID'] = Query.get('_STA_ESSID')
-        Conf['STA_Paswd'] = Query.get('_STA_Paswd')
-        Conf.Save()
+        ConfApp['STA_ESSID'] = Query.get('_STA_ESSID')
+        ConfApp['STA_Paswd'] = Query.get('_STA_Paswd')
+        ConfApp.Save()
 
         Reset()
     else:

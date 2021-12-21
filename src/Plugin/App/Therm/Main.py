@@ -9,7 +9,8 @@ Description:
 import uasyncio as asyncio
 import time
 #
-from Inc.Conf import Conf
+from . import ConfTherm
+from App import ConfApp
 from Inc.Plugin import Plugin
 from Inc.Log  import Log
 from Inc.Hyster import THyster
@@ -18,13 +19,13 @@ from Inc.Cron  import TCron
 
 class TTherm():
     def __init__(self):
-        self.Hyst = THyster()
+        self.Hyst = THyster(2.0)
         self.Cron = TCron()
 
-        if (Conf.Alias == 'Sen_dht22'):
+        if (ConfApp.Alias == 'Sen_dht22'):
             from IncP.DevC.Sen_dht22 import TSen_dht22_t
             self.DevT = TSen_dht22_t(14)
-        elif (Conf.Alias == 'Sen_ds18b20'):
+        elif (ConfApp.Alias == 'Sen_ds18b20'):
             from IncP.DevC.Sen_ds18b20 import TSen_ds18b20
             self.DevT = TSen_ds18b20(14)
         else:
@@ -44,15 +45,14 @@ class TTherm():
             Info = dict(self.DevT.Info(), **{'Uptime': int(time.ticks_ms() / 1000)})
             await Plugin.Post(self, Info)
 
-            #Val = self.Cron.GetVal()
-            #if (Val is not None):
-            #    HystOk = self.Hyst.CheckP(Val, self.DevT.Val)
-            #    #print('---ToDo. 11', Val, HystOk)
-            #    await Plugin.Post(self, self.DevT.Info())
+            Val = self.Cron.GetVal()
+            if (Val is not None):
+                HystOk = self.Hyst.CheckP(Val, self.DevT.Val)
+                print('---ToDo. 11', Val, HystOk)
+                await Plugin.Post(self, self.DevT.Info())
 
     async def Run(self, aSleep: float = 5):
-        Arr = [('*/2 8-13 * * *', 22), ('* 14-23 * * *', 24)]
-        self.Cron.Set(Arr)
+        self.Cron.Set(ConfTherm.Cron)
 
         while True:
             await self.Check()

@@ -8,9 +8,9 @@ Description:.
 import json
 import uasyncio as asyncio
 #
+from App import ConfApp
 from Inc.Mqtt import MQTTClient
 from Inc.Log  import Log
-from Inc.Conf import Conf
 from Inc.Plugin import Plugin
 from Inc.Sender import TSender
 from Inc.ApiParse import QueryToDict, QueryUrl
@@ -59,7 +59,7 @@ class TMqtt():
     async def Run(self, aSleep: float = 1.0):
         ConnSTA = Plugin.Get('App.ConnSTA')[0]
 
-        self.Mqtt = Mqtt = MQTTClient('%s-%s' % (cName, ConnSTA.Mac()) , Conf.Mqtt_Host, Conf.get('Mqtt_Port', 1883), Conf.Mqtt_User, Conf.Mqtt_Passw)
+        self.Mqtt = Mqtt = MQTTClient('%s-%s' % (cName, ConnSTA.Mac()) , ConfApp.Mqtt_Host, ConfApp.get('Mqtt_Port', 1883), ConfApp.Mqtt_User, ConfApp.Mqtt_Passw)
         Mqtt.set_callback(self.DoSubscribe)
 
         while True:

@@ -50,4 +50,4 @@ class TConf(TConfD):
                     V = "'" + V + "'"
                 File.write('%s = %s\n' % (K, V))
 
-Conf = TConf('Options')
+#Conf = TConf('ConfApp')

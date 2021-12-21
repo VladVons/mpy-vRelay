@@ -11,8 +11,8 @@ cDev="/dev/ttyUSB0"
 cSpeed1=115200
 cSpeed2=460800
 
-ESP32=0
-CustomFW=1
+ESP32=1
+CustomFW=0
 
 
 if [ $ESP32 == 1 ]; then
@@ -22,7 +22,7 @@ if [ $ESP32 == 1 ]; then
   else
     #download link http://micropython.org/download#esp8266
     cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp32"
-    cFileImg="esp32-idf3-20210202-v1.14.bin"
+    cFileImg="esp32-20210902-v1.17.bin"
   fi
 
   cEraseCmd="esptool.py --port $cDev --baud $cSpeed1 --chip esp32 erase_flash"

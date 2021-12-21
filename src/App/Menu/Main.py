@@ -5,8 +5,8 @@ License:     GNU, see LICENSE for more details
 '''
 
 
+from App import ConfApp
 from Inc.Menu import TMenu
-from Inc.Conf import Conf
 
 
 class TMenuApp(TMenu):
@@ -19,7 +19,7 @@ class TMenuApp(TMenu):
         await self.Exec(aParam[0], aParam[1])
 
     async def MSetup(self, aPath: str, aParam: list):
-        Vars = Conf.Keys()
+        Vars = ConfApp.Keys()
         self._ShowTree(Vars)
         if (not await self.AskYN('Continue')):
             return
@@ -41,8 +41,8 @@ class TMenuApp(TMenu):
 
         self._ShowTree(R)
         if (await self.AskYN('Save')):
-            Conf.update(R)
-            Conf.Save() 
+            ConfApp.update(R)
+            ConfApp.Save() 
             print('Saved')
 
     async def MApi(self, aPath: str, aParam: list):

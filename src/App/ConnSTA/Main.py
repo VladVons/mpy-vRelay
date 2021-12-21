@@ -8,8 +8,8 @@ Description:.
 import uasyncio as asyncio
 from network import WLAN, STA_IF
 #
+from App import ConfApp
 from Inc.Log import Log
-from Inc.Conf import Conf
 from Inc.Plugin import Plugin
 from Inc.Util.UNet import CheckHost
 from IncP.WLan import TWLan, GetMac
@@ -26,7 +26,7 @@ class TConnSTA(TWLan):
         return GetMac(self.IF)
 
     async def IsOk(self):
-        Host = Conf.get('WatchHost', self.IF.ifconfig()[2]) # or gateway
+        Host = ConfApp.get('WatchHost', self.IF.ifconfig()[2]) # or gateway
         Res = (self.IF.isconnected) and (await CheckHost(Host, 80, 3))
         return bool(Res) # (None and False) = None
 
@@ -36,7 +36,7 @@ class TConnSTA(TWLan):
     async def Connector(self):
         if (not await self.IsOk()):
             try:
-                await self.Connect(Conf.STA_ESSID, Conf.STA_Paswd, Conf.STA_Net)
+                await self.Connect(ConfApp.STA_ESSID, ConfApp.STA_Paswd, ConfApp.STA_Net)
             except Exception as E:
                 Log.Print(1, 'x', 'Connector()', E)
 
@@ -47,7 +47,7 @@ class TConnSTA(TWLan):
 
         if (Ok):
             self.Event.set()
-            SetTime(Conf.get('TZone', 2))
+            SetTime(ConfApp.get('TZone', 2))
         else:
             self.Event.clear()
 

@@ -7,6 +7,8 @@ Description:
 
 
 import time
+#
+from Inc.Log import Log
 
 
 class TSen():
@@ -16,12 +18,14 @@ class TSen():
     Time = 0
 
     async def Check(self):
-        Val = await self.Read()
-        if (Val is not None):
+        try:
+            Val = await self.Read()
             if (abs(Val - self.Val) > self.ValD) or (time.time() - self.Time > self.SecD):
                 self.Time = time.time()
                 self.Val = Val
                 return True
+        except Exception as E:
+            Log.Print(1, 'x', 'Check()', E)
 
     def Info(self):
         return {'Val': self.Val, 'Owner': self.__class__.__name__}

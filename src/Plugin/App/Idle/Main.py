@@ -9,7 +9,7 @@ Description:.
 from machine import Pin
 import uasyncio as asyncio
 #
-from Inc.Conf import Conf
+from App import ConfApp
 
 
 class TIdle():
