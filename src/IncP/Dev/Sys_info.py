@@ -18,7 +18,7 @@ __author__  = 'Vladimir Vons, vladvons@gmail.com'
 
 
 class TInfo():
-    async def Get(self):
+    async def Get(self) -> list:
         gc.collect()
         NetSTA = network.WLAN(network.STA_IF)
         NetAP  = network.WLAN(network.AP_IF)

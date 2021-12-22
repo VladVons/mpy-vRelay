@@ -64,7 +64,7 @@ class TPlugin():
     async def Post(self, aOwner, aMsg, aFunc = '_DoPost'):
         return await self._Post(self.Data.items(), aOwner, aMsg, aFunc)
 
-    async def Stop(self, aPath: str):
+    async def Stop(self, aPath: str) -> bool:
         Obj = self.Data.get(aPath)
         if (Obj):
             await self._Post([(aPath, Obj)], None, None, '_DoStop')

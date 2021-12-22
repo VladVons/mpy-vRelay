@@ -23,7 +23,7 @@ class TWLan():
     Cnt = 10
     Delay = 1
 
-    async def _WaitForReady(self, aFunc):
+    async def _WaitForReady(self, aFunc) -> bool:
         Cnt = self.Cnt
         while (not aFunc()) and (Cnt > 0):
             idle()

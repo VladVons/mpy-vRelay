@@ -33,5 +33,5 @@ class DS1820():
 
         return R
 
-    def Inf(self):
+    def Inf(self) -> tuple:
         return (-55, 125)

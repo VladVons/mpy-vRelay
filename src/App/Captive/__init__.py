@@ -1,7 +1,7 @@
 from .Options import *
 
 
-def Main():
+def Main() -> tuple:
     from App import ConfApp
 
     if (not ConfApp.STA_ESSID):

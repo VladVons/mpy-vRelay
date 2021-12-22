@@ -26,14 +26,14 @@ class TKbdTerm():
             return s.read(1)
     '''
 
-    def GetChr(self):
+    def GetChr(self) -> str:
         R = ''
         while sys.stdin in select.select([sys.stdin], [], [], 0)[0]:
             R = sys.stdin.read(1)
         return R
 
 
-    async def Input(self, aPrompt = ''):
+    async def Input(self, aPrompt = '') -> str:
         sys.stdout.write("%s%s   \r" % (aPrompt, ''))
 
         R = ''

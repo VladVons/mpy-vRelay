@@ -15,12 +15,12 @@ def TimeInRange(aStart, aEnd, aX):
         return (aStart <= aX) or (aX <= aEnd)
 '''
 
-def GetDate():
+def GetDate() -> str:
     lt = time.localtime(time.time())
     R = '%d-%02d-%02d' % (lt[0], lt[1], lt[2])
     return R
 
-def GetTime():
+def GetTime() -> str:
     lt = time.localtime(time.time())
     R = '%02d:%02d:%02d' % (lt[3], lt[4], lt[5])
     return R

@@ -16,7 +16,7 @@ from Inc.KbdTerm  import TKbdTerm
 
 
 class TMenu():
-    async def AskYN(self, aMsg: str):
+    async def AskYN(self, aMsg: str) -> bool:
         Str = await KbdTerm.Input('%s ?  Y/n:' % aMsg)
         return (Str) and (Str.lower() == 'y')
 

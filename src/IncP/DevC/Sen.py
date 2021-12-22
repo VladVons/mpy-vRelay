@@ -17,7 +17,7 @@ class TSen():
     Val  = 0
     Time = 0
 
-    async def Check(self):
+    async def Check(self) -> bool:
         try:
             Val = await self.Read()
             if (abs(Val - self.Val) > self.ValD) or (time.time() - self.Time > self.SecD):
@@ -27,7 +27,7 @@ class TSen():
         except Exception as E:
             Log.Print(1, 'x', 'Check()', E)
 
-    def Info(self):
+    def Info(self) -> dict:
         return {'Val': self.Val, 'Owner': self.__class__.__name__}
 
 '''

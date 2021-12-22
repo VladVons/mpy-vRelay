@@ -25,7 +25,7 @@ class TConnSTA(TWLan):
     def Mac(self):
         return GetMac(self.IF)
 
-    async def IsOk(self):
+    async def IsOk(self) -> bool:
         Host = ConfApp.get('WatchHost', self.IF.ifconfig()[2]) # or gateway
         Res = (self.IF.isconnected) and (await CheckHost(Host, 80, 3))
         return bool(Res) # (None and False) = None

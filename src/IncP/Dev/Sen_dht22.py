@@ -24,5 +24,5 @@ class DHT22():
             await asyncio.sleep_ms(250)
         return (self.Obj.temperature(), self.Obj.humidity())
 
-    def Inf(self):
+    def Inf(self) -> tuple:
         return ((-40, 80), (0, 100))

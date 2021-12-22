@@ -32,7 +32,7 @@ class TMqtt():
         # call self,Send() via safe buffered sender
         await self.Sender.Send(('%s/pub/%s' % (cName, 'post'), Data))
 
-    async def Send(self, aData):
+    async def Send(self, aData) -> bool:
         if (self.Mqtt) and (self.Mqtt.is_connected()):
             Topic, Data = aData
             try:

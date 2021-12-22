@@ -15,7 +15,7 @@ class THyster():
         self.On = False
 
     # Plus only
-    def CheckP(self, aKeep: float, aCur: float):
+    def CheckP(self, aKeep: float, aCur: float) -> bool:
         if (aCur < aKeep):
             self.On = True
         elif (aCur >= aKeep + self.H):
@@ -24,7 +24,7 @@ class THyster():
 
 '''
     # Plus & Minus
-    def CheckPM(self, aKeep: float, aCur: float):
+    def CheckPM(self, aKeep: float, aCur: float) -> bool:
         if (self.H > 0):
             if (aCur < aKeep):
                 self.On = True
@@ -39,7 +39,7 @@ class THyster():
 '''
 
 '''
-    def CheckMidPM(self, aKeep: float, aCur: float):
+    def CheckMidPM(self, aKeep: float, aCur: float) -> bool:
         Hyst = abs(self.H)
 
         if (aCur <= aKeep - Hyst):

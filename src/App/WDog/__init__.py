@@ -1,4 +1,4 @@
-def Main():
+def Main() -> tuple:
     from .Main import TWDog
 
     Obj = TWDog()

@@ -14,7 +14,7 @@ class TCycle():
         self.End = aEnd
         self.Step = aStep
 
-    async def Get(self):
+    async def Get(self) -> list:
         self.Cur += self.Step
         if (self.Cur > self.End):
             self.Cur = self.Start

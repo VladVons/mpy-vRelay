@@ -1,7 +1,7 @@
 from .Options import *
 
 
-def Main():
+def Main() -> tuple:
     from .Main import TMqtt
 
     Obj = TMqtt()
