@@ -49,6 +49,8 @@ class TMqtt():
             Path, Query = SplitPad(2, aMsg, '?')
             Query = QueryToDict(Query)
             R = await QueryUrl(Path, Query)
+        elif (tApi == 'Conf'): # topic: vRelay/sub/Conf
+            Path, Query = SplitPad(2, aMsg, '?')
         else:
             print('---20', tApi, aMsg)
             R = await Plugin.Post(self, (tApi.replace('.', '/'), aMsg))
