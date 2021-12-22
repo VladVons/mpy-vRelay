@@ -22,16 +22,19 @@ class TTherm():
         self.Hyst = THyster(2.0)
         self.Cron = TCron()
 
-        if (ConfApp.Alias == 'Sen_dht22'):
+        PinOut = ConfApp.PinOut.get('dht22-a')
+        if (PinOut):
             from IncP.DevC.Sen_dht22 import TSen_dht22_t
-            self.DevT = TSen_dht22_t(14)
-        elif (ConfApp.Alias == 'Sen_ds18b20'):
-            from IncP.DevC.Sen_ds18b20 import TSen_ds18b20
-            self.DevT = TSen_ds18b20(14)
+            self.DevT = TSen_dht22_t(PinOut)
         else:
-            from IncP.DevC.Emu_cycle import TEmu_cycle
-            self.DevT = TEmu_cycle(20, 30)
-            self.DevT.SecD = 5
+            PinOut = ConfApp.PinOut.get('ds18b20-a')
+            if (PinOut):
+                from IncP.DevC.Sen_ds18b20 import TSen_ds18b20
+                self.DevT = TSen_ds18b20(PinOut)
+            else:
+                from IncP.DevC.Emu_cycle import TEmu_cycle
+                self.DevT = TEmu_cycle(20, 30)
+                self.DevT.SecD = 5
 
     async def _DoPost(self, aOwner, aMsg):
         #self.Cron.Set(aMsg.get('Val'))

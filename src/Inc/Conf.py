@@ -31,12 +31,13 @@ class TConfD(dict):
 class TConf(TConfD):
     def __init__(self, aFile: str):
         super().__init__() 
+        self.LoadPlatform(aFile)
 
-        if (not UFS.FileExists(aFile +  '.py')):
-            aFile = aFile + '_' + sys.platform
-
+    def LoadPlatform(self, aFile: str):
         self.File = aFile + '.py'
-        self.Load(aFile)
+        for File in [aFile, aFile + '_' + sys.platform]:
+            if (UFS.FileExists(File +  '.py')):
+                self.Load(File)
 
     def Load(self, aFile: str):
         Obj = __import__(aFile)

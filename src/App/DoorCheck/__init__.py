@@ -1,4 +1,4 @@
-from .Options import *
+from .Conf import *
 
 
 def Main():

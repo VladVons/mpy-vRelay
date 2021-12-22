@@ -11,11 +11,17 @@ import time
 from Inc.Log import Log
 
 
+# [{'Alias': 'dht22-a', 'Pin': 22, 'Type': 'Sen_dht22'}]
+#def GetConf(aConf: list, aAlias: str):
+#    if (aConf):
+#        return next(Item for Item in aConf if Item['Alias'] == aAlias)
+
 class TSen():
     ValD = 1.0
     SecD = 60
     Val  = 0
     Time = 0
+
 
     async def Check(self) -> bool:
         try:
