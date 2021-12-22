@@ -15,12 +15,16 @@ from Inc.Plugin import Plugin
 from Inc.Log  import Log
 from Inc.Hyster import THyster
 from Inc.Cron  import TCron
+from IncP.Dev.Gpio import GpioW
 
 
 class TTherm():
     def __init__(self):
         self.Hyst = THyster(2.0)
         self.Cron = TCron()
+
+        PinOut = ConfApp.PinOut.get('heat-a')
+        self.Heat = GpioW(PinOut)
 
         PinOut = ConfApp.PinOut.get('dht22-a')
         if (PinOut):
@@ -48,16 +52,16 @@ class TTherm():
             Info = dict(self.DevT.Info(), **{'Uptime': int(time.ticks_ms() / 1000)})
             await Plugin.Post(self, Info)
 
-            Val = self.Cron.GetVal()
-            if (Val is not None):
-                HystOk = self.Hyst.CheckP(Val, self.DevT.Val)
-                print('---ToDo. 11', Val, HystOk)
-                await Plugin.Post(self, self.DevT.Info())
+            CronVal = self.Cron.GetVal()
+            if (CronVal is None):
+                await self.Heat.Set(0)
+            else:
+                On = self.Hyst.CheckP(CronVal, self.DevT.Val)
+                await self.Heat.Set(On)
 
     async def Run(self, aSleep: float = 5):
         self.Cron.Set(ConfTherm.Cron)
 
         while True:
             await self.Check()
-
             await asyncio.sleep(aSleep)
