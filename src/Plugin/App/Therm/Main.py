@@ -52,12 +52,13 @@ class TTherm():
             Info = dict(self.DevT.Info(), **{'Uptime': int(time.ticks_ms() / 1000)})
             await Plugin.Post(self, Info)
 
-            CronVal = self.Cron.GetVal()
-            if (CronVal is None):
-                await self.Heat.Set(0)
-            else:
-                On = self.Hyst.CheckP(CronVal, self.DevT.Val)
-                await self.Heat.Set(On)
+        #print(self.DevT.Val)
+        CronVal = self.Cron.GetVal()
+        if (CronVal is None):
+            await self.Heat.Set(0)
+        else:
+            On = self.Hyst.CheckP(CronVal, self.DevT.Val)
+            await self.Heat.Set(On)
 
     async def Run(self, aSleep: float = 5):
         self.Cron.Set(ConfTherm.Cron)

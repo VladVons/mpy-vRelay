@@ -21,10 +21,11 @@ class TSen():
     async def Check(self) -> bool:
         try:
             Val = await self.Read()
-            if (abs(Val - self.Val) > self.ValD) or (time.time() - self.Time > self.SecD):
+            Res = (abs(Val - self.Val) > self.ValD) or (time.time() - self.Time > self.SecD)
+            if (Res):
                 self.Time = time.time()
-                self.Val = Val
-                return True
+            self.Val = Val
+            return Res
         except Exception as E:
             Log.Print(1, 'x', 'Check()', E)
 
