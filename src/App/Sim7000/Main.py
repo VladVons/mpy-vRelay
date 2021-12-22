@@ -61,7 +61,7 @@ class TSim7000():
             #Date, Lat, Lon, Alt, Speed = aRes.split(',')[2:7]
             pass
 
-    async def Read(self, aBreak = ['OK','ERROR']) -> tuple
+    async def Read(self, aBreak = ['OK','ERROR']) -> tuple:
         Cmd = Res = ''
         for i in range(5):
             try:
