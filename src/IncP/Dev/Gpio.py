@@ -27,3 +27,7 @@ class GpioW():
     async def Set(self, aVal: int):
         async with Lock:
             self.Obj.value(aVal)
+
+    async def Get(self):
+        async with Lock:
+            return self.Obj.value()

@@ -26,6 +26,9 @@ class TTherm():
         PinOut = ConfApp.PinOut.get('heat-a')
         self.Heat = GpioW(PinOut)
 
+        PinOut = ConfApp.PinOut.get('led-a')
+        self.Led = GpioW(PinOut)
+
         PinOut = ConfApp.PinOut.get('dht22-a')
         if (PinOut):
             from IncP.DevC.Sen_dht22 import TSen_dht22_t
@@ -59,6 +62,8 @@ class TTherm():
         else:
             On = self.Hyst.CheckP(CronVal, self.DevT.Val)
             await self.Heat.Set(On)
+            await self.Led.Set(On)
+            print('---Temp %s, On %s' % (self.DevT.Val, On))
 
     async def Run(self, aSleep: float = 5):
         self.Cron.Set(ConfTherm.Cron)
