@@ -9,25 +9,15 @@ from machine import Pin
 import uasyncio as asyncio
 
 
-Lock = asyncio.Lock()
-
-
-class GpioR():
-    def __init__(self, aPin: int):
-        self.Obj = Pin(aPin, Pin.IN)
-
-    async def Get(self):
-        async with Lock:
-            return self.Obj.value()
-
 class GpioW():
     def __init__(self, aPin: int):
         self.Obj = Pin(aPin, Pin.OUT)
+        self.Lock = asyncio.Lock()
 
     async def Set(self, aVal: int):
-        async with Lock:
+        async with self.Lock:
             self.Obj.value(aVal)
 
     async def Get(self):
-        async with Lock:
+        async with self.Lock:
             return self.Obj.value()

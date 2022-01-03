@@ -17,7 +17,7 @@ class TSen_cron(TSen):
     def Init(self, aData: list):
         self.Data = aData
 
-    async def Read(self):
+    async def Get(self):
         for Cron, Val in self.Data:
             if (IsNow(Cron)):
                 return Val

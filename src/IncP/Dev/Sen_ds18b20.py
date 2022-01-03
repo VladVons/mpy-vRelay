@@ -11,7 +11,6 @@ import uasyncio as asyncio
 #
 from   ds18x20 import DS18X20
 
-Lock = asyncio.Lock()
 
 class DS1820():
     def __init__(self, aPin: int):
@@ -24,7 +23,8 @@ class DS1820():
         if (not aIDs): 
             #Roms = W1.scan() # hangs if no devices
             aIDs = self.Obj.scan()
-        async with Lock:
+
+        async with asyncio.Lock():
             self.Obj.convert_temp()
             await asyncio.sleep_ms(750)
             for ID in aIDs:

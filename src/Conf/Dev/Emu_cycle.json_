@@ -1,0 +1,10 @@
+{
+    "Dev":[
+        {
+            "Module":"Emu_cycle",
+            "Class":"TEmu_cycle",
+            "Alias":"Cycle1",
+            "Param":{"aStart": %Start%, "aEnd": "%End%"}
+        }
+    ]
+}

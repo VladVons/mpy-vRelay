@@ -13,5 +13,8 @@ class TGpioW():
     def __init__(self, aPin):
         self.Dev = GpioW(aPin)
 
-    async def Write(self, aVal: int):
+    async def Set(self, aVal: int):
         return await self.Dev.Set(aVal)
+
+    async def Get(self):
+        return await self.Dev.Get()

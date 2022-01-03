@@ -14,7 +14,7 @@ class TSen_dht22_t(TSen):
     def __init__(self, aPin):
         self.Dev = DHT22(aPin)
 
-    async def Read(self):
+    async def Get(self):
         R = await self.Dev.Get()
         return R[0]
 
@@ -23,6 +23,6 @@ class TSen_dht22_h(TSen):
     def __init__(self, aPin):
         self.Dev = DHT22(aPin)
 
-    async def Read(self):
+    async def Get(self):
         R = await self.Dev.Get()
         return R[1]

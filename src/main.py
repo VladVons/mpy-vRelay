@@ -23,7 +23,6 @@ def Main():
 
     Main.Main()
 
+#import test
 Main()
-#import Test1
-
 print('End')

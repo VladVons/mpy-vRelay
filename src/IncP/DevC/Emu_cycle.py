@@ -14,6 +14,9 @@ class TEmu_cycle(TSen):
     def __init__(self, aStart: int, aEnd: int):
         self.Dev = TCycle(aStart, aEnd)
 
-    async def Read(self):
+    async def Get(self):
         R = await self.Dev.Get()
         return R[0]
+
+    def Get2(self):
+        return [self.Dev.Start, self.Dev.End]

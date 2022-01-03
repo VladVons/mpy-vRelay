@@ -94,6 +94,7 @@ esp()
   else
     killall picocom
     espf $*
+    sleep 1
     _esp_terminal
   fi
 }

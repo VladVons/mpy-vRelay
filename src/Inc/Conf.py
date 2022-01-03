@@ -41,8 +41,10 @@ class TConf(TConfD):
 
     def Load(self, aFile: str):
         Obj = __import__(aFile)
+        #Obj = __import__(aFile.replace('/', '.'), None, None, ['App'])
         for Key in dir(Obj):
-            self[Key] = getattr(Obj, Key, None)
+            if (not Key.startswith('__')):
+                self[Key] = getattr(Obj, Key, None)
 
     def Save(self):
         with open(self.File, 'w') as File:

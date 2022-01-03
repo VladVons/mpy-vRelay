@@ -14,6 +14,6 @@ class TSen_ds18b20(TSen):
     def __init__(self, aPin):
         self.Dev = DS1820(aPin)
 
-    async def Read(self):
+    async def Get(self):
         R = await self.Dev.Get()
         return R[0]['value']
