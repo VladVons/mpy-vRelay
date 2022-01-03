@@ -21,7 +21,7 @@ class TSen():
     async def Check(self) -> bool:
         try:
             Val = await self.Read()
-            Res = (abs(Val - self.Val) > self.ValD) or (time.time() - self.Time > self.SecD)
+            Res = (Val is not None) and (abs(Val - self.Val) > self.ValD) or (time.time() - self.Time > self.SecD)
             if (Res):
                 self.Time = time.time()
             self.Val = Val

@@ -1,5 +1,5 @@
 '''
-Author:      https://github.com/micropython/micropython-lib/tree/master/umqtt.simple
+Author: https://github.com/micropython/micropython-lib/tree/master/micropython/umqtt.simple/umqtt
 async fork of umqtt.simple (21 Jun 2017)
 
 alternative: https://github.com/peterhinch/micropython-mqtt

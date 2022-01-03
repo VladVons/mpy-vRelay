@@ -14,14 +14,14 @@ from App import ConfApp
 from Inc.Plugin import Plugin
 from Inc.Log  import Log
 from Inc.Hyster import THyster
-from Inc.Cron  import TCron
+from IncP.DevC.Sen_cron import TSen_cron
 from IncP.Dev.Gpio import GpioW
 
 
 class TTherm():
     def __init__(self):
         self.Hyst = THyster(2.0)
-        self.Cron = TCron()
+        self.Cron = TSen_cron()
 
         PinOut = ConfApp.PinOut.get('heat-a')
         self.Heat = GpioW(PinOut)
@@ -56,7 +56,7 @@ class TTherm():
             await Plugin.Post(self, Info)
 
         #print(self.DevT.Val)
-        CronVal = self.Cron.GetVal()
+        CronVal = await self.Cron.Read()
         if (CronVal is None):
             await self.Heat.Set(0)
         else:
@@ -66,7 +66,7 @@ class TTherm():
             print('---Temp %s, On %s' % (self.DevT.Val, On))
 
     async def Run(self, aSleep: float = 5):
-        self.Cron.Set(ConfTherm.Cron)
+        self.Cron.Init(ConfTherm.Cron)
 
         while True:
             await self.Check()

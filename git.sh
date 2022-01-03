@@ -2,7 +2,7 @@
 # Created: 28.09.2016
 # Vladimir Vons, VladVons@gmail.com
 
-source ./common.sh
+source ./common.inc.sh
 
 
 cUser="VladVons"

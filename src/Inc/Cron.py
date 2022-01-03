@@ -38,6 +38,7 @@ def _Parse(aValue: str, aTarget: int) -> bool:
     return False
 
 def IsNow(aPattern: str) -> bool:
+    # aPattern = '*/2 8-13 * * *'
     lt = time.localtime(time.time())
     Minute, Hour, DOM, Month, DOW = aPattern.split(' ')
 
@@ -47,16 +48,3 @@ def IsNow(aPattern: str) -> bool:
         _Parse(Month,  lt[1]) and \
         _Parse(DOW,    lt[6])
     return R
-
-
-class TCron():
-    #Data = [('*/2 8-13 * * *', 22), ('* 14-23 * * *', 24)]
-    Data = []
-
-    def Set(self, aData: list):
-        self.Data = aData
-
-    def GetVal(self):
-        for Cron, Val in self.Data:
-            if (IsNow(Cron)):
-                return Val

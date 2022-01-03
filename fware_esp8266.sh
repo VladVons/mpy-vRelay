@@ -7,7 +7,7 @@
 #https://github.com/kevinkk525/pysmartnode/blob/master/tools/esp8266/esp8266_get_repository.sh
 
 
-source ./common.sh
+source ./common.inc.sh
 
 export PATH=$PATH:~/.local/bin:$cDirMPY/esp-open-sdk/xtensa-lx106-elf/bin
 
@@ -15,9 +15,9 @@ export PATH=$PATH:~/.local/bin:$cDirMPY/esp-open-sdk/xtensa-lx106-elf/bin
 Install()
 {
   sudo apt install unzip unrar-free bzip2
-  sudo apt install make autoconf automake libtool gcc g++ gperf flex bison texinfo gawk ncurses-dev libexpat-dev git help2man wget libtool-bin libffi-dev
+  sudo apt install make autoconf automake libtool gcc g++ gcc-multilib gperf flex bison texinfo gawk ncurses-dev libexpat-dev help2man wget libtool-bin libffi-dev patch
   sudo apt install sed git bash help2man cmake
-  #sudo apt install libncurses5-dev libc6-dev-amd64 gcc-multilib
+  #sudo apt install libncurses5-dev libc6-dev-amd64
   sudo apt install python2-dev
 
   # python2 pip 
@@ -29,27 +29,33 @@ Install()
   #sudo apt install python3-dev python3-serial python3-pip
   #pip3 install rshell esptool
 
-  #compiler: xtensa-lx106-elf-gcc
-  #sudo apt install gcc-xtensa-lx106
 }
 
 
-Make_EspOpenSdk()
+ExportPython2()
+{
+  ##export python=python2
+  ##sudo ln -s /usr/bin/python2.7 /usr/bin/python
+  mkdir -p /tmp/tmpbin && ln -s /usr/bin/python2.7 /tmp/tmpbin/python
+  export PATH=/tmp/tmpbin:${PATH}
+  python --version
+  echo "Note. Dont use python virtenv. Need 'python' mapped to 2.7 !"
+  echo
+}
+
+
+Get_EspOpenSdk()
 {
   Log "$0->$FUNCNAME($*)"
-
-  echo "Note. Dont use python virtenv"
-  read -n 1 -r -s -p $'Press enter to continue...\n'
-
-  #export python=python2
-  #mkdir /tmp/tmpbin && ln -s /usr/bin/python2.7 /tmp/tmpbin/python && export PATH=/tmp/tmpbin:${PATH}
-  #sudo ln -s /usr/bin/python2.7 /usr/bin/python
 
 
   cd $cDirMPY
 
   #need ~4G
   #sudo docker run --rm -v $HOME:$HOME -u $UID -w $PWD larsks/esp-open-sdk
+
+  git config --global http.sslverify false
+
   git clone --recursive https://github.com/pfalcon/esp-open-sdk.git
   cd esp-open-sdk
   git pull
@@ -57,15 +63,29 @@ Make_EspOpenSdk()
   git submodule sync
   git submodule update --init
 
-  sed -i 's/GNU bash, version (3\.[1-9]|4)/GNU bash, version ([0-9\.]+)/' $cDirMPY/esp-open-sdk/crosstool-NG/configure.ac
+  # edit it manually. Doesnt work with regex !
+  #sed -i 's/GNU bash, version (3\.[1-9]|4)/GNU bash, version ([0-9\.]+)/' $cDirMPY/esp-open-sdk/crosstool-NG/configure.ac
+}
 
-  #cd $cDirMPY/esp-open-sdk/crosstool-NG
-  #./bootstrap && ./configure --prefix=`pwd` && make && make install
-  #./ct-ng xtensa-lx106-elf
-  #./ct-ng build
 
-  #make clean
-  #make -j
+Make_EspOpenSdk()
+{
+  ###sudo apt install gcc-xtensa-lx106
+
+  ExportPython2
+  #echo "Note. Dont use python virtenv. Need 'python' mapped to 2.7"
+  #read -n 1 -r -s -p 'Compiling takes 30m. Press a key to continue...'
+
+  cd $cDirMPY/esp-open-sdk/crosstool-NG
+  ./bootstrap
+  ./configure --prefix=$(pwd) 
+  make
+  make install
+  ./ct-ng xtensa-lx106-elf
+  ./ct-ng build
+
+  ##make clean
+  ##make -j
   make STANDALONE=y
 }
 
@@ -82,8 +102,8 @@ InstallPkg()
 
   #https://github.com/micropython/micropython/issues/2700
   #micropython/ports/esp8266/boards/esp8266.ld -> irom0_0_seg :  org = 0x40209000, len = 0xa7000
-  rm -R $cDirMPY/micropython/ports/esp8266/modules/{Inc,IncP,App}
-  cp -R $cDirCur/src/{Inc,IncP,App} $cDirMPY/micropython/ports/esp8266/modules/
+  rm -R $cDirMPY/micropython/ports/esp8266/modules/{App,Inc,IncP}
+  cp -R $cDirCur/src/{App,Inc,IncP} $cDirMPY/micropython/ports/esp8266/modules/
 }
 
 
@@ -103,11 +123,15 @@ Make_MicroFirmware()
 }
 
 
+#---
+#ExportPython2
+
 #Install
+#Get_EspOpenSdk
 #Make_EspOpenSdk
 #
-Get_MicroPython
-Make_MicroPython
+#Get_MicroPython
+#Make_MicroPython
 #
 InstallPkg
 Make_MicroFirmware

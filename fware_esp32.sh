@@ -4,7 +4,7 @@
 
 # https://github.com/kevinkk525/pysmartnode/blob/master/tools/esp32/esp32_get_repository.sh
 
-source ./common.sh
+source ./common.inc.sh
 
 Compiler=~/.espressif/tools/xtensa-esp32-elf/esp-2019r2-8.2.0/xtensa-esp32-elf/bin/
 export PATH=$PATH:~/.local/bin:$Compiler:
@@ -80,8 +80,8 @@ InstallPkg()
 #Install
 #Make_EspOpenSdk
 #
-Get_MicroPython
-Make_MicroPython
+#Get_MicroPython
+#Make_MicroPython
 #
 InstallPkg
 Make_MicroFirmware

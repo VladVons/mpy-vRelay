@@ -1,7 +1,7 @@
 #!/bin/bash
 #--- VladVons@gmail.com
 
-source ./common.sh
+source ./common.inc.sh
 
 export PATH=$PATH:~/.local/bin
 
@@ -11,8 +11,8 @@ cDev="/dev/ttyUSB0"
 cSpeed1=115200
 cSpeed2=460800
 
-ESP32=0
-CustomFW=1
+ESP32=1
+CustomFW=0
 
 
 if [ $ESP32 == 1 ]; then

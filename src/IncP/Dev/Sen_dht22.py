@@ -10,15 +10,14 @@ import machine, dht, time
 import uasyncio as asyncio
 
 
-Lock = asyncio.Lock()
-
 class DHT22():
     def __init__(self, aPin: int):
         Pin = machine.Pin(aPin)
         self.Obj = dht.DHT22(Pin)
+        self.Lock = asyncio.Lock()
 
     async def Get(self) -> list:
-        async with Lock:
+        async with self.Lock:
             await asyncio.sleep_ms(100)
             self.Obj.measure()
             await asyncio.sleep_ms(250)

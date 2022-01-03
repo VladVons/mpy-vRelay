@@ -27,9 +27,7 @@ cPort=/dev/ttyUSB0
 
 _esp_install()
 {
-  sudo pip3 install esptool
-  sudo pip3 install adafruit-ampy
-  sudo pip3 install picocom
+  sudo pip3 install esptool adafruit-ampy
 
   # add current user preveleges
   sudo usermod -a -G dialout $USER
