@@ -40,6 +40,7 @@ class TConfDev(dict):
                             self[Item['Alias']] = TClass(** Item['Param'])
                     except Exception as E:
                         Log.Print(1, 'x', 'Load()', E)
+                        print('Data', Data)
     '''
     def Clear(self):
          for Item in list(self.keys()):

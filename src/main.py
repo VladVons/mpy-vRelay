@@ -8,6 +8,13 @@ Description:.
 import time, gc, esp
 
 
+def RecursLimit(aCnt: int) -> int:
+    # mptask.h, MICROPY_TASK_STACK_SIZE
+    try:
+        return RecursLimit(aCnt + 1)
+    except:
+        return aCnt
+
 def Main():
     esp.osdebug(None)
 
@@ -16,6 +23,7 @@ def Main():
     print('MemFree boot', gc.mem_free())
 
     from App import Main
+    gc.collect()
     print('MemFree App', gc.mem_free())
 
     print('sleep 0.1')
@@ -24,5 +32,7 @@ def Main():
     Main.Main()
 
 #import test
+print('Recursion limit', RecursLimit(0))
+
 Main()
 print('End')

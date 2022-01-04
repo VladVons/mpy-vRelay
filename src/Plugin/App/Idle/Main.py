@@ -5,7 +5,7 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
-
+import gc
 from machine import Pin
 import uasyncio as asyncio
 #
@@ -21,7 +21,8 @@ class TIdle():
 
     async def Run(self, aSleep: float = 2):
         while True:
-            print('Idle', self.CntLoop)
+            gc.collect()
+            print('Idle', self.CntLoop, 'MemFree', gc.mem_free())
             self.tLedBeat()
 
             self.CntLoop += 1
