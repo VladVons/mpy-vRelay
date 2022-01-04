@@ -48,3 +48,15 @@ def IsNow(aPattern: str) -> bool:
         _Parse(Month,  lt[1]) and \
         _Parse(DOW,    lt[6])
     return R
+
+class TCron():
+    #Data = [('*/2 8-13 * * *', 22), ('* 14-23 * * *', 24)]
+    Data = []
+
+    def Init(self, aData: list):
+        self.Data = aData
+
+    async def Get(self):
+        for Cron, Val in self.Data:
+            if (IsNow(Cron)):
+                return Val

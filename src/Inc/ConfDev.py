@@ -36,10 +36,14 @@ class TConfDev(dict):
                 try:
                     Data = json.loads(Data)
                     for Item in Data.get('Dev', []):
-                        Class = Item['Class']
-                        Mod = __import__(Item['Module'], None, None, [Class])
+                        Class = Item.get('Class')
+                        Param = Item.get('Param', {})
+                        Module = Item.get('Module')
+                        Mod = __import__(Module, None, None, [Class])
                         TClass = getattr(Mod, Class)
-                        self[Item['Alias']] = TClass(** Item['Param'])
+                        Obj = TClass(** Param)
+                        Obj.Descr = Item.get('Descr', '')
+                        self[Item['Alias']] = Obj
                 except Exception as E:
                     Log.Print(1, 'x', 'Load()', E)
                     print('Data', Data)

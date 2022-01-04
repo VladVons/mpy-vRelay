@@ -1,10 +1,34 @@
 {
     "Dev":[
         {
-            "Module":"IncP.DevC.Sen_dht22",
-            "Class":"TSen_dht22_t",
-            "Alias":"SenTemp",
-            "Param":{"aPin": %PinDht%}
+            "Module": "IncP.DevC.Sen_dht22",
+            "Class": "TSen_dht22_t",
+            "Alias": "Temper1",
+            "Descr": "Temperature",
+            "Param":{"aPin": %PinDht1%}
+        },
+        {
+            "Module": "Inc.Cron",
+            "Class": "TCron",
+            "Alias": "Cron1"
+        },
+        {
+            "Module": "Inc.Hyster",
+            "Class": "THyster",
+            "Alias": "Hyster1",
+            "Param":{"aHyst": 2}
+        },
+        {
+            "Module": "IncP.Dev.Gpio",
+            "Class": "GpioW",
+            "Alias": "Heat1",
+            "Param":{"aPin": %PinHeat1%}
+        },
+        {
+            "Module": "IncP.Dev.Gpio",
+            "Class": "GpioW",
+            "Alias": "Led1",
+            "Param":{"aPin": %PinLed1%}
         }
     ]
 }

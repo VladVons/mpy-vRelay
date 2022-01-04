@@ -1,15 +1,14 @@
-from App import ConfApp
-
 from Inc.Conf import TConf
-ConfTherm = TConf('Conf/Therm')
+Conf = TConf('Conf/Therm')
 
 #esp8266. maximum recursion depth exceeded
+#from App import ConfApp
 #from Inc.ConfDev import TConfDev
-#ConfDevTherm = TConfDev()
-#ConfDevTherm.Load('Conf/Dev', ConfApp)
+#ConfDev = TConfDev()
+#ConfDev.Load('Conf/Dev', ConfApp)
 
 def Main():
     from .Main import TTherm
 
     Obj = TTherm()
-    return (Obj, Obj.Run())
+    return (Obj, Obj.Run(Conf.get('Sleep', 15)))
