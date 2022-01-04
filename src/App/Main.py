@@ -10,7 +10,7 @@ import os, gc
 import machine
 import uasyncio as asyncio
 #
-from . import ConfApp
+from . import ConfApp, ConfDevApp
 from Inc.Log  import Log
 from Inc.Plugin import Plugin
 
@@ -20,8 +20,13 @@ async def Run():
     #DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
     #print('DSleep', DSleep)
 
+    ConfDevApp.LoadPlugin('Conf/Dev', ['Plugin.App.Therm'], ConfApp)
+
     Plugin.LoadList(ConfApp.get('Plugins', 'App.HttpSrv'))
     Plugin.LoadDir('Plugin/App')
+    Plugins = sorted(list(Plugin.keys()))
+    print('Plugins', Plugins)
+
 
     gc.collect()
     Log.Print(1, 'i', 'Run()', 'MemFree %d' % (gc.mem_free()))

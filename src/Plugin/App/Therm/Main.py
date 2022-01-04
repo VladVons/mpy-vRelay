@@ -9,8 +9,8 @@ Description:
 import uasyncio as asyncio
 import time
 #
-from . import ConfTherm, ConfDevTherm
-from App import ConfApp
+from . import ConfTherm
+from App import ConfApp, ConfDevApp
 from Inc.Plugin import Plugin
 from Inc.Log  import Log
 from Inc.Hyster import THyster
@@ -29,7 +29,7 @@ class TTherm():
         PinOut = ConfApp.PinOut.get('led-a')
         self.Led = GpioW(PinOut)
 
-        self.DevT = ConfDevTherm['SenTemp']
+        self.DevT = ConfDevApp['SenTemp']
 
     #async def _DoPost(self, aOwner, aMsg):
     #    self.Cron.Set(aMsg.get('Val'))

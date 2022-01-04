@@ -7,8 +7,6 @@ ConfTherm = TConf('Conf/Therm')
 #from Inc.ConfDev import TConfDev
 #ConfDevTherm = TConfDev()
 #ConfDevTherm.Load('Conf/Dev', ConfApp)
-from App import ConfDevTherm
-
 
 def Main():
     from .Main import TTherm
