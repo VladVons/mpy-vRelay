@@ -2,6 +2,7 @@
 *.mpy
 *.dbf
 *.dbl
+*.db
 *.bin
 wget-log.*
 __pycache__
