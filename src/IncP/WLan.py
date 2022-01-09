@@ -5,6 +5,7 @@ License:     GNU, see LICENSE for more details
 Description: 
 '''
 
+
 from network   import WLAN, STA_IF, AP_IF, AUTH_WPA_WPA2_PSK
 from sys       import stdout, platform
 from machine   import idle

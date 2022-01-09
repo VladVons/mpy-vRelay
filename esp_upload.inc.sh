@@ -66,6 +66,7 @@ _files_db()
 _esp_file_transfare_Db()
 {
   touch $cUploadedDB
+  date >> $cUploadedDB
 
   Cnt=0
   _files_db |\
@@ -120,6 +121,7 @@ espf()
 espfu()
 {
   _esp_file_transfare_Db
+  _esp_terminal
 }
 
 ##### send files to device and enter terminal
