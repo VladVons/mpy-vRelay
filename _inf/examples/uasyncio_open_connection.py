@@ -1,1 +1,0 @@
-/mnt/hdd/data1/work/micropython/micropython/tests/net_inet/uasyncio_open_connection.py

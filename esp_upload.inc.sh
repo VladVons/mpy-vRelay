@@ -20,13 +20,12 @@
 ##### receive files from device from current directory
 #espg
 
-
-cSpeed=115200
-cPort=/dev/ttyUSB0
+source ./common.conf
 
 
 _esp_install()
 {
+  sudo apt install picocom
   sudo pip3 install esptool adafruit-ampy
 
   # add current user preveleges
@@ -36,7 +35,7 @@ _esp_install()
 
 _esp_terminal()
 {
-  picocom $cPort -b${cSpeed}
+  picocom $cDev -b${cSpeed1}
 }
 
 _esp_file_transfare()
@@ -48,9 +47,9 @@ _esp_file_transfare()
   Suffix=${Path#*$Find}
 
   if [ "$aMode" == "put" ]; then
-    Cmd="ampy --port $cPort --baud $cSpeed put $aFile $Suffix"
+    Cmd="ampy --port $cDev --baud $cSpeed1 put $aFile $Suffix"
   elif [ "$aMode" == "get" ]; then
-    Cmd="ampy --port $cPort --baud $cSpeed get $Suffix"
+    Cmd="ampy --port $cDev --baud $cSpeed1 get $Suffix"
   else 
     Cmd="echo unknown mode $aMode"
   fi
@@ -59,6 +58,39 @@ _esp_file_transfare()
   eval "$Cmd"
 }
 
+_files_db()
+{
+  find $cSrc -type f -printf '%T+ %p\n' | sort -r
+}
+
+_esp_file_transfare_Db()
+{
+  touch $cUploadedDB
+
+  Cnt=0
+  _files_db |\
+  while read Item; do
+    if [ $(grep -c "$Item" $cUploadedDB) -ne 0 ]; then
+      continue
+    fi
+    ((Cnt++))
+
+    File=$(echo $Item | awk '{print $2}')
+    Size=$(du -b $File | awk '{print $1}')
+    SrcRoot=${Item#*$cSrc/}
+    printf "%02d %4d %s\n" $Cnt $Size $SrcRoot
+
+    ampy --port $cDev --baud $cSpeed1 put $File $SrcRoot
+    if [ $? == 0 ]; then
+      echo $Item >> $cUploadedDB
+    fi
+  done
+}
+
+create_db()
+{
+  _files_db > $cUploadedDB
+}
 
 # receive files from device
 espg()
@@ -84,6 +116,12 @@ espf()
   done
 }
 
+##### send only updated files
+espfu()
+{
+  _esp_file_transfare_Db
+}
+
 ##### send files to device and enter terminal
 esp()
 {
@@ -94,7 +132,6 @@ esp()
   else
     killall picocom
     espf $*
-    sleep 1
     _esp_terminal
   fi
 }

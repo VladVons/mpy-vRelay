@@ -168,6 +168,8 @@ EspSrcCopy()
   else
     EspSrcCopy2 $aDir
   fi
+
+  echo > $cUploadedDB
 }
 
 
@@ -182,6 +184,8 @@ EspEFC()
 
   sleep 2
   EspSrcCopy
+
+  find $cSrc -type f -printf '%T+ %p\n' | sort -r  > $cUploadedDB
 
   sleep 2
   #ExecM "ampy --port $cDev --baud $cSpeed1 reset"
