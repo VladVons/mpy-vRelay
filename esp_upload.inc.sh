@@ -60,7 +60,7 @@ _esp_file_transfare()
 
 _files_db()
 {
-  find $cSrc -type f -printf '%T+ %p\n' | sort -r
+  find $cSrc -type f -printf '%T@ %p\n' | sort -r
 }
 
 _esp_file_transfare_Db()

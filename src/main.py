@@ -2,7 +2,7 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2020.02.10
 License:     GNU, see LICENSE for more details
-Description:
+Description: 
 '''
 
 import time, gc, esp 
