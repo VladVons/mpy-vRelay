@@ -1,5 +1,0 @@
-{
-  "key": "ctrl+shift+t",
-  "command": "workbench.action.terminal.sendSequence",
-  "args": { "text": "'${file}'\u000D" }
-}
