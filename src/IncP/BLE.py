@@ -103,9 +103,7 @@ class TBLE:
         pass
 
     def Send(self, aData):
-        print('---x1 Send', aData)
         for conn in self._conns:
-            print('---x2 Send', aData)
             self._ble.gatts_notify(conn, self._tx, aData)
 
     def Close(self):
