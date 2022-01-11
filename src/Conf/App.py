@@ -5,7 +5,7 @@ Alias = 'Sen_dht22'
 
 #Descr = 'frozen'
 #
-Plugins = 'App.HttpSrv -App.Menu App.Mqtt App.ConnSTA App.Captive -App.Sim7000 -App.WDog'
+#Plugins = 'App.HttpSrv App.Mqtt App.Ble App.ConnSTA App.Captive'
 TZone = 2
 #DSleep = 62
 #

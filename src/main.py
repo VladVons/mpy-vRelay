@@ -32,22 +32,7 @@ def Main():
     Main.Main()
 
 
-def Test1():
-    import time
-    from IncP.BLE import TBLE
-    BLE = TBLE('MyBLE')
-    Cnt = 0
-    while True:
-        Cnt += 1
-        Msg = "Hello %s" % (Cnt)
-        BLE.Write(Msg)
-        time.sleep(2)
-
-Test1()
-
-#import Test3
-#print('Recursion limit', RecursLimit(0))
-
-#Main()
-#print('End')
+print('Recursion limit', RecursLimit(0))
+Main()
+print('End')
 

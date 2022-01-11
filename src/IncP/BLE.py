@@ -16,17 +16,17 @@ _IRQ_CENTRAL_CONNECT = const(1)
 _IRQ_CENTRAL_DISCONNECT = const(2)
 _IRQ_GATTS_WRITE = const(3)
 
-_UART_UUID = bluetooth.UUID("6E400001-B5A3-F393-E0A9-E50E24DCCA9E")
-_UART_TX =  (bluetooth.UUID("6E400003-B5A3-F393-E0A9-E50E24DCCA9E"), bluetooth.FLAG_NOTIFY, )
-_UART_RX =  (bluetooth.UUID("6E400002-B5A3-F393-E0A9-E50E24DCCA9E"), bluetooth.FLAG_WRITE, )
-_UART_SERVICE = (_UART_UUID, (_UART_TX, _UART_RX), )
+# support 'Heart Rate'
+_HR_UUID = bluetooth.UUID(0x180D)
+_HR_CHAR = (bluetooth.UUID(0x2A37), bluetooth.FLAG_READ | bluetooth.FLAG_NOTIFY, )
+_HR_SERVICE = (_HR_UUID, (_HR_CHAR, ), )
 
-# org.bluetooth.service.environmental_sensing
-_ENV_SENSE_UUID = bluetooth.UUID(0x181A)
-
-# org.bluetooth.characteristic.gap.appearance.xml
-_ADV_APPEARANCE_GENERIC_THERMOMETER = const(0x300)
-
+# support 'Nordic UART'
+_UART_UUID = bluetooth.UUID('6E400001-B5A3-F393-E0A9-E50E24DCCA9E')
+_UART_TX =  (bluetooth.UUID('6E400003-B5A3-F393-E0A9-E50E24DCCA9E'), bluetooth.FLAG_READ | bluetooth.FLAG_NOTIFY, )
+_UART_RX =  (bluetooth.UUID('6E400002-B5A3-F393-E0A9-E50E24DCCA9E'), bluetooth.FLAG_WRITE, )
+_UART_SERVICE = (_UART_UUID, (_UART_TX, _UART_RX, ), )
+_SERVICES = (_HR_SERVICE, _UART_SERVICE, )
 
 def GetAdvPayload(aLimitedDisc=False, aBrEdr=False, aName=None, aServices=None, aAppearance=0):
     _ADV_FLAGS = const(0x01)
@@ -38,7 +38,7 @@ def GetAdvPayload(aLimitedDisc=False, aBrEdr=False, aName=None, aServices=None, 
 
     def _append(aType, aValue):
         nonlocal Res
-        print('adv_append', aType, aValue)
+        #print('adv_append', aType, aValue)
         Res += struct.pack("BB", len(aValue) + 1, aType) + aValue
 
     Res = bytearray()
@@ -66,45 +66,46 @@ def GetAdvPayload(aLimitedDisc=False, aBrEdr=False, aName=None, aServices=None, 
 
 
 class TBLE:
-    def __init__(self, aName):
+    def __init__(self, aPayload: bytes):
         self._conns = set()
         self._ble = bluetooth.BLE()
         self._ble.active(True)
-        self._ble.irq(self._irq)
-        ((self._tx, self._rx),) = self._ble.gatts_register_services((_UART_SERVICE, ))
+        self._ble.irq(self._IRQ)
+        ( (self._hr, ), (self._tx, self._rx, ), ) = self._ble.gatts_register_services(_SERVICES)
 
-        self._payload = GetAdvPayload(aName=aName, aServices=[_ENV_SENSE_UUID], aAppearance=_ADV_APPEARANCE_GENERIC_THERMOMETER)
-        self._advertise()
+        self._payload = aPayload
+        self._Advertise()
 
-    def _advertise(self, aInterval=500000):
+    def _Advertise(self, aInterval: int = 500000):
+        #self._ble.config(addr_mode=2)
         self._ble.gap_advertise(aInterval, adv_data=self._payload)
 
-    def _irq(self, aEvent, aData):
+    def _IRQ(self, aEvent, aData):
+        print('---x Ev', aEvent, aData)
         if (aEvent == _IRQ_CENTRAL_CONNECT):
-            conn_h, addr_type, addr = aData
-            print('---x EvConn', conn_h, addr_type, addr)
+            conn_h, _, _ = aData
             self._conns.add(conn_h)
-            self._advertise()
+            # allow multiple connection
+            self._Advertise()
+
         elif (aEvent == _IRQ_CENTRAL_DISCONNECT):
-            conn_h, addr_type, addr = aData
-            print('---x EvDConn', conn_h, addr_type, addr)
+            conn_h, _, _ = aData
             if (conn_h in self._conns):
                 self._conns.remove(conn_h)
-            self._advertise()
+            self._Advertise()
+
         elif (aEvent == _IRQ_GATTS_WRITE):
-            conn_h, attr_h = aData
-            print('---x EvWrite', conn_h, attr_h)
             Buf = self._ble.gatts_read(self._rx)
             Msg = Buf.decode('UTF-8').strip()
-            print('---x EvWrite Msg', Msg)
-        else:
-            print('---x EvElse', aEvent, aData)
+            self._DoReceive(Msg)
 
+    def _DoReceive(self, aData : str):
+        pass
 
-    def Write(self, aData):
-        print('---x write', aData)
+    def Send(self, aData):
+        print('---x1 Send', aData)
         for conn in self._conns:
-            print('---x write dev', conn, aData)
+            print('---x2 Send', aData)
             self._ble.gatts_notify(conn, self._tx, aData)
 
     def Close(self):
