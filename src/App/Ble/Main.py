@@ -10,7 +10,7 @@ import uasyncio as asyncio
 #
 #from App import ConfApp
 from IncP.BLE import TBLE
-#from Inc.Log  import Log
+from Inc.Log  import Log
 from Inc.Plugin import Plugin
 from IncP.Marker import Marker
 
@@ -21,6 +21,15 @@ class TBleEx(TBLE):
         Data = Marker(self, aOwner, aMsg)
         print('TBleEx.Send', Data)
         self.Send(json.dumps(Data))
+
+    def _DoConnect(self, aOn: bool, aAddr: bytes):
+        # allow multiple connection
+        if (aOn):
+            self._Advertise()
+ 
+        Info = {'On': aOn, 'Func': 'DoConnect'})
+        self.Send(json.dumps(Info))
+        #Plugin.PostSyn(self, Info)
 
     def _DoReceive(self, aMsg: str):
         print('DoReceive', aMsg)

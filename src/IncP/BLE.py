@@ -85,23 +85,27 @@ class TBLE:
 
     def _Advertise(self, aInterval: int = 500000):
         #self._ble.config(addr_mode=2)
-        self._ble.gap_advertise(None)
-        self._ble.gap_advertise(aInterval, adv_data=self._payload)
+        if (aInterval == 0):
+            self._ble.gap_advertise(None)
+        else:
+            self._ble.gap_advertise(aInterval, adv_data=self._payload)
 
     def _IRQ(self, aEvent: int, aData):
         if (aEvent == _IRQ_CENTRAL_CONNECT):
             conn_h, _, addr = aData
-            Log.Print(1, 'i', 'Connect', PrettifyMac(addr))
             self._conns.add(conn_h)
-            # allow multiple connection
-            self._Advertise()
+            Log.Print(1, 'i', 'Connect', PrettifyMac(addr))
+            self._DoConnect(True, addr)
 
         elif (aEvent == _IRQ_CENTRAL_DISCONNECT):
             conn_h, _, addr = aData
-            Log.Print(1, 'i', 'Disconnect', PrettifyMac(addr))
             if (conn_h in self._conns):
                 self._conns.remove(conn_h)
-            self._Advertise()
+                Log.Print(1, 'i', 'Disconnect', PrettifyMac(addr))
+                self._Advertise()
+                self._DoConnect(False, addr)
+
+
 
         elif (aEvent == _IRQ_GATTS_WRITE):
             Buf = self._ble.gatts_read(self._rx)
@@ -109,6 +113,9 @@ class TBLE:
             self._DoReceive(Msg)
 
     def _DoReceive(self, aData: str):
+        pass
+
+    def _DoConnect(self, aData: str):
         pass
 
     def Send(self, aData):

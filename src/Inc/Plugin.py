@@ -58,6 +58,9 @@ class TPlugin(dict):
                     break
         return R
 
+    def PostSyn(self, aOwner, aMsg, aFunc: str = '_DoPost'):
+        return asyncio.run(self.Post(aOwner, aMsg, aFunc))
+
     async def Post(self, aOwner, aMsg, aFunc: str = '_DoPost'):
         return await self._Post(self.items(), aOwner, aMsg, aFunc)
 
