@@ -10,6 +10,6 @@ def Main() -> tuple:
     # org.bluetooth.characteristic.gap.appearance.xml
     _ADV_APPEARANCE_GENERIC_THERMOMETER = const(0x300)
 
-    Payload = GetAdvPayload(aName='MyBLE', aServices=[_ENV_SENSE_UUID], aAppearance=_ADV_APPEARANCE_GENERIC_THERMOMETER)
+    Payload = GetAdvPayload(aName = 'MyBLE', aServices = [_ENV_SENSE_UUID], aAppearance = _ADV_APPEARANCE_GENERIC_THERMOMETER)
     Obj = TBleEx(Payload)
     return (Obj, Obj.Run())

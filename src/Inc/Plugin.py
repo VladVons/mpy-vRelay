@@ -58,7 +58,7 @@ class TPlugin(dict):
                     break
         return R
 
-    async def Post(self, aOwner, aMsg, aFunc = '_DoPost'):
+    async def Post(self, aOwner, aMsg, aFunc: str = '_DoPost'):
         return await self._Post(self.items(), aOwner, aMsg, aFunc)
 
     async def Stop(self, aPath: str) -> bool:
@@ -75,7 +75,7 @@ class TPlugin(dict):
             await self.Stop(Key)
 
     async def Run(self):
-        Tasks = [Val[1] for Val in self.values()]
+        Tasks = [v[1] for v in self.values()]
         await asyncio.gather(*Tasks)
 
 

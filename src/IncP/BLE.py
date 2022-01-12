@@ -7,9 +7,13 @@ Description:
 https://mpython.readthedocs.io/en/master/library/micropython/ubluetooth.html
 '''
 
+
 import bluetooth
 from micropython import const
+from ubinascii import hexlify
 import struct
+#
+from Inc.Log  import Log
 
 
 _IRQ_CENTRAL_CONNECT = const(1)
@@ -28,7 +32,7 @@ _UART_RX =  (bluetooth.UUID('6E400002-B5A3-F393-E0A9-E50E24DCCA9E'), bluetooth.F
 _UART_SERVICE = (_UART_UUID, (_UART_TX, _UART_RX, ), )
 _SERVICES = (_HR_SERVICE, _UART_SERVICE, )
 
-def GetAdvPayload(aLimitedDisc=False, aBrEdr=False, aName=None, aServices=None, aAppearance=0):
+def GetAdvPayload(aName: str = None, aServices: list = None, aAppearance: int = 0, aLimitedDisc: bool = False, aBrEdr: bool = False) -> bytearray:
     _ADV_FLAGS = const(0x01)
     _ADV_NAME = const(0x09)
     _ADV_APPEARANCE = const(0x19)
@@ -36,7 +40,7 @@ def GetAdvPayload(aLimitedDisc=False, aBrEdr=False, aName=None, aServices=None, 
     _ADV_UUID32_COMPLETE = const(0x5)
     _ADV_UUID128_COMPLETE = const(0x7)
 
-    def _append(aType, aValue):
+    def _append(aType: int, aValue):
         nonlocal Res
         #print('adv_append', aType, aValue)
         Res += struct.pack("BB", len(aValue) + 1, aType) + aValue
@@ -64,6 +68,9 @@ def GetAdvPayload(aLimitedDisc=False, aBrEdr=False, aName=None, aServices=None, 
 
     return Res
 
+def PrettifyMac(aMac: memoryview) -> str:
+    #Str = hexlify(aMac).decode('utf-8')
+    return "%x:%x:%x:%x:%x:%x" % struct.unpack("BBBBBB", aMac)
 
 class TBLE:
     def __init__(self, aPayload: bytes):
@@ -78,18 +85,20 @@ class TBLE:
 
     def _Advertise(self, aInterval: int = 500000):
         #self._ble.config(addr_mode=2)
+        self._ble.gap_advertise(None)
         self._ble.gap_advertise(aInterval, adv_data=self._payload)
 
-    def _IRQ(self, aEvent, aData):
-        print('---x Ev', aEvent, aData)
+    def _IRQ(self, aEvent: int, aData):
         if (aEvent == _IRQ_CENTRAL_CONNECT):
-            conn_h, _, _ = aData
+            conn_h, _, addr = aData
+            Log.Print(1, 'i', 'Connect', PrettifyMac(addr))
             self._conns.add(conn_h)
             # allow multiple connection
             self._Advertise()
 
         elif (aEvent == _IRQ_CENTRAL_DISCONNECT):
-            conn_h, _, _ = aData
+            conn_h, _, addr = aData
+            Log.Print(1, 'i', 'Disconnect', PrettifyMac(addr))
             if (conn_h in self._conns):
                 self._conns.remove(conn_h)
             self._Advertise()
@@ -99,7 +108,7 @@ class TBLE:
             Msg = Buf.decode('UTF-8').strip()
             self._DoReceive(Msg)
 
-    def _DoReceive(self, aData : str):
+    def _DoReceive(self, aData: str):
         pass
 
     def Send(self, aData):
