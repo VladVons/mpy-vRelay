@@ -12,7 +12,7 @@ import json
 from Inc.Log import Log
 
 
-class TConfDev(dict):
+class TConfClass(dict):
     def __getattr__(self, aName: str):
         return self.get(aName)
 
@@ -35,7 +35,7 @@ class TConfDev(dict):
                 Data = self._Replace(hF.read(), aVars)
                 try:
                     Data = json.loads(Data)
-                    for Item in Data.get('Dev', []):
+                    for Item in Data.get('Classes', []):
                         Class = Item.get('Class')
                         Param = Item.get('Param', {})
                         Module = Item.get('Module')

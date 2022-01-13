@@ -1,11 +1,11 @@
 from Inc.Conf import TConf
-Conf = TConf('Conf/Therm')
+Conf = TConf('Conf/Plugin.App.Therm')
 
 #esp8266. maximum recursion depth exceeded
 #from App import ConfApp
-#from Inc.ConfDev import TConfDev
-#ConfDev = TConfDev()
-#ConfDev.Load('Conf/Dev', ConfApp)
+#from Inc.ConfClass import TConfClass
+#ConfClass = TConfClass()
+#ConfClass.Load('Conf/Class', ConfApp)
 
 def Main(aOwner):
     from .Main import TTherm

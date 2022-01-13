@@ -1,5 +1,5 @@
 {
-    "Dev":[
+    "Classes":[
         {
             "Module": "IncP.DevC.Sen_dht22",
             "Class": "TSen_dht22_t",

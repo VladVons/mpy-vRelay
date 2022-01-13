@@ -10,7 +10,7 @@ import uasyncio as asyncio
 import time
 #
 from . import Conf
-from App import ConfApp, ConfDevApp
+from App import ConfApp, ConfClassApp
 from Inc.Plugin import Plugin
 from Inc.Log  import Log
 
@@ -24,7 +24,7 @@ class TTherm():
         print('TTherm._DoStop', aOwner, aMsg)
 
     async def Check(self):
-        CD = ConfDevApp
+        CD = ConfClassApp
         Temper1 = CD.Temper1
         Hyster1 = CD.Hyster1
         Cron1 = CD.Cron1
