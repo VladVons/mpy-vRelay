@@ -1,4 +1,4 @@
-def Main() -> tuple:
+def Main(aOwner) -> tuple:
     import bluetooth
     from micropython import const
 

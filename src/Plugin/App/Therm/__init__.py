@@ -7,7 +7,7 @@ Conf = TConf('Conf/Therm')
 #ConfDev = TConfDev()
 #ConfDev.Load('Conf/Dev', ConfApp)
 
-def Main():
+def Main(aOwner):
     from .Main import TTherm
 
     Obj = TTherm()

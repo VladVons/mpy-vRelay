@@ -105,8 +105,6 @@ class TBLE:
                 self._Advertise()
                 self._DoConnect(False, addr)
 
-
-
         elif (aEvent == _IRQ_GATTS_WRITE):
             Buf = self._ble.gatts_read(self._rx)
             Msg = Buf.decode('UTF-8').strip()

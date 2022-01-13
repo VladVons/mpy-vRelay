@@ -35,7 +35,7 @@ class TDoorCheck():
                 self.CntDoor += 1
                 self.Beep()
 
-                Mqtt = Plugin.Get('App.Mqtt')
+                Mqtt = Plugin.get('App.Mqtt')
                 if (Mqtt):
                     Mqtt[0].Publish('MyTopic1', 'CntDoor %s' % self.CntDoor)
 

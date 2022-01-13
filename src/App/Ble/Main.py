@@ -26,10 +26,10 @@ class TBleEx(TBLE):
         # allow multiple connection
         if (aOn):
             self._Advertise()
- 
-        Info = {'On': aOn, 'Func': 'DoConnect'})
+
+        Info = {'On': aOn, 'Func': 'DoConnect'}
         self.Send(json.dumps(Info))
-        #Plugin.PostSyn(self, Info)
+        #Plugin.PostNonAsync(self, Info)
 
     def _DoReceive(self, aMsg: str):
         print('DoReceive', aMsg)

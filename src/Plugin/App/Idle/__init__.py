@@ -1,4 +1,4 @@
-def Main():
+def Main(aOwner):
     from .Main import TIdle
 
     Obj = TIdle()

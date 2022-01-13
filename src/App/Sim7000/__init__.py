@@ -1,4 +1,4 @@
-def Main() -> tuple:
+def Main(aOwner) -> tuple:
     from .Main import TSim7000
 
     Obj = TSim7000()

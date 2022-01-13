@@ -17,6 +17,14 @@ from Inc.Log  import Log
 
 
 class TPlugin(dict):
+    def AddTask(self, aModule, aPath):
+        gc.collect()
+        Log.Print(1, 'i', 'MemFree %6d. Loading %s ...' % (gc.mem_free(), aPath))
+        Arr = aModule.Main(self)
+        if (Arr):
+            #Class, Func, ?Topic = Arr
+            self[aPath] = [Arr[0], asyncio.create_task(Arr[1])]
+
     def LoadDir(self, aDir: str):
         Files = os.ilistdir(aDir)
         for Info in Files:
@@ -38,15 +46,7 @@ class TPlugin(dict):
         for Item in Depends.split(' '):
             self.LoadMod(Item)
 
-        Arr = Mod.Main()
-        if (Arr):
-            #Class, Func, ?Topic = Arr
-            self[aPath] = [Arr[0], asyncio.create_task(Arr[1])]
-        Log.Print(1, 'i', 'LoadMod()', aPath)
-        gc.collect()
-
-    def Get(self, aPath: str):
-        return self.get(aPath)
+        self.AddTask(Mod, aPath)
 
     async def _Post(self, aTasks, aOwner, aMsg, aFunc) -> dict:
         R = {}
@@ -58,11 +58,11 @@ class TPlugin(dict):
                     break
         return R
 
-    def PostSyn(self, aOwner, aMsg, aFunc: str = '_DoPost'):
-        return asyncio.run(self.Post(aOwner, aMsg, aFunc))
-
     async def Post(self, aOwner, aMsg, aFunc: str = '_DoPost'):
         return await self._Post(self.items(), aOwner, aMsg, aFunc)
+
+    def PostNonAsync(self, aOwner, aMsg, aFunc: str = '_DoPost'):
+        return asyncio.run(self.Post(aOwner, aMsg, aFunc))
 
     async def Stop(self, aPath: str) -> bool:
         Obj = self.get(aPath)

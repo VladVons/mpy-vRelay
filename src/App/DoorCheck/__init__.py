@@ -1,7 +1,7 @@
 from .Conf import *
 
 
-def Main():
+def Main(aOwner):
     from .Main import TDoorCheck
 
     Obj = TDoorCheck(cPinBtn, cPinLed, cPinSnd)
