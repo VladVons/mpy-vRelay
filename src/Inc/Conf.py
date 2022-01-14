@@ -23,7 +23,7 @@ class TConfD(dict):
 
     def Keys(self) -> dict:
         R = {}
-        for K in self.keys(): 
+        for K in self.keys():
             if ('__' not in K):
                 R[K] = self.get(K)
         return R
@@ -31,7 +31,7 @@ class TConfD(dict):
 
 class TConf(TConfD):
     def __init__(self, aFile: str):
-        super().__init__() 
+        super().__init__()
         self.LoadPlatform(aFile)
 
     def LoadPlatform(self, aFile: str):
@@ -40,8 +40,8 @@ class TConf(TConfD):
             if (UFS.FileExists(File +  '.py')):
                 self.Load(File)
 
-    def Load(self, aFile: str):
-        Obj = __import__(aFile)
+    def Load(self, aFile: str, aMod = ['*']):
+        Obj = __import__(aFile.replace('/', '.'), None, None, aMod)
         #Obj = __import__(aFile.replace('/', '.'), None, None, ['App'])
         for Key in dir(Obj):
             if (not Key.startswith('__')):
