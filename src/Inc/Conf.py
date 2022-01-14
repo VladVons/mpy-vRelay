@@ -40,9 +40,8 @@ class TConf(TConfD):
             if (UFS.FileExists(File +  '.py')):
                 self.Load(File)
 
-    def Load(self, aFile: str, aMod = ['*']):
-        Obj = __import__(aFile.replace('/', '.'), None, None, aMod)
-        #Obj = __import__(aFile.replace('/', '.'), None, None, ['App'])
+    def Load(self, aFile: str):
+        Obj = __import__(aFile.replace('/', '.'), None, None, ['*'])
         for Key in dir(Obj):
             if (not Key.startswith('__')):
                 self[Key] = getattr(Obj, Key, None)
