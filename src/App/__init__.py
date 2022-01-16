@@ -1,6 +1,4 @@
 from Inc.Conf import TConf
-ConfApp = TConf('Conf/App')
 
-# esp8266. maximum recursion depth exceeded. Plugin/App/Therm/__init__.py
-from Inc.ConfClass import TConfClass
-ConfClassApp = TConfClass()
+ConfApp = TConf('Conf/App.py')
+ConfApp.Load()

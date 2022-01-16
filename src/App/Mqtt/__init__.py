@@ -1,7 +1,7 @@
 from .Conf import *
 
 
-def Main(aOwner) -> tuple:
+def Main(aConf) -> tuple:
     from .Main import TMqtt
 
     Obj = TMqtt()

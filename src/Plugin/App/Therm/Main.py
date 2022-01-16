@@ -9,8 +9,6 @@ Description:
 import uasyncio as asyncio
 import time
 #
-from . import Conf
-from App import ConfApp, ConfClassApp
 from Inc.Plugin import Plugin
 from Inc.Log  import Log
 
@@ -24,19 +22,19 @@ class TTherm():
         print('TTherm._DoStop', aOwner, aMsg)
 
     async def Check(self):
-        CD = ConfClassApp
-        Temper1 = CD.Temper1
-        Hyster1 = CD.Hyster1
-        Cron1 = CD.Cron1
-        Heat1 = CD.Heat1
-        Led1 = CD.Led1
+        CC = self.CC
+        Temper1 = CC.Temper1
+        Hyster1 = CC.Hyster1
+        Cron1 = CC.Cron1
+        Heat1 = CC.Heat1
+        Led1 = CC.Led1
 
         if (await Temper1.Check() == True):
             Info = dict(Temper1.Info(), **{'Uptime': int(time.ticks_ms() / 1000)})
             await Plugin.Post(self, Info)
 
         #print(self.DevT.Val)
-        Cron1.Init(Conf.Cron)
+        Cron1.Init(CC.Conf.Cron)
         CronVal = await Cron1.Get()
         if (CronVal is None):
             await Heat1.Set(0)
@@ -46,7 +44,7 @@ class TTherm():
             await Led1.Set(On)
             print('---Temp %s, On %s' % (Temper1.Val, On))
 
-    async def Run(self, aSleep: float = 5):
+    async def Run(self, aSleep: float = 15):
         while True:
             await self.Check()
             await asyncio.sleep(aSleep)

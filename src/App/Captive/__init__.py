@@ -1,7 +1,7 @@
 from .Conf import *
 
 
-def Main(aOwner) -> tuple:
+def Main(aConf) -> tuple:
     from App import ConfApp
 
     if (not ConfApp.STA_ESSID):

@@ -14,16 +14,27 @@ except:
 import os, sys, gc
 #
 from Inc.Log  import Log
+from Inc.Conf import TConf
+from Inc.ConfClass import TConfClass
 
 
 class TPlugin(dict):
     def AddTask(self, aModule, aPath):
         gc.collect()
         Log.Print(1, 'i', 'MemFree %6d. Loading %s ...' % (gc.mem_free(), aPath))
-        Arr = aModule.Main(self)
+
+        File = 'Conf/' + aPath.replace('.', '~')
+        Conf = TConf(File + '.py')
+        Conf.Load()
+        ConfClass = TConfClass(File + '.json', Conf)
+        ConfClass.Load()
+
+        Arr = aModule.Main(Conf)
         if (Arr):
-            #Class, Func, ?Topic = Arr
-            self[aPath] = [Arr[0], asyncio.create_task(Arr[1])]
+            Class, AFunc= Arr
+            self[aPath] = [Class, asyncio.create_task(AFunc)]
+            if (Conf) or (ConfClass):
+                Class.CC = ConfClass
 
     def LoadDir(self, aDir: str):
         Files = os.ilistdir(aDir)

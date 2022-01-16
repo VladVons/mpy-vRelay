@@ -17,40 +17,41 @@ from .Util import UFS
 from .Log  import Log
 
 
+def ImportMod(aFile: str, aMod: list = ['*']):
+    #aMod = ['Main']
+
+    #__import__(aPath)
+    #Mod = sys.modules.get(aPath)
+    return __import__(aFile.replace('/', '.'), None, None, aMod)
+
+
 class TConfD(dict):
+    def __init__(self, aFile: str):
+        super().__init__()
+        self.File = aFile
+
     def __getattr__(self, aName: str):
         return self.get(aName)
 
-    def Keys(self) -> dict:
-        R = {}
-        for K in self.keys():
-            if ('__' not in K):
-                R[K] = self.get(K)
-        return R
+    def Load(self):
+        Name, Ext = self.File.split('.')
+        for Item in [Name, Name + '_' + sys.platform]:
+            File = Item + '.' + Ext
+            if (UFS.FileExists(File)):
+                self._Load(File)
 
 
 class TConf(TConfD):
-    def __init__(self, aFile: str):
-        super().__init__()
-        self.LoadPlatform(aFile)
-
-    def LoadPlatform(self, aFile: str):
-        self.File = aFile + '.py'
-        for File in [aFile, aFile + '_' + sys.platform]:
-            if (UFS.FileExists(File +  '.py')):
-                self.Load(File)
-
-    def Load(self, aFile: str):
-        Obj = __import__(aFile.replace('/', '.'), None, None, ['*'])
-        for Key in dir(Obj):
-            if (not Key.startswith('__')):
-                self[Key] = getattr(Obj, Key, None)
+    def _Load(self, aFile: str):
+        Name, _ = aFile.split('.')
+        Obj = ImportMod(Name)
+        Keys = [O for O in dir(Obj) if (not O.startswith('__'))]
+        for Key in Keys:
+            self[Key] = getattr(Obj, Key, None)
 
     def Save(self):
         with open(self.File, 'w') as File:
-            for K, V in sorted(self.Keys().items()):
+            for K, V in sorted(self.items()):
                 if (type(V) is str):
                     V = "'" + V + "'"
                 File.write('%s = %s\n' % (K, V))
-
-#Conf = TConf('ConfApp')
