@@ -5,9 +5,9 @@ License:     GNU, see LICENSE for more details
 Description: 
 '''
 
-import time, gc, esp 
+import time, gc, esp
 
-
+'''
 def RecursLimit(aCnt: int) -> int:
     # mptask.h, MICROPY_TASK_STACK_SIZE
     try:
@@ -16,6 +16,7 @@ def RecursLimit(aCnt: int) -> int:
         return aCnt
 
 print('Recursion limit', RecursLimit(0))
+'''
 
 esp.osdebug(None)
 
@@ -24,10 +25,8 @@ print()
 print('MemFree boot', gc.mem_free())
 
 from App import Main
-
 print('sleep 0.1')
 time.sleep(0.1)
 
 Main.Main()
 print('End')
- 

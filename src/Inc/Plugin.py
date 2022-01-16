@@ -54,8 +54,10 @@ class TPlugin(dict):
         __import__(aPath)
         Mod = sys.modules.get(aPath)
         Depends = getattr(Mod, 'Depends', '')
-        for Item in Depends.split(' '):
-            self.LoadMod(Item)
+        for iDepend in Depends.split():
+            if (iDepend):
+                Log.Print(1, 'i', '%s depends on %s' % (aPath, iDepend))
+                self.LoadMod(iDepend)
 
         self.AddTask(Mod, aPath)
 

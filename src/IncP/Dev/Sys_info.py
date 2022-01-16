@@ -13,7 +13,7 @@ from App import ConfApp
 from Inc.Util.UTime import GetDate, GetTime
 from IncP.WLan import GetMac
 
-__version__ = '1.1.07, 2021.12.22'
+__version__ = '1.1.08, 2022.01.16'
 __author__  = 'Vladimir Vons, vladvons@gmail.com'
 
 
