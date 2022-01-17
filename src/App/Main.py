@@ -2,17 +2,17 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2020.02.10
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 '''
 
 
 import os, gc
 import machine
-import uasyncio as asyncio
 #
 from . import ConfApp
 from Inc.Log  import Log
 from Inc.Plugin import Plugin
+
 
 async def Run():
     Log.Print(1, 'i', 'Run', os.uname())
@@ -22,8 +22,8 @@ async def Run():
 
     Plugin.LoadList(ConfApp.get('Plugins', 'App.HttpSrv'))
     Plugin.LoadDir('Plugin/App')
-    Plugins = sorted(list(Plugin.keys()))
-    print('Plugins', Plugins)
+    #Plugins = sorted(list(Plugin.keys()))
+    #print('Plugins', Plugins)
 
     gc.collect()
     Log.Print(1, 'i', 'Run()', 'MemFree %d' % (gc.mem_free()))
@@ -34,6 +34,3 @@ async def Run():
         print('Ctrl-C')
     finally:
         await Plugin.StopAll()
-
-def Main():
-    asyncio.run(Run())

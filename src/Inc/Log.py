@@ -2,11 +2,11 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2017.02.01
 License:     GNU, see LICENSE for more details
-Description: 
+Description:
 '''
 
 
-import time, os, sys
+import sys
 #
 from .Util.UTime import GetDate, GetTime
 
@@ -34,7 +34,7 @@ class TLog():
     def __init__(self):
         self.Level  = 1
         self.Cnt    = 0
-        self.Echoes = [] 
+        self.Echoes = []
 
         self.AddEcho(TEchoConsole())
 
@@ -47,13 +47,13 @@ class TLog():
             self.Cnt += 1
             R = '%s,%s,%03d,%d,%s,%s%s' % (GetDate(), GetTime(), self.Cnt, aLevel, aType, ' ' * aLevel, list(aParam))
             if (aType == 'x') and (len(aParam) > 1):
-                self.DoExcept(aParam[1])
+                self._DoExcept(aParam[1])
 
             for Echo in self.Echoes:
                 Echo.Write(R)
         return R
 
-    def DoExcept(self, aE):
+    def _DoExcept(self, aE):
         sys.print_exception(aE)
 
 

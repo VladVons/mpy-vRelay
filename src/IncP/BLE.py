@@ -72,7 +72,7 @@ def PrettifyMac(aMac: memoryview) -> str:
     #Str = hexlify(aMac).decode('utf-8')
     return "%x:%x:%x:%x:%x:%x" % struct.unpack("BBBBBB", aMac)
 
-class TBLE:
+class TBLE():
     def __init__(self, aPayload: bytes):
         self._conns = set()
         self._ble = bluetooth.BLE()

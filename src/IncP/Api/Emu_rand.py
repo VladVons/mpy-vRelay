@@ -2,7 +2,7 @@
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2021.02.19
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 '''
 
 import random

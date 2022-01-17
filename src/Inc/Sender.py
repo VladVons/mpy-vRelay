@@ -2,7 +2,7 @@
 Author:      Vladimir Vons, Oster Inc
 Created:     2021.03.05
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 '''
 
 
@@ -26,5 +26,5 @@ class TSender():
                     break
                 await asyncio.sleep(0.1)
         else:
-            Log.Print(1, 'i', 'UnSend', aData)
+            Log.Print(1, 'i', 'UnSent', aData)
             self.Buf.append(aData)

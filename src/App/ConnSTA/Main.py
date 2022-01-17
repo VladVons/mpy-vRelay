@@ -2,8 +2,9 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2021.02.21
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 '''
+
 
 import uasyncio as asyncio
 from network import WLAN, STA_IF

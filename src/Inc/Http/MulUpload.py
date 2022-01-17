@@ -2,8 +2,9 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2021.02.04
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 '''
+
 
 try:
   import asyncio

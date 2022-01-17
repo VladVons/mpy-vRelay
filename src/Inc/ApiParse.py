@@ -1,6 +1,6 @@
 '''
 Author:      Vladimir Vons <VladVons@gmail.com>
-Created:     2021.02.17 
+Created:     2021.02.17
 License:     GNU, see LICENSE for more details
 Description: micropython ESP8266
 '''

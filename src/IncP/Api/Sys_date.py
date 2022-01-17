@@ -2,7 +2,7 @@
 Author:      Vladimir Vons <VladVons@gmail.com>
 Created:     2021.02.22
 License:     GNU, see LICENSE for more details
-Description: 
+Description:
 '''
 
 from Inc.Util.UTime import GetDate, GetTime

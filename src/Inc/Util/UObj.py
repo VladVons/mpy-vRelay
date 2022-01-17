@@ -5,6 +5,7 @@ License:     GNU, see LICENSE for more details
 Description:.
 '''
 
+
 def GetTree(aObj, aPrefix: str = '', aDepth: int = 99) -> list:
     R = []
 

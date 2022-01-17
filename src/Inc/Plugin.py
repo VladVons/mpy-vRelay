@@ -21,7 +21,7 @@ from Inc.ConfClass import TConfClass
 class TPlugin(dict):
     def AddTask(self, aModule, aPath):
         gc.collect()
-        Log.Print(1, 'i', 'MemFree %6d. Loading %s ...' % (gc.mem_free(), aPath))
+        Log.Print(1, 'i', 'MemFree %6d. Loading %s' % (gc.mem_free(), aPath))
 
         File = 'Conf/' + aPath.replace('.', '~')
         Conf = TConf(File + '.py')
@@ -81,7 +81,7 @@ class TPlugin(dict):
         Obj = self.get(aPath)
         if (Obj):
             await self._Post([(aPath, Obj)], None, None, '_DoStop')
-            await asyncio.sleep(1)
+            await asyncio.sleep(0.5)
             Obj[1].cancel()
             del self[aPath]
             return True

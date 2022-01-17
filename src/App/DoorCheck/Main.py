@@ -2,7 +2,7 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2020.03.12
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 '''
 
 import machine

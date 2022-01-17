@@ -2,7 +2,7 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2018.06.10
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 
 abrevation for RAM saving
 R - Result

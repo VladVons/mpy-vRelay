@@ -2,8 +2,10 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2020.04.03
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 '''
+
+
 try:
   import asyncio
 except:
