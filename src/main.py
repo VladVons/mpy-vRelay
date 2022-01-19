@@ -7,6 +7,7 @@ Description:
 
 import time, gc, esp
 
+
 '''
 def RecursLimit(aCnt: int) -> int:
     # mptask.h, MICROPY_TASK_STACK_SIZE
@@ -27,8 +28,9 @@ print('MemFree boot', gc.mem_free())
 from App.Main import Run
 import uasyncio as asyncio
 
-print('sleep 0.1')
-time.sleep(0.1)
+Wait = 0.1
+print('sleep', Wait)
+time.sleep(Wait)
 
 asyncio.run(Run())
 

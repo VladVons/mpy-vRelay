@@ -32,7 +32,7 @@ class TPlugin(dict):
         Arr = aModule.Main(Conf)
         if (Arr):
             Class, AFunc= Arr
-            self[aPath] = [Class, asyncio.create_task(AFunc)]
+            self[aPath] = (Class, asyncio.create_task(AFunc))
             if (Conf) or (ConfClass):
                 Class.CC = ConfClass
 
@@ -92,7 +92,7 @@ class TPlugin(dict):
 
     async def Run(self):
         Tasks = [v[1] for v in self.values()]
-        await asyncio.gather(*Tasks)
+        await asyncio.gather(* Tasks)
 
 
 Plugin = TPlugin()

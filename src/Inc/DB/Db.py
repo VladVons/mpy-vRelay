@@ -2,7 +2,7 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2020.03.03
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 '''
 
 from Inc.Util import UArr

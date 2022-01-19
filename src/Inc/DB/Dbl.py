@@ -2,7 +2,40 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2020.03.03
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
+
+import os, time
+from Inc.DB.Dbl import TDbl, TDblFields
+
+dbl = TDbl()
+File = 'Products.dbl'
+if (os.path.isfile(File)):
+    dbl.Open(File)
+    for RecNo in dbl:
+        lt = time.localtime(dbl.GetField('Created'))
+        DateTime = '%d-%02d-%02d %02d:%02d:%02d' % (lt[0], lt[1], lt[2], lt[3], lt[4], lt[5])
+        print(RecNo, dbl.GetField('Name'), DateTime, dbl.GetField('Votes'), dbl.GetField('Price'), dbl.GetField('Active'))
+else:
+    # see python struct format. https://docs.python.org/3/library/struct.html
+    DblFields = TDblFields()
+    DblFields.Add('Name', 's', 20)
+    DblFields.Add('Created', 'f')
+    DblFields.Add('Votes', 'i')
+    DblFields.Add('Price', 'f')
+    DblFields.Add('Active', '?')
+
+    dbl.Create(File, DblFields)
+    for Idx in range(10):
+        dbl.RecAdd()
+        dbl.SetField('Name', 'Monitor_%s' % Idx)
+        dbl.SetField('Created', time.time())
+        dbl.SetField('Votes', 10 + Idx)
+        dbl.SetField('Price', 100.14 + Idx)
+        dbl.SetField('Active', (Idx % 2) == 0)
+
+        print('Added record', Idx)
+        time.sleep(0.1)
+dbl.Close()
 '''
 
 
