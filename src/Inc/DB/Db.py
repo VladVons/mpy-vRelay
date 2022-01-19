@@ -41,7 +41,7 @@ class TDb():
         self.RecLen: int = 0
         self.RecNo: int = 0
         self.RecSave: bool = False
-        self.Buf:bytearray = bytearray()
+        self.Buf: bytearray = bytearray()
         self.BufFill: bytes = b'\x00'
         self.Fields: TDbFields = TDbFields()
 
@@ -85,6 +85,11 @@ class TDb():
         else:
             Len = aField.Ofst + len(aData) - len(self.Buf)
         self.Buf[aField.Ofst:Len] = aData
+
+    def SetRec(self, aBuf: bytearray):
+        assert (len(self.Buf) == len(aBuf)), 'buf len mismatch'
+        self.RecSave = True
+        self.Buf = aBuf
 
     def GetField(self, aName: str):
         Field = self.Fields.Get(aName.upper())

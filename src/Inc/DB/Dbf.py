@@ -102,7 +102,7 @@ class TDbf(TDb):
         self.Stream.seek(0)
         Data = self.Stream.read(32)
         Sign, LUpd, RecCnt, self.HeadLen, self.RecLen = struct.unpack('<1B3s1I1H1H', Data[0:1+3+4+2+2])
-        assert Sign == self.Sign, 'bad signature'
+        assert (Sign == self.Sign), 'bad signature'
 
         self.Fields = TDbfFields()
         self.Fields.Add('Del', 'C', 1, 0)
