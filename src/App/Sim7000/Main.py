@@ -2,7 +2,7 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2021.02.23
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 
 https://github.com/tmcadam/sim7000-tools/blob/master/sim7000.py
 https://github.com/search?l=Python&q=sim7000&type=Repositories

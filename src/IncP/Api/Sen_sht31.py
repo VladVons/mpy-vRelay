@@ -6,6 +6,7 @@ Description: micropython ESP8266
              SHT31 temperature-humidity sensor
 '''
 
+
 import machine
 #
 from Inc.Log import Log

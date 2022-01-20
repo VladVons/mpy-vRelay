@@ -3,8 +3,9 @@ Author:      Vladimir Vons, Oster Inc.
 Created:     2021.02.11
 License:     GNU, see LICENSE for more details
 
-Description:.http://IP/info
+Description: http://IP/info
 '''
+
 
 import json
 #

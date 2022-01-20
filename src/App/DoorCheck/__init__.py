@@ -1,7 +1,7 @@
 from .Conf import *
 
 
-def Main(aConf):
+def Main(aConf) -> tuple:
     from .Main import TDoorCheck
 
     Obj = TDoorCheck(cPinBtn, cPinLed, cPinSnd)

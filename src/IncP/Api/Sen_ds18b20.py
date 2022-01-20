@@ -6,6 +6,7 @@ Description: micropython ESP8266
              DS1820 temperature sensor
 '''
 
+
 import binascii
 
 from Inc.Log import Log
