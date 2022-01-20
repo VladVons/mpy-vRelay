@@ -11,6 +11,7 @@ https://simcom.ee/documents/?dir=SIM7000x
 https://m2msupport.net/m2msupport/tutorial-for-simcom-m2m-modules/#Network
 '''
 
+
 import uasyncio as asyncio
 from machine import UART, Pin
 #

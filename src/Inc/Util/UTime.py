@@ -2,11 +2,12 @@
 Author:      Vladimir Vons, Oster Inc.
 Created:     2020.02.27
 License:     GNU, see LICENSE for more details
-Description:.
+Description:
 '''
 
 
 import time
+
 
 '''
 def TimeInRange(aStart, aEnd, aX):

@@ -36,7 +36,7 @@ class TDbFields(dict):
 
 class TDb():
     def __init__(self):
-        self.Stream = None
+        self.S = None   # Stream->S. Abbr for micropython
         self.HeadLen: int = 0
         self.RecLen: int = 0
         self.RecNo: int = 0
@@ -61,17 +61,17 @@ class TDb():
 
     def _SeekRecNo(self):
         Ofst = self.HeadLen + (self.RecNo * self.RecLen)
-        return self.Stream.seek(Ofst)
+        return self.S.seek(Ofst)
 
     def _RecRead(self):
         self._SeekRecNo()
-        self.Buf = bytearray(self.Stream.read(self.RecLen))
+        self.Buf = bytearray(self.S.read(self.RecLen))
 
     def _RecWrite(self):
         if (self.RecSave):
             self.RecSave = False
             self._SeekRecNo()
-            self.Stream.write(self.Buf)
+            self.S.write(self.Buf)
             self._DoRecWrite()
 
     def _GetFieldData(self, aField: TDbField) -> bytearray:
@@ -102,7 +102,7 @@ class TDb():
         self._SetFieldData(Field, Value)
 
     def GetSize(self) -> int:
-        FileSize = self.Stream.seek(0, 2)
+        FileSize = self.S.seek(0, 2)
         return int((FileSize - self.HeadLen) / self.RecLen)
 
     def RecGo(self, aNo: int):
@@ -117,15 +117,15 @@ class TDb():
         self._RecWrite()
 
         self.Buf = bytearray(self.BufFill * self.RecLen)
-        self.Stream.seek(0, 2)
+        self.S.seek(0, 2)
         for Cnt in range(aCnt):
-            self.Stream.write(self.Buf)
+            self.S.write(self.Buf)
         self.RecNo = self.GetSize() - 1
 
     def Create(self, aName: str, aFields: TDbFields):
         self.Close()
 
-        self.Stream = open(aName, 'wb+')
+        self.S = open(aName, 'wb+')
         self._StructWrite(aFields)
         self._StructRead()
 
@@ -133,7 +133,7 @@ class TDb():
         self.Close()
 
         Mode = 'rb' if aROnly else 'rb+'
-        self.Stream = open(aName, Mode)
+        self.S = open(aName, Mode)
 
         #self.HeadLen, self.RecLen
         self._StructRead()
@@ -141,10 +141,10 @@ class TDb():
         self.RecGo(0)
 
     def Close(self):
-       if (self.Stream):
+       if (self.S):
             self._RecWrite()
-            self.Stream.close()
-            self.Stream = None
+            self.S.close()
+            self.S = None
 
     def _StructRead(self):
         # init vars self.HeadLen, self.RecLen, self.Fields

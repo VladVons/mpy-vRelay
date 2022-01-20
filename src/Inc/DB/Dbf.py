@@ -99,17 +99,17 @@ class TDbf(TDb):
         self.BufFill = b' '
 
     def _StructRead(self):
-        self.Stream.seek(0)
-        Data = self.Stream.read(32)
+        self.S.seek(0)
+        Data = self.S.read(32)
         Sign, LUpd, RecCnt, self.HeadLen, self.RecLen = struct.unpack('<1B3s1I1H1H', Data[0:1+3+4+2+2])
         assert (Sign == self.Sign), 'bad signature'
 
         self.Fields = TDbfFields()
         self.Fields.Add('Del', 'C', 1, 0)
 
-        self.Stream.seek(32)
+        self.S.seek(32)
         while True:
-            Data = self.Stream.read(32)
+            Data = self.S.read(32)
             if (Data[0] == 0x0D):
                 break
 
@@ -121,20 +121,20 @@ class TDbf(TDb):
         RecLen  = aFields.Len + 1
         HeadLen = 32 + (32 * len(aFields)) + 1
         Data = struct.pack('<1B3B1I1H1H', self.Sign, 1, 1, 1, 0, HeadLen, RecLen)
-        self.Stream.seek(0)
-        self.Stream.write(Data)
+        self.S.seek(0)
+        self.S.write(Data)
 
-        self.Stream.seek(32)
+        self.S.seek(32)
         for K, V in aFields.Sort():
             Data = struct.pack('<11s1s4s1B1B14s', V.Name.encode(), V.Type.encode(), b'\x00', V.Len, V.LenD, b'\x00')
-            self.Stream.write(Data)
-        self.Stream.write(b'\x0D')
+            self.S.write(Data)
+        self.S.write(b'\x0D')
 
     def _DoRecWrite(self):
         # YYMMDD, RecCount
         Data = struct.pack('<1B1B1B1I', 20, 1, 1, self.GetSize())
-        self.Stream.seek(1)
-        self.Stream.write(Data)
+        self.S.seek(1)
+        self.S.write(Data)
 
     def RecDelete(self, aMode: bool = True):
         self.RecSave = True

@@ -89,24 +89,24 @@ class TDbl(TDb):
     def _StructWrite(self, aFields: TDblFields):
         HeadLen = 16 + (16 * len(aFields))
         Data = struct.pack('<1B1H1H1H', self.Sign, HeadLen, aFields.Len, len(aFields))
-        self.Stream.seek(0)
-        self.Stream.write(Data)
+        self.S.seek(0)
+        self.S.write(Data)
 
-        self.Stream.seek(16)
+        self.S.seek(16)
         for K, V in aFields.Sort():
             Data = struct.pack('<11s1s1B3s', V.Name.encode(), V.Type.encode(), V.Len, b'\x00')
-            self.Stream.write(Data)
+            self.S.write(Data)
 
     def _StructRead(self):
         self.Fields = TDblFields()
 
-        self.Stream.seek(0)
-        Data = self.Stream.read(16)
+        self.S.seek(0)
+        Data = self.S.read(16)
         Sign, self.HeadLen, self.RecLen, Fields = struct.unpack('<1B1H1H1H', Data[0:1+2+2+2])
         assert Sign == self.Sign, 'bad signature'
 
         for i in range(Fields):
-            Data = self.Stream.read(16)
+            Data = self.S.read(16)
             FName, FType, FLen, X = struct.unpack('<11s1s1B3s', Data)
             Name = FName.split(b'\x00', 1)[0].decode()
             self.Fields.Add(Name, FType.decode(), FLen)

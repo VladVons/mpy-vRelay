@@ -30,4 +30,4 @@ class TSen():
             Log.Print(1, 'x', 'Check()', E)
 
     def Info(self) -> dict:
-        return {'Val': self.Val, 'Owner': self.__class__.__name__}
+        return {'Val': self.Val, 'Owner': self.__class__.__name__, 'Alias': self.Alias}

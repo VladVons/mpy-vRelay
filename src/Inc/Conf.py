@@ -13,7 +13,7 @@ V - Value
 
 import os, sys
 #
-from .Util import UFS
+from .Util.UFS import FileExists
 from .Log  import Log
 
 
@@ -37,7 +37,7 @@ class TConfD(dict):
         Name, Ext = self.File.split('.')
         for Item in [Name, Name + '_' + sys.platform]:
             File = Item + '.' + Ext
-            if (UFS.FileExists(File)):
+            if (FileExists(File)):
                 self._Load(File)
 
 
