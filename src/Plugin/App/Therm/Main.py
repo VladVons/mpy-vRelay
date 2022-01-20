@@ -23,14 +23,14 @@ class TTherm():
 
     async def Check(self):
         CC = self.CC
-        Temper1 = CC.Temper1
+        Temp1 = CC.Temp1
         Hyster1 = CC.Hyster1
         Cron1 = CC.Cron1
         Heat1 = CC.Heat1
         Led1 = CC.Led1
 
-        if (await Temper1.Check() == True):
-            Info = dict(Temper1.Info(), **{'Uptime': int(time.ticks_ms() / 1000)})
+        if (await Temp1.Check() == True):
+            Info = dict(Temp1.Info(), **{'Uptime': int(time.ticks_ms() / 1000)})
             await Plugin.Post(self, Info)
 
         #print(self.DevT.Val)
@@ -39,10 +39,10 @@ class TTherm():
         if (CronVal is None):
             await Heat1.Set(0)
         else:
-            On = Hyster1.CheckP(CronVal, Temper1.Val)
+            On = Hyster1.CheckP(CronVal, Temp1.Val)
             await Heat1.Set(On)
             await Led1.Set(On)
-            print('---Temp %s, On %s' % (Temper1.Val, On))
+            print('---Temp %s, On %s' % (Temp1.Val, On))
 
     async def Run(self, aSleep: float = 15):
         while True:

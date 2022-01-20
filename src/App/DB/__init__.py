@@ -1,5 +1,5 @@
 def Main(aConf):
     from .Main import TDB
 
-    Obj = TDB()
-    return (Obj, Obj.Run('values.db'))
+    Obj = TDB('values.db')
+    return (Obj, Obj.Run(60))

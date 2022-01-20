@@ -13,50 +13,55 @@ import uasyncio as asyncio
 #
 from Inc.DB.Dbl import TDbl, TDblFields
 from Inc.Util.UFS import FileExists
+from Inc.Log  import Log
 
 
 class TDB():
-    def __init__(self):
-        self.db = None
+    def __init__(self, aFile: str):
+        self.File = aFile 
 
     async def _DoPost(self, aOwner, aMsg):
-        if (self.db):
-            if (aMsg.get('Val')):
-                print('---x-TDB', aMsg, self.db.GetSize())
+        if (aMsg.get('Val')):
+            Log.Print(1, 'i', 'TDB._DoPost()', aMsg)
 
-                self.db.RecAdd()
-                self.db.SetField('Alias', aMsg.get('Alias', ''))
-                self.db.SetField('Created', time.time())
-                self.db.SetField('Value', aMsg.get('Val', 0))
-
-    def Init(self, aFile):
-        self.db = TDbl()
-        if (FileExists(aFile)):
-            self.db.Open(aFile)
-        else:
-            Fields = TDblFields()
-            Fields.Add('Alias', 's', 8)
-            Fields.Add('Created', 'f')
-            Fields.Add('Value', 'f')
-            self.db.Create(aFile, Fields)
-
-    def Trunc(self, aFile):
-        if (self.db.GetSize() > 10000):
-            db = TDbl()
-            db.Create(File + '.tmp', self.db.Fields)
-            self.db.RecGo(1000)
-            for RecNo in self.db:
-                db.RecAdd()
-                db.SetRec(self.db.Buf)
+            db = self.Init(self.File)
+            db.RecAdd()
+            db.SetField('Alias', aMsg.get('Alias', 'X'))
+            db.SetField('Time', time.time())
+            db.SetField('Val', aMsg.get('Val'))
             db.Close()
 
-            self.db.Close()
-            os.rename(File + '.tmp', aFile)
-            self.Init(aFile)
+    def Init(self, aFile):
+        db = TDbl()
+        if (FileExists(aFile)):
+            db.Open(aFile)
+        else:
+            Fields = TDblFields()
+            Fields.Add('Alias', 's', 5)
+            Fields.Add('Time', 'f')
+            Fields.Add('Val', 'f')
+            db.Create(aFile, Fields)
+        return db
 
-    async def Run(self, aFile):
-        self.Init(aFile)
+    def Trunc(self, aFile):
+        db1 = self.Init(aFile)
+        if (db1.GetSize() < 60*24*7):
+            db1.Close()
+        else:
+            db2 = TDbl()
+            FileTmp = aFile + '.tmp'
+            db2.Create(FileTmp, db1.Fields)
+            db1.RecGo(60*24*1)
+            for R in db1:
+                db2.RecAdd()
+                db2.SetRec(db1.Buf)
+            db1.Close()
+            db2.Close()
 
+            os.remove(aFile)
+            os.rename(FileTmp, aFile)
+
+    async def Run(self, aSleep = 60):
         while True:
-            self.Trunc(aFile)
-            await asyncio.sleep(60)
+            self.Trunc(self.File)
+            await asyncio.sleep(aSleep)

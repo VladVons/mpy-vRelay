@@ -3,7 +3,7 @@
         {
             "Module": "IncP.DevC.Sen_dht22",
             "Class": "TSen_dht22_t",
-            "Alias": "Temper1",
+            "Alias": "Temp1",
             "Descr": "Temperature",
             "Param":{"aPin": %PinDht1%}
         },

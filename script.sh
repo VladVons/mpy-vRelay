@@ -22,7 +22,8 @@ if [ $ESP32 == 1 ]; then
   else
     #download link http://micropython.org/download#esp8266
     cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp32"
-    cFileImg="esp32-20210902-v1.17.bin"
+    #cFileImg="esp32-20210902-v1.17.bin"
+    cFileImg="esp32-20220117-v1.18.bin"
   fi
 
   cEraseCmd="esptool.py --port $cDev --baud $cSpeed1 --chip esp32 erase_flash"

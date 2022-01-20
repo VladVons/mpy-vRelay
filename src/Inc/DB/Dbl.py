@@ -103,7 +103,7 @@ class TDbl(TDb):
         self.S.seek(0)
         Data = self.S.read(16)
         Sign, self.HeadLen, self.RecLen, Fields = struct.unpack('<1B1H1H1H', Data[0:1+2+2+2])
-        assert Sign == self.Sign, 'bad signature'
+        assert (Sign == self.Sign), 'bad signature'
 
         for i in range(Fields):
             Data = self.S.read(16)
