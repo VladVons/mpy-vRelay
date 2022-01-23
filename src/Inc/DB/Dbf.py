@@ -44,38 +44,38 @@ from .Db import TDb, TDbFields, TDbField
 
 
 class TDbfField(TDbField):
-    def DefLen(self, aType: str, aLen: int):
+    def _DefLen(self, aType: str, aLen: int):
         if (aLen == 0):
             aLen = {'C': 10, 'N': 10, 'D': 8, 'L': 1}.get(aType, 0)
         return aLen
 
-    def ValueToData(self, aValue) -> bytearray:
+    def ValToData(self, aVal) -> bytearray:
         if (self.Type == 'L'):
-            aValue = 'T' if aValue else 'F'
+            aVal = 'T' if aVal else 'F'
         elif (self.Type == 'D'):
-            lt = time.localtime(aValue)
-            aValue = '%04d%02d%02d' % (lt[0], lt[1], lt[2])
+            lt = time.localtime(aVal)
+            aVal = '%04d%02d%02d' % (lt[0], lt[1], lt[2])
         else:
-            aValue = str(aValue)
-        return aValue.encode()
+            aVal = str(aVal)
+        return aVal.encode()
 
-    def DataToValue(self, aValue: bytearray):
-        aValue = aValue.decode().strip()
+    def DataToVal(self, aVal: bytearray):
+        aVal = aVal.decode().strip()
 
         if (self.Type == 'N'):
             if (self.LenD > 0):
-                aValue = float(aValue if aValue != '' else '0.0')
+                aVal = float(aVal if aVal != '' else '0.0')
             else:
-                aValue = int(aValue if aValue != '' else '0')
+                aVal = int(aVal if aVal != '' else '0')
         elif (self.Type == 'F'):
-            aValue = float(aValue if aValue != '' else '0.0')
+            aVal = float(aVal if aVal != '' else '0.0')
         elif (self.Type == 'L'):
-            aValue = True if aValue == 'T' else False
+            aVal = True if aVal == 'T' else False
         elif (self.Type == 'D'):
-            if (aValue == ''):
-                aValue = '20010101'
+            if (aVal == ''):
+                aVal = '20010101'
             #R = time.mktime([int(R[0:4]), int(R[4:6]), int(R[6:8]), 0, 0, 0, 0, 0])
-        return aValue
+        return aVal
 
 
 class TDbfFields(TDbFields):
@@ -84,7 +84,7 @@ class TDbfFields(TDbFields):
         aType = aType.upper()
 
         R = TDbfField()
-        aLen = R.DefLen(aType, aLen)
+        aLen = R._DefLen(aType, aLen)
         R.update({'Name': aName, 'Type': aType, 'Len': aLen, 'No': len(self), 'Ofst': self.Len, 'LenD': aLenD})
         self[aName] = R
         self.Len += aLen

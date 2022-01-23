@@ -4,17 +4,32 @@ Created:     2020.03.03
 License:     GNU, see LICENSE for more details
 Description:
 
-import os, time
+import os, time, struct
 from Inc.DB.Dbl import TDbl, TDblFields
 
 dbl = TDbl()
 File = 'Products.dbl'
 if (os.path.isfile(File)):
-    dbl.Open(File)
-    for RecNo in dbl:
-        lt = time.localtime(dbl.GetField('Created'))
+    db.Open(aFile)
+
+    # by name
+    Time1 = time.time()
+    for RecNo in db:
+        lt = time.localtime(db.GetField('Created'))
         DateTime = '%d-%02d-%02d %02d:%02d:%02d' % (lt[0], lt[1], lt[2], lt[3], lt[4], lt[5])
-        print(RecNo, dbl.GetField('Name'), DateTime, dbl.GetField('Votes'), dbl.GetField('Price'), dbl.GetField('Active'))
+        print(RecNo, db.GetField('Name'), DateTime, db.GetField('Price'))
+    print('time', time.time() - Time1)
+
+    # by index
+    Time1 = time.time()
+    Struct = db.Fields.Struct()
+    db.RecGo(0)
+    for RecNo in db:
+        Record = struct.unpack(Struct, db.Buf)
+        lt = time.localtime(Record[1])
+        DateTime = '%d-%02d-%02d %02d:%02d:%02d' % (lt[0], lt[1], lt[2], lt[3], lt[4], lt[5])
+        print(RecNo, Record[0].decode(), DateTime, Record[3])
+    print('time', time.time() - Time1)
 else:
     # see python struct format. https://docs.python.org/3/library/struct.html
     DblFields = TDblFields()
@@ -45,19 +60,26 @@ from .Db import TDb, TDbFields, TDbField
 
 
 class TDblField(TDbField):
-    def ValueToData(self, aValue) -> bytearray:
+    def Struct(self) -> str:
         if (self.Type == 's'):
-            R = struct.pack('<%s%s' % (self.Len, self.Type), aValue.encode())
+            return '%s%s' % (self.Len, 's')
         else:
-            R = struct.pack('<%s%s' % (1, self.Type), aValue)
-        return R
+            return '%s%s' % (1, self.Type)
 
-    def DataToValue(self, aValue: bytearray):
+    def ValToData(self, aVal) -> bytearray:
+        Struct = '<' + self.Struct()
         if (self.Type == 's'):
-            Data = struct.unpack('<%s%s' % (self.Len, self.Type), aValue)
+            return struct.pack(Struct, aVal.encode())
+        else:
+            return struct.pack(Struct, aVal)
+
+    def DataToVal(self, aVal: bytearray):
+        Struct = '<' + self.Struct()
+        if (self.Type == 's'):
+            Data = struct.unpack(Struct, aVal)
             R = Data[0].split(b'\x00', 1)[0].decode()
         else:
-            Data = struct.unpack('<%s%s' % (1, self.Type), aValue)
+            Data = struct.unpack(Struct, aVal)
             R = Data[0]
         return R
 
@@ -76,10 +98,10 @@ class TDblFields(TDbFields):
         self.Len += Len
         return R
 
-    def GetStruct(self):
+    def Struct(self) -> str:
         R = '<'
-        for K, V in self.Sort():
-            R += '%s%s' % (V.Len, V.Type)
+        for K, _ in self.Sort():
+            R += self[K].Struct()
         return R
 
 

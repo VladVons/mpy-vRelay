@@ -17,7 +17,6 @@ class TSen():
     Val  = 0
     Time = 0
 
-
     async def Check(self) -> bool:
         try:
             Val = await self.Get()

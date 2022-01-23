@@ -12,10 +12,10 @@ class TDbField(dict):
     def __getattr__(self, aName: str):
         return self.get(aName)
 
-    def ValueToData(self, aValue) -> bytearray:
+    def ValToData(self, aVal) -> bytearray:
         raise NotImplementedError()
 
-    def DataToValue(self, aValue: bytearray):
+    def DataToVal(self, aVal: bytearray):
         raise NotImplementedError()
  
 
@@ -94,12 +94,12 @@ class TDb():
     def GetField(self, aName: str):
         Field = self.Fields.Get(aName.upper())
         Data = self._GetFieldData(Field)
-        return Field.DataToValue(Data)
+        return Field.DataToVal(Data)
 
-    def SetField(self, aName: str, aValue):
+    def SetField(self, aName: str, aVal):
         Field = self.Fields.Get(aName.upper())
-        Value = Field.ValueToData(aValue)
-        self._SetFieldData(Field, Value)
+        Val = Field.ValToData(aVal)
+        self._SetFieldData(Field, Val)
 
     def GetSize(self) -> int:
         FileSize = self.S.seek(0, 2)
