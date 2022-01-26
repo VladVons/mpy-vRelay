@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-wget="wget --read-timeout=6 --tries=1 -qO-"
+wget="wget --read-timeout=3 --tries=1 -qO-"
 
 
 ExecM()
@@ -17,6 +17,7 @@ ExecM()
 Loop()
 {
   local aHosts=$1;
+  echo "hosts: $aHosts"
 
   TimeStart="$(date -u +%s)"
   Cnt=0
@@ -27,6 +28,7 @@ Loop()
     echo "Cnt: $Cnt, Uptime: $((TimeNow-$TimeStart))"
 
     for Host in $aHosts; do
+        echo
         echo $Host
         HostMpy $Host
         #HostHive $Host
@@ -110,9 +112,9 @@ HostMpy()
 
 #Hosts="http://dht4.lan"
 #Hosts="http://192.168.11.105"
-Hosts="http://dht1.lan"
+Hosts="192.168.11.131 192.168.11.132 192.168.11.133 192.168.11.134 192.168.11.135 192.168.11.136"
 #
-Loop $Hosts
+Loop "$Hosts"
 #$wget "$Hosts/sys_sleep.py?delay=1&async=1&echo=1"
 #$wget "$Hosts/sys_sleep.py?delay=2&echo=1"
 #$wget "$Hosts/sys_mem1.py"

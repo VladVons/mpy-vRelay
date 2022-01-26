@@ -44,7 +44,7 @@ from .Db import TDb, TDbFields, TDbField
 
 
 class TDbfField(TDbField):
-    def _DefLen(self, aType: str, aLen: int):
+    def _DefLen(self, aType: str, aLen: int) -> int:
         if (aLen == 0):
             aLen = {'C': 10, 'N': 10, 'D': 8, 'L': 1}.get(aType, 0)
         return aLen
@@ -60,7 +60,7 @@ class TDbfField(TDbField):
         return aVal.encode()
 
     def DataToVal(self, aVal: bytearray):
-        aVal = aVal.decode().strip()
+        aVal: str = aVal.decode().strip()
 
         if (self.Type == 'N'):
             if (self.LenD > 0):
@@ -78,12 +78,12 @@ class TDbfField(TDbField):
         return aVal
 
 
-class TDbfFields(TDbFields):
+class TDbfFields(TDbFields) -> TDbfField:
     def Add(self, aName: str, aType: str, aLen: int = 0, aLenD: int = 0):
         aName = aName.upper()
         aType = aType.upper()
 
-        R = TDbfField()
+        R: TDbfField = TDbfField()
         aLen = R._DefLen(aType, aLen)
         R.update({'Name': aName, 'Type': aType, 'Len': aLen, 'No': len(self), 'Ofst': self.Len, 'LenD': aLenD})
         self[aName] = R
@@ -92,7 +92,7 @@ class TDbfFields(TDbFields):
 
 
 class TDbf(TDb):
-    Sign = 3
+    Sign: int = 3
 
     def __init__(self):
         super().__init__()
@@ -118,8 +118,8 @@ class TDbf(TDb):
             self.Fields.Add(Name, FType.decode(), FLen, FLenD)
 
     def _StructWrite(self, aFields: TDbfFields):
-        RecLen  = aFields.Len + 1
-        HeadLen = 32 + (32 * len(aFields)) + 1
+        RecLen: int  = aFields.Len + 1
+        HeadLen: int = 32 + (32 * len(aFields)) + 1
         Data = struct.pack('<1B3B1I1H1H', self.Sign, 1, 1, 1, 0, HeadLen, RecLen)
         self.S.seek(0)
         self.S.write(Data)
@@ -140,5 +140,5 @@ class TDbf(TDb):
         self.RecSave = True
         self.Buf[0] = 42 if aMode else 32
 
-    def RecDeleted(self):
+    def RecDeleted(self) -> bool:
         return self.Buf[0] == 42

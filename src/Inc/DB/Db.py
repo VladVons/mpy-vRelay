@@ -5,6 +5,7 @@ License:     GNU, see LICENSE for more details
 Description:
 '''
 
+
 from Inc.Util import UArr
 
 
@@ -17,7 +18,7 @@ class TDbField(dict):
 
     def DataToVal(self, aVal: bytearray):
         raise NotImplementedError()
- 
+
 
 class TDbFields(dict):
     Len: int = 0
@@ -43,7 +44,7 @@ class TDb():
         self.RecSave: bool = False
         self.Buf: bytearray = bytearray()
         self.BufFill: bytes = b'\x00'
-        self.Fields: TDbFields = TDbFields()
+        self.Fields = None
 
     def __del__(self):
         self.Close()
@@ -60,8 +61,8 @@ class TDb():
             return self.RecNo - 1
 
     def _SeekRecNo(self):
-        Ofst = self.HeadLen + (self.RecNo * self.RecLen)
-        return self.S.seek(Ofst)
+        Ofst: int = self.HeadLen + (self.RecNo * self.RecLen)
+        self.S.seek(Ofst)
 
     def _RecRead(self):
         self._SeekRecNo()
@@ -92,17 +93,17 @@ class TDb():
         self.Buf = aBuf
 
     def GetField(self, aName: str):
-        Field = self.Fields.Get(aName.upper())
+        Field: TDbField = self.Fields.Get(aName.upper())
         Data = self._GetFieldData(Field)
         return Field.DataToVal(Data)
 
     def SetField(self, aName: str, aVal):
-        Field = self.Fields.Get(aName.upper())
+        Field: TDbField = self.Fields.Get(aName.upper())
         Val = Field.ValToData(aVal)
         self._SetFieldData(Field, Val)
 
     def GetSize(self) -> int:
-        FileSize = self.S.seek(0, 2)
+        FileSize: int = self.S.seek(0, 2)
         return int((FileSize - self.HeadLen) / self.RecLen)
 
     def RecGo(self, aNo: int):
@@ -132,7 +133,7 @@ class TDb():
     def Open(self, aName: str, aROnly: bool = False):
         self.Close()
 
-        Mode = 'rb' if aROnly else 'rb+'
+        Mode: str = 'rb' if aROnly else 'rb+'
         self.S = open(aName, Mode)
 
         #self.HeadLen, self.RecLen
@@ -141,7 +142,7 @@ class TDb():
         self.RecGo(0)
 
     def Close(self):
-       if (self.S):
+        if (self.S):
             self._RecWrite()
             self.S.close()
             self.S = None

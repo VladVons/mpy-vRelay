@@ -67,14 +67,14 @@ class TDblField(TDbField):
             return '%s%s' % (1, self.Type)
 
     def ValToData(self, aVal) -> bytearray:
-        Struct = '<' + self.Struct()
+        Struct: str = '<' + self.Struct()
         if (self.Type == 's'):
             return struct.pack(Struct, aVal.encode())
         else:
             return struct.pack(Struct, aVal)
 
     def DataToVal(self, aVal: bytearray):
-        Struct = '<' + self.Struct()
+        Struct: str = '<' + self.Struct()
         if (self.Type == 's'):
             Data = struct.unpack(Struct, aVal)
             R = Data[0].split(b'\x00', 1)[0].decode()
@@ -85,12 +85,12 @@ class TDblField(TDbField):
 
 
 class TDblFields(TDbFields):
-    def Add(self, aName: str, aType: str, aLen: int = 1):
+    def Add(self, aName: str, aType: str, aLen: int = 1) -> TDblField:
         aName = aName.upper()
 
         if (aType != 's'):
             aLen = 1
-        Len = struct.calcsize('<%s%s' % (aLen, aType))
+        Len: int = struct.calcsize('<%s%s' % (aLen, aType))
 
         R = TDblField()
         R.update({'Name': aName, 'Type': aType, 'Len': Len, 'No': len(self), 'Ofst': self.Len})
@@ -99,17 +99,17 @@ class TDblFields(TDbFields):
         return R
 
     def Struct(self) -> str:
-        R = '<'
+        R: str = '<'
         for K, _ in self.Sort():
             R += self[K].Struct()
         return R
 
 
 class TDbl(TDb):
-    Sign = 71
+    Sign: int = 71
 
     def _StructWrite(self, aFields: TDblFields):
-        HeadLen = 16 + (16 * len(aFields))
+        HeadLen: int = 16 + (16 * len(aFields))
         Data = struct.pack('<1B1H1H1H', self.Sign, HeadLen, aFields.Len, len(aFields))
         self.S.seek(0)
         self.S.write(Data)
