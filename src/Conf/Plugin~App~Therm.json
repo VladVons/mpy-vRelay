@@ -19,8 +19,8 @@
             "Param":{"aHyst": 2}
         },
         {
-            "Module": "IncP.Dev.Gpio",
-            "Class": "GpioW",
+            "Module": "IncP.DevC.Gpio",
+            "Class": "TGpioW",
             "Alias": "Heat1",
             "Param":{"aPin": %PinHeat1%}
         },

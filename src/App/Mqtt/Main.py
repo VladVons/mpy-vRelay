@@ -60,7 +60,7 @@ class TMqtt():
         await self.Sender.Send(('%s/pub/%s' % (tId, tApi), R))
 
     async def Run(self, aSleep: float = 1.0):
-        ConnSTA = Plugin.get('App.ConnSTA')[0]
+        ConnSTA = Plugin.Find('ConnSTA')[0]
 
         self.Mqtt = Mqtt = MQTTClient('%s-%s' % (cName, ConnSTA.Mac()) , ConfApp.Mqtt_Host, ConfApp.get('Mqtt_Port', 1883), ConfApp.Mqtt_User, ConfApp.Mqtt_Passw)
         Mqtt.set_callback(self.DoSubscribe)

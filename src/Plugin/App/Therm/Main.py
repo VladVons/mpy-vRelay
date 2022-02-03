@@ -40,7 +40,7 @@ class TTherm():
             await Heat1.Set(0)
         else:
             On = Hyster1.CheckP(CronVal, Temp1.Val)
-            await Heat1.Set(On)
+            await Heat1.Set(On, self)
             await Led1.Set(On)
             print('---Temp %s, On %s' % (Temp1.Val, On))
 

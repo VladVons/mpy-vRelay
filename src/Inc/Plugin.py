@@ -19,6 +19,9 @@ from Inc.ConfClass import TConfClass
 
 
 class TPlugin(dict):
+    def Find(self, aKey: str) -> list:
+        return [Val[0] for Key, Val in self.items() if aKey in Key]
+
     def AddTask(self, aModule, aPath):
         gc.collect()
         Log.Print(1, 'i', 'MemFree %6d. Loading %s' % (gc.mem_free(), aPath))
