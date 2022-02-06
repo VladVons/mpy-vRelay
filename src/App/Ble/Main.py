@@ -20,8 +20,8 @@ class TBleEx(TBLE):
     async def _DoPost(self, aOwner, aMsg):
         #print('TBleEx._DoPost', aOwner, aMsg)
         Data = Marker(self, aOwner, aMsg)
-        print('TBleEx.Send', Data)
-        self.Send(json.dumps(Data))
+        #print('TBleEx.Send', Data)
+        #self.Send(json.dumps(Data))
 
     def _DoConnect(self, aOn: bool, aAddr: bytes):
         # allow multiple connection

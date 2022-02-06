@@ -3,8 +3,8 @@
 #http://www.steves-internet-guide.com/mosquitto_pub-sub-clients/
 #apt install mosquitto-clients
 
-#cHost="vpn2.oster.com.ua"
-cHost="192.168.2.115"
+cHost="vpn2.oster.com.ua"
+#cHost="192.168.2.115"
 
 
 
@@ -33,9 +33,11 @@ Pub1()
 }
 
 
-Pub2()
+Pub_dht22()
 {
-  local Topic="vRelay/pub/post"
+  #local Topic="vRelay/pub/post"
+  local Topic="vRelay/sub/post1"
+
 
   Id="a0b0c0d0"
   Alias="dht-emu-alias"
@@ -55,10 +57,40 @@ Pub2()
     echo $Data
 
     mosquitto_pub -h $cHost -t $Topic -m "$Data"
-    sleep 3
+    sleep 5
+  done
+}
+
+
+Pub_button()
+{
+  local Topic="vRelay/sub/post2"
+
+
+  Id="a0b0c0d0"
+  Alias="button1"
+  Owner="TDev_button"
+  Val=1
+
+  Cnt=0
+  while true; do
+    ((Cnt++))
+    Date=$(date "+%Y-%m-%d %H:%M:%S")
+
+    Val=$((Cnt % 2))
+
+    Template='{"Date": "%s", "Owner": "TTherm", "Data": {"Owner": "%s", "Uptime": %s, "Val": %s}, "Id": "%s", "Alias": "%s"}'
+    Data=$(printf "$Template" "$Date" "$Owner" "$Cnt" "$Val" "$Id" "$Alias")
+    echo $Data
+
+    mosquitto_pub -h $cHost -t $Topic -m "$Data"
+    sleep 5
   done
 }
 
 
 #Pub1
-Pub2
+#Pub_dht22
+Pub_button
+
+

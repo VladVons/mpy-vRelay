@@ -38,7 +38,7 @@ class TMqtt():
             Topic, Data = aData
             try:
                 await self.Mqtt.publish(Topic, json.dumps(Data))
-                print('TMqtt.Send', aData)
+                #print('---TMqtt.Send', aData)
                 return True
             except Exception as E:
                 Log.Print(1, 'x', 'Send()', E)
@@ -53,11 +53,13 @@ class TMqtt():
         elif (tApi == 'Conf'): # topic: vRelay/sub/Conf
             Path, Query = SplitPad(2, aMsg, '?')
         else:
-            print('---20', tApi, aMsg)
-            R = await Plugin.Post(self, (tApi.replace('.', '/'), aMsg))
+            Data = json.loads(aMsg)
+            Data['tApi'] = tApi.replace('.', '/')
+            R = await Plugin.Post(self, Data)
+            R = json.dumps(R)
 
         #Log.Print(1, 'i', 'DoSubscribe()', 'topic: %s, msg: %s, res: %s' % (aTopic, aMsg, R))
-        await self.Sender.Send(('%s/pub/%s' % (tId, tApi), R))
+        #await self.Sender.Send(('%s/pub/%s' % (tId, tApi), R))
 
     async def Run(self, aSleep: float = 1.0):
         ConnSTA = Plugin.Find('ConnSTA')[0]

@@ -14,12 +14,12 @@ from Inc.Log  import Log
 
 class TTherm():
     async def _DoPost(self, aOwner, aMsg):
-        #print('TTherm._DoPost', aOwner, aMsg)
+        #print('--- TTherm._DoPost', aOwner, aMsg)
         #self.Cron.Set(aMsg.get('Val'))
-        pass
+        print('TTherm._DoPost', aMsg)
 
-    async def _DoStop(self, aOwner, aMsg):
-        print('TTherm._DoStop', aOwner, aMsg)
+    #async def _DoStop(self, aOwner, aMsg):
+    #    print('TTherm._DoStop', aOwner, aMsg)
 
     async def Check(self):
         CC = self.CC
