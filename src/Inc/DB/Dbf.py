@@ -78,8 +78,8 @@ class TDbfField(TDbField):
         return aVal
 
 
-class TDbfFields(TDbFields) -> TDbfField:
-    def Add(self, aName: str, aType: str, aLen: int = 0, aLenD: int = 0):
+class TDbfFields(TDbFields):
+    def Add(self, aName: str, aType: str, aLen: int = 0, aLenD: int = 0) -> TDbfField:
         aName = aName.upper()
         aType = aType.upper()
 

@@ -199,32 +199,28 @@ EspRelease()
   Log "$0->$FUNCNAME"
   # https://github.com/bbcmicrobit/micropython/issues/555#issuecomment-419491671
 
-  SkipFile="boot.py,main.py,Options.py,__pycache__"
-  SkipDir="Plugin"
+  SkipFile="boot.py,main.py"
+  SkipDir="./Plugin/Api,./Plugin/App/Idle,./Plugin/App/Therm,/Plugin/Web,./Conf"
   Compiler="$cDirMPY/micropython/mpy-cross/mpy-cross"
 
   DirOut="../release"
   cd ./src
+  rm -R $DirOut
   mkdir -p $DirOut
 
   find ./ -type f |\
   while read File; do
-    echo "$File ..."
+    echo "$File"
+
+    FName=$(basename -- "$File")
+    DName=$(dirname -- "$File")
 
     FExt="${File##*.}"
-    if [ "$FExt" == "py" ]; then 
-        FName=$(basename -- "$File")
-        DName=$(dirname -- "$File")
+    if [ "$FExt" == "py" ] && [[ "$SkipFile" != *"$FName"* ]] && [[ "$SkipDir" != *"$DName"* ]]; then 
+        mkdir -p $(dirname $DirOut/$File)
 
-        if [[ "$SkipFile" != *"$FName"* ]]; then
-           #[[ "$SkipDir" != *"$DName"* ]]; then
-            mkdir -p $(dirname $DirOut/$File)
-
-            FileObj=$(echo $File | sed "s|.py|.mpy|g")
-            $Compiler $File -o $DirOut/$FileObj
-        else
-            cp --parents $File $DirOut
-        fi
+        FileObj=$(echo $File | sed "s|.py|.mpy|g")
+        $Compiler $File -o $DirOut/$FileObj
     else
         cp --parents $File $DirOut
     fi
