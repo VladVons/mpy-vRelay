@@ -68,7 +68,7 @@ Pub_button()
 
 
   Id="a0b0c0d0"
-  Alias="button1"
+  Alias="Button1"
   Owner="TDev_button"
   Val=1
 
@@ -79,8 +79,12 @@ Pub_button()
 
     Val=$((Cnt % 2))
 
-    Template='{"Date": "%s", "Owner": "TTherm", "Data": {"Owner": "%s", "Uptime": %s, "Val": %s}, "Id": "%s", "Alias": "%s"}'
-    Data=$(printf "$Template" "$Date" "$Owner" "$Cnt" "$Val" "$Id" "$Alias")
+    #Template='{"Date": "%s", "Owner": "TTherm", "Data": {"Owner": "%s", "Uptime": %s, "Val": %s}, "Id": "%s", "Alias": "%s"}'
+    #Data=$(printf "$Template" "$Date" "$Owner" "$Cnt" "$Val" "$Id" "$Alias")
+
+    Template='{"Date": "%s", "Owner": "TTherm", "Data": {"Owner": "%s", "Uptime": %s, "Val": %s, "Alias": "%s"}, "Id": "%s"}'
+    Data=$(printf "$Template" "$Date" "$Owner" "$Cnt" "$Val" "$Alias" "$Id")
+
     echo $Data
 
     mosquitto_pub -h $cHost -t $Topic -m "$Data"

@@ -12,11 +12,23 @@ import time
 from Inc.Plugin import Plugin
 from Inc.Log  import Log
 
+
 class TTherm():
     async def _DoPost(self, aOwner, aMsg):
-        #print('--- TTherm._DoPost', aOwner, aMsg)
-        #self.Cron.Set(aMsg.get('Val'))
-        print('TTherm._DoPost', aMsg)
+        Alias = 'Button1'
+        Data = aMsg.get('Data', {})
+        if (Data.get('Alias') == Alias):
+            Val = Data.get('Val')
+            if (Val == -1):
+                if (Alias in self.CC.Heat1.Allow):
+                    self.CC.Heat1.Allow.remove(Alias)
+            else:
+                if (not Alias in self.CC.Heat1.Allow):
+                    self.CC.Heat1.Allow.append(Alias)
+
+                await self.CC.Heat1.Set(Val, Alias)
+                await self.CC.Led1.Set(Val)
+
 
     #async def _DoStop(self, aOwner, aMsg):
     #    print('TTherm._DoStop', aOwner, aMsg)
@@ -40,7 +52,7 @@ class TTherm():
             await Heat1.Set(0)
         else:
             On = Hyster1.CheckP(CronVal, Temp1.Val)
-            await Heat1.Set(On, self)
+            await Heat1.Set(On, 'Hyster1')
             await Led1.Set(On)
             print('---Temp %s, On %s' % (Temp1.Val, On))
 

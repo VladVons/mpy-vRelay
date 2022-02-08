@@ -14,8 +14,8 @@ class TGpioW():
         self.Dev = GpioW(aPin)
         self.Allow = []
 
-    async def Set(self, aVal: int, aOwner: object = None):
-        if (not self.Allow) or (aOwner in self.Allow):
+    async def Set(self, aVal: int, aAlias: str = ''):
+        if (not self.Allow) or (aAlias in self.Allow):
             return await self.Dev.Set(aVal)
 
     async def Get(self):
