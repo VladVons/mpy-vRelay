@@ -22,9 +22,9 @@ class TPlugin(dict):
     def Find(self, aKey: str) -> list:
         return [Val[0] for Key, Val in self.items() if aKey in Key]
 
-    def AddTask(self, aModule, aPath):
+    def AddTask(self, aModule, aPath: str):
         gc.collect()
-        Log.Print(1, 'i', 'MemFree %6d. Loading %s' % (gc.mem_free(), aPath))
+        Log.Print(1, 'i', 'Plugin %s' % (aPath))
 
         File = 'Conf/' + aPath.replace('.', '~')
         Conf = TConf(File + '.py')
@@ -90,7 +90,7 @@ class TPlugin(dict):
             return True
 
     async def StopAll(self):
-        for Key in self.keys():
+        for Key in list(self.keys()):
             await self.Stop(Key)
 
     async def Run(self):

@@ -6,6 +6,13 @@ Description:
 '''
 
 import time, gc, esp
+#from uhashlib import md5
+
+#from uhashlib import sha1
+#from ubinascii import hexlify
+#s1 = '1234567890_1234567890_1234567890'
+#s2 = hexlify(sha1(s1).digest()).decode()
+#print(s2)
 
 
 '''
