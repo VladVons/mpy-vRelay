@@ -28,10 +28,12 @@ def ImportMod(aFile: str, aMod: list = ['*']):
 class TConfD(dict):
     def __init__(self, aFile: str):
         super().__init__()
+
         self.File = aFile
+        self.Def = None
 
     def __getattr__(self, aName: str):
-        return self.get(aName)
+        return self.Get(aName)
 
     def Load(self):
         Name, Ext = self.File.split('.')
@@ -40,6 +42,11 @@ class TConfD(dict):
             if (FileExists(File)):
                 self._Load(File)
 
+    def Get(self, aName: str):
+        Res = self.get(aName)
+        if (Res is None) and (self.Def):
+            Res = self.Def.Get(aName)
+        return Res
 
 class TConf(TConfD):
     def _Load(self, aFile: str):
