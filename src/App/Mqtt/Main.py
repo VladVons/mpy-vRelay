@@ -11,7 +11,7 @@ import uasyncio as asyncio
 #
 from App import ConfApp
 from Inc.Mqtt import MQTTClient
-from Inc.Log  import Log
+from IncP.Log import Log
 from Inc.Plugin import Plugin
 from Inc.Sender import TSender
 from Inc.ApiParse import QueryToDict, QueryUrl

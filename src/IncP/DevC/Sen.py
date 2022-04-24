@@ -8,7 +8,7 @@ Description:
 
 import time
 #
-from Inc.Log import Log
+from IncP.Log import Log
 
 
 class TSen():

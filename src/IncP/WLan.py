@@ -12,7 +12,7 @@ from machine   import idle
 from ubinascii import hexlify
 from uasyncio  import sleep
 #
-from Inc.Log import Log
+from IncP.Log import Log
 
 
 def GetMac(aObj) -> str:

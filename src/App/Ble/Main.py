@@ -11,7 +11,7 @@ import uasyncio as asyncio
 #
 #from App import ConfApp
 from IncP.BLE import TBLE
-from Inc.Log  import Log
+from IncP.Log import Log
 from Inc.Plugin import Plugin
 from IncP.Marker import Marker
 

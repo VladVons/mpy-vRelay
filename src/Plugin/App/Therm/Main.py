@@ -10,7 +10,7 @@ import uasyncio as asyncio
 import time
 #
 from Inc.Plugin import Plugin
-from Inc.Log  import Log
+from IncP.Log import Log
 
 
 class TTherm():

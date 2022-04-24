@@ -15,7 +15,7 @@ https://m2msupport.net/m2msupport/tutorial-for-simcom-m2m-modules/#Network
 import uasyncio as asyncio
 from machine import UART, Pin
 #
-from Inc.Log import Log
+from IncP.Log import Log
 
 
 class TSim7000():

@@ -9,7 +9,7 @@ Description:
 import json, os, uio
 #
 from App import ConfApp
-from Inc.Log import Log
+from IncP.Log import Log
 from Inc.Http.HttpUrl import UrlLoad
 from IncP.Api import TApiBase
 

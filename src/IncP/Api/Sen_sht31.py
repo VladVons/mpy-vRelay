@@ -9,7 +9,7 @@ Description: micropython ESP8266
 
 import machine
 #
-from Inc.Log import Log
+from IncP.Log import Log
 from IncP.Api import TApiBase
 from IncP.Dev.Sen_sht31 import SHT31
 

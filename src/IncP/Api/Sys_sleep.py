@@ -9,7 +9,7 @@ Description:
 import time
 import uasyncio as asyncio
 #
-from Inc.Log import Log
+from IncP.Log import Log
 from IncP.Api import TApiBase
 
 

@@ -13,7 +13,7 @@ from micropython import const
 from ubinascii import hexlify
 import struct
 #
-from Inc.Log  import Log
+from IncP.Log import Log
 
 
 _IRQ_CENTRAL_CONNECT = const(1)

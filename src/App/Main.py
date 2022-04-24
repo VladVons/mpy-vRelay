@@ -10,7 +10,7 @@ import os, gc
 import machine
 #
 from . import ConfApp
-from Inc.Log  import Log
+from IncP.Log import Log
 from Inc.Plugin import Plugin
 
 

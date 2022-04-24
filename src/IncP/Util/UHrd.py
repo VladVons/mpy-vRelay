@@ -9,7 +9,7 @@ Description:
 import machine
 import uasyncio as asyncio
 #
-from Inc.Log  import Log
+from IncP.Log import Log
 
 
 def Reset(aSec: int = 0):
