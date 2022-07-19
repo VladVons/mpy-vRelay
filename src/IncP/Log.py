@@ -6,7 +6,7 @@ Description:
 '''
 
 
-from IncP.Log import TLog, TEchoConsole
+from Inc.Log import TLog, TEchoConsole
 
 
 class TEchoConsoleEx(TEchoConsole):
