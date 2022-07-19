@@ -8,7 +8,7 @@ License:     GNU, see LICENSE for more details
 import os
 import json
 #
-from Inc.Log import Log
+from IncP.Log import Log
 from Inc.Conf import TConf, TDictDef
 
 
@@ -27,10 +27,14 @@ class TConfClass(TConf):
         for Item in Items:
             Repl = self.Conf.get(Item)
             if (Repl is not None):
-                aData = aData.replace(Delim + Item + Delim, str(Repl))
+                Find = Delim + Item + Delim
+                if (not isinstance(Repl), str):
+                    Repl = str(Repl).replace("'", '"')
+                aData = aData.replace(Find, Repl)
         return aData
 
     def _Load(self, aFile: str):
+        Log.Print(1, 'i', '_Load()', 'test')
         with open(aFile) as hF:
             Data = self._Replace(hF.read())
             try:
@@ -50,7 +54,7 @@ class TConfClass(TConf):
                     self[Alias] = Obj
             except Exception as E:
                 Log.Print(1, 'x', '_Load()', aE = E)
-                print('Data', Data)
+                print('Data-x', Data)
 
     '''
      def _DirList(self, aDir):

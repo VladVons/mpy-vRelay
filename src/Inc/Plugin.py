@@ -16,7 +16,7 @@ import sys
 #
 from Inc.Conf import TConf
 from Inc.ConfClass import TConfClass
-from Inc.Log  import Log
+from IncP.Log import Log
 
 
 class TPlugin(dict):

@@ -1,0 +1,16 @@
+{
+    "Classes":[
+        {
+            "Module": "Inc.Cron",
+            "Class": "TCron",
+            "Alias": "Cron1",
+            "Param":{"aData": %Cron%}
+        },
+        {
+            "Module": "IncP.DevC.Gpio",
+            "Class": "TGpioW",
+            "Alias": "Heat1",
+            "Param":{"aPin": %PinHeat1%}
+        }
+    ]
+}

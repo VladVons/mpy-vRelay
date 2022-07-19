@@ -11,7 +11,7 @@ cDev="/dev/ttyUSB0"
 cSpeed1=115200
 cSpeed2=460800
 
-ESP32=1
+ESP32=0
 CustomFW=0
 
 
@@ -34,7 +34,7 @@ else
     cFileImg="firmware-combined.bin"
   else
     cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp8266"
-    cFileImg="esp8266-20200911-v1.13.bin"
+    cFileImg="esp8266-20220618-v1.19.1.bin"
   fi
 
   cEraseCmd="esptool.py --port $cDev --baud $cSpeed1 erase_flash"

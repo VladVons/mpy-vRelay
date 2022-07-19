@@ -8,7 +8,7 @@ License:     GNU, see LICENSE for more details
 import uasyncio as asyncio
 from ucollections import deque
 #
-from Inc.Log  import Log
+from IncP.Log  import Log
 
 
 class TSender():
