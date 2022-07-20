@@ -26,7 +26,9 @@ class TConfClass(TConf):
         Items = aData.split(Delim)[1::2]
         for Item in Items:
             Repl = self.Conf.get(Item)
-            if (Repl is not None):
+            if (Repl is None):
+                Log.Print(1, 'e', 'unknown ' + Item)
+            else:
                 Find = Delim + Item + Delim
                 if (not isinstance(Repl), str):
                     Repl = str(Repl).replace("'", '"')

@@ -57,13 +57,16 @@ class TPlugin(dict):
 
         __import__(aPath)
         Mod = sys.modules.get(aPath)
-        Depends = getattr(Mod, 'Depends', '')
-        for iDepend in Depends.split():
-            if (iDepend):
-                Log.Print(1, 'i', '%s depends on %s' % (aPath, iDepend))
-                self.LoadMod(iDepend)
-
-        self.AddTask(Mod, aPath)
+        Enable = getattr(Mod, 'Enable', True)
+        if (Enable):
+            Depends = getattr(Mod, 'Depends', '')
+            for x in Depends.split():
+                if (x):
+                    Log.Print(1, 'i', '%s depends on %s' % (aPath, x))
+                    self.LoadMod(x)
+            self.AddTask(Mod, aPath)
+        else:
+            Log.Print(1, 'i', '%s disabled' % (aPath))
 
     async def _Post(self, aTasks, aOwner, aMsg, aFunc) -> dict:
         R = {}

@@ -7,18 +7,19 @@ Description:
 
 
 import uasyncio as asyncio
-import time
-#
-from Inc.Plugin import Plugin
-from IncP.Log import Log
 
 
 class TDry():
     async def Check(self):
         On = await self.CC.Cron1.Get()
-        print('--x2', On)
+        await self.CC.Heat1.Set(On, 'Cron1')
+        print('-x1', On)
 
     async def Run(self, aSleep: float = 1):
+        for x in [True, False]:
+            await self.CC.Heat1.Set(x)
+            await asyncio.sleep(3)
+
         while True:
             await self.Check()
             await asyncio.sleep(aSleep)
