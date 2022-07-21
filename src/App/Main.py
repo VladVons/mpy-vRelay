@@ -21,7 +21,7 @@ async def Run():
     #DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)
     #print('DSleep', DSleep)
 
-    Plugin.LoadList(ConfApp.get('Plugins', 'App.HttpSrv'))
+    Plugin.LoadList(ConfApp.get('Plugins', 'App.HttpSrv'), ConfApp.get('PluginsSkip', ''))
     Plugin.LoadDir('Plugin/App')
     #Plugins = sorted(list(Plugin.keys()))
     #print('Plugins', Plugins)

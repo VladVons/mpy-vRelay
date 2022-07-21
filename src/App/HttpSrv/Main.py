@@ -24,7 +24,7 @@ class THttpApiApp(THttpApi):
     async def DoUrl(self, aReader: asyncio.StreamReader, aWriter: asyncio.StreamWriter, aHead: dict):
         Path = aHead['path']
         Query = QueryToDict(aHead['query'])
-
+        print('-x. DoUrl() ', Path, Query)
         R = await QueryUrl(Path, Query)
         if (R):
             await self.Answer(aWriter, 200, 'json', R)

@@ -9,7 +9,7 @@ Alias = 'Sen_dht22'
 TZone = 2
 #DSleep = 62
 #
-STA_ESSID = 'oster.com.ua'
+STA_ESSID = 'oster.com.ua1'
 STA_Paswd = '19710000'
 #STA_Net = ('192.168.2.206', '255.255.255.0', '192.168.2.1', '192.168.2.1')
 AP_Paswd = '12345678'

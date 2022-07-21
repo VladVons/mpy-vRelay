@@ -36,7 +36,6 @@ class TConfClass(TConf):
         return aData
 
     def _Load(self, aFile: str):
-        Log.Print(1, 'i', '_Load()', 'test')
         with open(aFile) as hF:
             Data = self._Replace(hF.read())
             try:

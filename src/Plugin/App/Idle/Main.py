@@ -27,15 +27,18 @@ class TIdle():
     #        await asyncio.sleep(2)
 
 
+    def tMemInfo(self):
+        gc.collect()
+        print('Idle', self.CntLoop, 'MemFree', gc.mem_free())
+
     def tLedBeat(self):
         O = Pin(2, Pin.OUT)
         O.value(not O.value())
 
     async def Run(self, aSleep: float = 2):
         while True:
-            gc.collect()
-            print('Idle', self.CntLoop, 'MemFree', gc.mem_free())
 
+            self.tMemInfo()
             self.tLedBeat()
             #await self.tPinBeat()
 

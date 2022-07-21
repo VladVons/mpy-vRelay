@@ -6,10 +6,10 @@ License:     GNU, see LICENSE for more details
 https://github.com/kipe/pycron
 https://crontab.guru/examples.html
 
-Minute  Hour    DOM     Month   DOW
-*       8-20    *       *       *
+Sec     Min     Hour    Day     Month   DOW
+*       */3     6,8-20  *       *       *
 
-IsNow('*/3 6,3-5 * * 2')
+IsNow('* */3 6,8-20 * * 2')
 '''
 
 
@@ -37,20 +37,20 @@ def _Parse(aValue: str, aTarget: int) -> bool:
     return False
 
 def IsNow(aPattern: str) -> bool:
-    # aPattern = '*/2 8-13 * * *'
     lt = time.localtime(time.time())
-    Minute, Hour, DOM, Month, DOW = aPattern.split(' ')
+    Sec, Min, Hour, DOM, Month, DOW = aPattern.split(' ')
 
-    R = _Parse(Minute, lt[4]) and \
-        _Parse(Hour,   lt[3]) and \
-        _Parse(DOM,    lt[2]) and \
-        _Parse(Month,  lt[1]) and \
-        _Parse(DOW,    lt[6])
-    return R
+    Res = _Parse(Sec,  lt[5]) and \
+          _Parse(Min,  lt[4]) and \
+          _Parse(Hour, lt[3]) and \
+          _Parse(DOM,  lt[2]) and \
+          _Parse(Month,lt[1]) and \
+          _Parse(DOW,  lt[6])
+    return Res
 
 
 class TCron():
-    #Data = [('*/2 8-13 * * *', 22), ('* 14-23 * * *', 24)]
+    #Data = [('* */2 8-13 * * *', 22), ('* * 14-23 * * *', 24)]
     def __init__(self, aData = []):
         self.Data = aData
 

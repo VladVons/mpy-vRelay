@@ -47,9 +47,11 @@ class TPlugin(dict):
                 DirName = Info[0]
                 self.LoadMod(aDir.replace('/', '.') + '.' + DirName)
 
-    def LoadList(self, aModules: str):
+    def LoadList(self, aModules: str, aSkip: str = ''):
+        Skip = aSkip.split()
         for Module in aModules.split():
-            self.LoadMod(Module)
+            if (not Module in Skip):
+                self.LoadMod(Module)
 
     def LoadMod(self, aPath: str):
         if (aPath == '') or (aPath.startswith('-')) or (self.get(aPath)):
