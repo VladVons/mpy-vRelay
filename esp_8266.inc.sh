@@ -31,13 +31,24 @@ Pkg_Install()
   apt update -y && apt dist-upgrade -y && apt autoremove -y && apt clean -y
 
   apt install -y --no-install-recommends \
-    mc sudo wget git zip unzip picocom strace apt-utils rsync \
+    mc sudo wget curl git zip unzip picocom strace apt-utils rsync \
     python3 python3-pip \
+    python2-minimal \
     make gcc libtool libffi-dev pkg-config
 
   rsync -av ./fstatic/ /
 
+  Passw="root"
+  echo -e "$Passw\n$Passw" | passwd root
+
   AddUser $cUser
+
+  # need python 2.7
+  ln -s /usr/bin/python2.7 /usr/bin/python
+  curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+  python2 get-pip.py
+  rm get-pip.py
+  /usr/local/bin/pip2.7 install serial
 
   PipInstall "esptool adafruit-ampy" $cUser
 

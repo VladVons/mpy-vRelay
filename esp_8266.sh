@@ -3,7 +3,7 @@
 source ./esp_8266.inc.sh
 
 
-FreeSpace
+#FreeSpace
 #Pkg_Install
 #
 #Get_EspOpenSdk
@@ -12,7 +12,7 @@ FreeSpace
 #Get_MicroPython
 #Make_MicroPython
 #
-#ModulesFreeze
+ModulesFreeze
 #Make_MicroFirmware
 #
 #Esp_Erase
