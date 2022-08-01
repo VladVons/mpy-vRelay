@@ -11,7 +11,7 @@ from Inc.Plugin import Plugin
 
 class TApi():
     async def Exec(self) -> dict:
-        return list(Plugin.Data.keys())
+        return list(Plugin.keys())
 
     async def Query(self, aData: dict) -> dict:
         return await self.Exec()

@@ -8,10 +8,9 @@ Description:
 
 from App import ConfApp
 
-
 class TApi():
     async def Exec(self) -> dict:
-        return ConfApp.Keys()
+        return ConfApp
 
     async def Query(self, aData: dict) -> dict:
         return await self.Exec()

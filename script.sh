@@ -30,7 +30,8 @@ if [ $ESP32 == 1 ]; then
   cFirmwareCmd="esptool.py --port $cDev --baud $cSpeed2 --chip esp32 write_flash -z 0x1000"
 else
   if [ $CustomFW == 1 ]; then
-    cDirImg="$cDirMPY/micropython/ports/esp8266/build-GENERIC"
+    #cDirImg="$cDirMPY/micropython/ports/esp8266/build-GENERIC"
+    cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp8266"
     cFileImg="firmware-combined.bin"
   else
     cDirImg="/mnt/hdd/data1/share/public/image/esp/micropython/esp8266"

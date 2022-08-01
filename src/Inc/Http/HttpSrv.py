@@ -126,8 +126,8 @@ class THttpApi():
             else:
                 await self.DoUrl(aReader, aWriter, Head)
         except Exception as E:
-            Data = Log.Print(1, 'x', 'CallBack()', aE = E)
-            await self.Answer(aWriter, 404, 'html', Data)
+            Log.Print(1, 'x', 'CallBack()', aE = E)
+            await self.Answer(aWriter, 404, 'html', str(E))
         finally:
             await aWriter.aclose()
 

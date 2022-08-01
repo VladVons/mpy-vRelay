@@ -10,12 +10,12 @@ import os, gc
 import machine
 #
 from . import ConfApp
-from IncP.Log import Log, TEchoConsole
+from IncP.Log import Log, TEchoConsoleEx
 from Inc.Plugin import Plugin
 
 
 async def Run():
-    Log.AddEcho(TEchoConsole())
+    Log.AddEcho(TEchoConsoleEx())
     Log.Print(1, 'i', 'Run', os.uname())
 
     #DSleep = (machine.reset_cause() == machine.DEEPSLEEP_RESET)

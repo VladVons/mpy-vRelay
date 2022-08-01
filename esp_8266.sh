@@ -12,10 +12,10 @@ source ./esp_8266.inc.sh
 #Get_MicroPython
 #Make_MicroPython
 #
-ModulesFreeze
+#ModulesFreeze
 #Make_MicroFirmware
 #
 #Esp_Erase
 #Esp_Firmware
-#Esp_SrcCopySkip "$cSrc" "App Inc IncP __pycache__ Test.py"
+Esp_SrcCopySkip "$cSrc" "App Inc IncP"
 #Esp_SrcCopySkip "$cSrc" "__pycache__"
