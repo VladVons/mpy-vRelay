@@ -13,7 +13,7 @@ class TDry():
     async def Check(self):
         On = await self.CC.Cron1.Get()
         await self.CC.Heat1.Set(On, 'Cron1')
-        #print('-x1', On)
+        print('-x dry', On)
 
     async def Run(self, aSleep: float = 1):
         for x in [True, False]:
