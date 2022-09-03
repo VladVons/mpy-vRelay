@@ -9,6 +9,7 @@ Description:
 import os
 #
 from IncP.Api import TApiBase
+from Inc.Util.UFS import IsDir
 
 
 class TApi(TApiBase):
@@ -17,7 +18,16 @@ class TApi(TApiBase):
     }
 
     async def Exec(self, aPath: str) -> dict:
-        return {'files': os.listdir(aPath)}
+        File = []
+        Dir = []
+        Files = sorted(os.listdir(aPath))
+        for x in Files:
+            Path = aPath + '/' + x
+            if (IsDir(Path)):
+                Dir.append(Path)
+            else:
+                File.append(Path)
+        return {'dir': Dir, 'file': File}
 
     async def Query(self, aData: dict) -> dict:
         return await self.ExecDef(aData, ['path'])
