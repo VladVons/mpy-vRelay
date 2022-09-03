@@ -95,8 +95,8 @@ class TSim7000():
         while True:
             await self.AT('') # ToDo. readline hangs without it !
 
-            await self.AT("+CGMI") # manufacturer
-            #await self.AT("+CGMM") # Module name
+            await self.AT('+CGMI') # manufacturer
+            #await self.AT('+CGMM') # Module name
 
             await self.AT('+CGNSPWR=1') # Power on and wait 2s
             await self.AT('+CGNSINF')

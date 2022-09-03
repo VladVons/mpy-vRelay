@@ -39,6 +39,6 @@ class TBleEx(TBLE):
         Cnt = 0
         while True:
             Cnt += 1
-            Msg = "TBleEx.Run %s\n" % (Cnt)
+            Msg = 'TBleEx.Run %s\n' % (Cnt)
             self.Send(Msg)
             await asyncio.sleep(aSleep)

@@ -73,8 +73,8 @@ class MQTTClient:
             import ussl # IncP
             self.sock = ussl.wrap_socket(self.sock, **self.ssl_params)
 
-        premsg = bytearray(b"\x10\0\0\0\0\0")
-        msg = bytearray(b"\x04MQTT\x04\x02\0\0")
+        premsg = bytearray(b'\x10\0\0\0\0\0')
+        msg = bytearray(b'\x04MQTT\x04\x02\0\0')
 
         sz = 10 + 2 + len(self.client_id)
         msg[6] = clean_session << 1
@@ -101,7 +101,7 @@ class MQTTClient:
 
         self.sock.write(premsg, i + 2)
         self.sock.write(msg)
-        #print(hex(len(msg)), hexlify(msg, ":"))
+        #print(hex(len(msg)), hexlify(msg, ':'))
         self._send_str(self.client_id)
 
         if self.lw_topic:
@@ -119,14 +119,14 @@ class MQTTClient:
         return resp[2] & 1
 
     #def disconnect(self):
-    #    self.sock.write(b"\xe0\0")
+    #    self.sock.write(b'\xe0\0')
     #    self.sock.close()
 
     def ping(self):
-        self.sock.write(b"\xc0\0")
+        self.sock.write(b'\xc0\0')
 
     async def publish(self, topic, msg, retain=False, qos=0):
-        pkt = bytearray(b"\x30\0\0\0")
+        pkt = bytearray(b'\x30\0\0\0')
         pkt[0] |= qos << 1 | retain
         sz = 2 + len(topic) + len(msg)
 
@@ -140,7 +140,7 @@ class MQTTClient:
             sz >>= 7
             i += 1
         pkt[i] = sz
-        #print(hex(len(pkt)), hexlify(pkt, ":"))
+        #print(hex(len(pkt)), hexlify(pkt, ':'))
         self.sock.write(pkt, i + 1)
         self._send_str(topic)
 
@@ -156,7 +156,7 @@ class MQTTClient:
                 op = await self.wait_msg()
                 if op == 0x40:
                     sz = self.sock.read(1)
-                    assert sz == b"\x02"
+                    assert sz == b'\x02'
                     rcv_pid = self.sock.read(2)
                     rcv_pid = rcv_pid[0] << 8 | rcv_pid[1]
                     if pid == rcv_pid:
@@ -165,15 +165,15 @@ class MQTTClient:
             assert 0
 
     async def subscribe(self, topic, qos=0):
-        assert self.cb is not None, "Subscribe callback is not set"
+        assert self.cb is not None, 'Subscribe callback is not set'
 
-        pkt = bytearray(b"\x82\0\0\0")
+        pkt = bytearray(b'\x82\0\0\0')
         self.pid += 1
         struct.pack_into('!BH', pkt, 1, 2 + 2 + len(topic) + 1, self.pid)
-        #print(hex(len(pkt)), hexlify(pkt, ":"))
+        #print(hex(len(pkt)), hexlify(pkt, ':'))
         self.sock.write(pkt)
         self._send_str(topic)
-        self.sock.write(qos.to_bytes(1, "little"))
+        self.sock.write(qos.to_bytes(1, 'little'))
         while 1:
             op = await self.wait_msg()
             if op == 0x90:
@@ -197,7 +197,7 @@ class MQTTClient:
         if res == b'':
             raise OSError(-1)
 
-        if res == b"\xd0":  # PINGRESP
+        if res == b'\xd0':  # PINGRESP
             sz = self.sock.read(1)[0]
             assert sz == 0
             return None
@@ -218,7 +218,7 @@ class MQTTClient:
         msg = self.sock.read(sz)
         await self.cb(topic, msg)
         if op & 6 == 2:
-            pkt = bytearray(b"\x40\x02\0\0")
+            pkt = bytearray(b'\x40\x02\0\0')
             struct.pack_into('!H', pkt, 2, pid)
             self.sock.write(pkt)
         elif op & 6 == 4:
@@ -235,7 +235,7 @@ class MQTTClient:
     def disconnect(self):
         if (self.sock): # VladVons
             try:
-                self.sock.write(b"\xe0\0")
+                self.sock.write(b'\xe0\0')
             finally:
                 self.sock.close()
                 self.sock = None

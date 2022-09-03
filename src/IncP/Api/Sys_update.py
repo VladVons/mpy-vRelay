@@ -20,7 +20,7 @@ class TApi(TApiBase):
         Buf = uio.BytesIO()
         try:
             await UrlLoad(aUrl, Buf)
-            Data = Buf.getvalue().decode("utf-8")
+            Data = Buf.getvalue().decode('utf-8')
             Data = json.loads(Data)
             Buf.close()
         except Exception as E:
@@ -38,7 +38,7 @@ class TApi(TApiBase):
                 except: pass
 
             Url = Root + '/' + File
-            with open(File, "w") as hFile:
+            with open(File, 'w') as hFile:
                 await UrlLoad(Url, hFile)
                 hFile.seek(0, 2)
                 Size += hFile.tell()

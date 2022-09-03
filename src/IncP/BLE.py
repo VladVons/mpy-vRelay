@@ -43,11 +43,11 @@ def GetAdvPayload(aName: str = None, aServices: list = None, aAppearance: int = 
     def _append(aType: int, aValue):
         nonlocal Res
         #print('adv_append', aType, aValue)
-        Res += struct.pack("BB", len(aValue) + 1, aType) + aValue
+        Res += struct.pack('BB', len(aValue) + 1, aType) + aValue
 
     Res = bytearray()
 
-    Data = struct.pack("B", (0x01 if aLimitedDisc else 0x02) + (0x18 if aBrEdr else 0x04))
+    Data = struct.pack('B', (0x01 if aLimitedDisc else 0x02) + (0x18 if aBrEdr else 0x04))
     _append(_ADV_FLAGS, Data)
 
     if (aName):
@@ -64,13 +64,13 @@ def GetAdvPayload(aName: str = None, aServices: list = None, aAppearance: int = 
                 _append(_ADV_UUID128_COMPLETE, Data)
 
     if (aAppearance):
-        _append(_ADV_APPEARANCE, struct.pack("<h", aAppearance))
+        _append(_ADV_APPEARANCE, struct.pack('<h', aAppearance))
 
     return Res
 
 def PrettifyMac(aMac: memoryview) -> str:
     #Str = hexlify(aMac).decode('utf-8')
-    return "%x:%x:%x:%x:%x:%x" % struct.unpack("BBBBBB", aMac)
+    return '%x:%x:%x:%x:%x:%x' % struct.unpack('BBBBBB', aMac)
 
 class TBLE():
     def __init__(self, aPayload: bytes):
