@@ -17,17 +17,15 @@ class TApi(TApiBase):
         'path': '/'
     }
 
-    async def Exec(self, aPath: str) -> dict:
-        File = []
-        Dir = []
+    async def Exec(self, aPath: str) -> list:
+        Res = []
         Files = sorted(os.listdir(aPath))
         for x in Files:
             Path = aPath + '/' + x
             if (IsDir(Path)):
-                Dir.append(Path)
-            else:
-                File.append(Path)
-        return {'dir': Dir, 'file': File}
+                Path += '/'
+            Res.append(Path)
+        return Res
 
-    async def Query(self, aData: dict) -> dict:
+    async def Query(self, aData: dict) -> list:
         return await self.ExecDef(aData, ['path'])

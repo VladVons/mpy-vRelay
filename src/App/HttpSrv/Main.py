@@ -27,7 +27,8 @@ class THttpApiApp(THttpApi):
         print('-x. DoUrl() ', Path, Query)
         R = await QueryUrl(Path, Query)
         if (R):
-            await self.Answer(aWriter, 200, 'json', R)
+            Type = Query.get('r', 'json')
+            await self.Answer(aWriter, 200, Type, R)
         elif (Path == '/generate_204'):
             await self.LoadFile(aWriter, Path + '.html')
             #R = UStr.TDictRepl({'$SSID': 'mySSID'}).Parse(R)

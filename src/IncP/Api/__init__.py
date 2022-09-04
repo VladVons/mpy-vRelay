@@ -14,12 +14,12 @@ class TApiBase():
         if (Val is None):
             Val = Def
         else:
-            Type = type(Def).__name__
-            if (Type == 'int'):
+            Type = type(Def)
+            if (Type == int):
                 Val = int(Val)
-            elif (Type == 'float'):
+            elif (Type == float):
                 Val = float(Val)
-            elif (Type == 'bool'):
+            elif (Type == bool):
                 Val = bool(int(Val))
         return Val
 
@@ -27,7 +27,7 @@ class TApiBase():
         if (aData.get('debug')):
             print('debug', aData)
         else:
-            Diff = set(list(aData.keys())) - set(list(self.Param.keys()))
+            Diff = set(list(aData.keys())) - set(list(self.Param.keys()) + ['r'])
             if (Diff):
                 raise Exception('Unknown %s' % Diff)
 
