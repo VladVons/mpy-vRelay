@@ -6,7 +6,7 @@ Description:
 '''
 
 
-from Inc.Util.UTime import GetDate, GetTime
+from Inc.Util.Time import GetDate, GetTime
 
 
 class TApi():

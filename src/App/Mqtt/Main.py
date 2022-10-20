@@ -15,7 +15,7 @@ from IncP.Log import Log
 from Inc.Plugin import Plugin
 from Inc.Sender import TSender
 from Inc.ApiParse import QueryToDict, QueryUrl
-from Inc.Util.UStr import SplitPad
+from Inc.Util.Str import SplitPad
 from IncP.Marker import Marker
 
 

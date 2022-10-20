@@ -10,7 +10,7 @@ import gc, os, sys, time, network, machine
 from ubinascii import hexlify
 #
 from App import ConfApp
-from Inc.Util.UTime import GetDate, GetTime
+from Inc.Util.Time import GetDate, GetTime
 from IncP.WLan import GetMac
 
 __version__ = '1.1.09, 2022.08.01'

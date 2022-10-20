@@ -10,7 +10,7 @@ import machine
 from ubinascii import hexlify
 #
 from App import ConfApp
-from Inc.Util.UTime import GetDate, GetTime
+from Inc.Util.Time import GetDate, GetTime
 
 def Marker(aSender, aOwner, aData) -> dict:
     return {

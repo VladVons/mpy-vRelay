@@ -9,7 +9,7 @@ Description:
 import os
 #
 from IncP.Api import TApiBase
-from Inc.Util.UFS import IsDir
+from Inc.Util.FS import IsDir
 
 
 class TApi(TApiBase):

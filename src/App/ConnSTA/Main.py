@@ -10,9 +10,9 @@ import uasyncio as asyncio
 from network import WLAN, STA_IF
 #
 from App import ConfApp
-from IncP.Log import Log
 from Inc.Plugin import Plugin
-from Inc.Util.UNet import CheckHost
+from Inc.Util.Net import CheckHost
+from IncP.Log import Log
 from IncP.WLan import TWLan, GetMac
 from IncP.Util.UTime import SetTime
 
